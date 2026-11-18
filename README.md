@@ -26,7 +26,12 @@ Every page has the logo at the top left (it links back to Home), a red **"WE ARE
 
 ## 2. Update the website every day (Admin page)
 
-Open `https://<your-site>/admin.html` (there is also a small "Admin" link at the bottom of every page).
+There is **no public link** to the admin area, so members won't see it. To open it from the website:
+- tap the **©** symbol at the very bottom of any page **5 times quickly**, or
+- press **Ctrl + Shift + A** on a computer, or
+- go straight to `https://<your-site>/admin.html`.
+
+The admin page then asks for the **admin password**. The starting password is `Thyword@2026`. Change it straight away in **Admin → Settings → Admin Password**, then click **Save & Publish**. Publishing also needs the GitHub token, which only administrators have, so even someone who guesses the page address cannot change the website.
 
 **First time only:** go to the **Settings** tab and connect GitHub:
 1. Create a token at <https://github.com/settings/personal-access-tokens/new>.
@@ -51,7 +56,7 @@ All content lives in **`data/content.js`**, so you can also edit that file by ha
 
 ## 3. Email sign-ups and contact messages
 
-In **Admin → Settings**, enter the **Admin email**. Sign-ups ("Get upcoming event & live service alerts") and contact-form messages are delivered there by the free [FormSubmit](https://formsubmit.co) service. The first time someone submits, FormSubmit sends a one-time **activation email** to that address. Click the link in it. If you prefer [Formspree](https://formspree.io), paste its form URL in *Custom form endpoint*.
+The church email `thywordinternationalworshipcentre@gmail.com` is set as the **Admin email** (you can change it in **Admin → Settings**). Visitors can use any email provider (Gmail, Yahoo, Outlook and others). The contact form asks for name, email, phone number and the request. Sign-ups ("Get upcoming event & live service alerts") and contact-form messages are delivered there by the free [FormSubmit](https://formsubmit.co) service. The first time someone submits, FormSubmit sends a one-time **activation email** to that address. Click the link in it. If you prefer [Formspree](https://formspree.io), paste its form URL in *Custom form endpoint*.
 
 Until an email is set, the contact form falls back to WhatsApp.
 

@@ -12,7 +12,8 @@ window.SITE_CONTENT = {
     "tagline": "The House of Possibilities",
     "motto": "His Word is Life & Spirit",
     "logo": "assets/images/logo.png",
-    "adminEmail": "",
+    "adminEmail": "thywordinternationalworshipcentre@gmail.com",
+    "adminPasswordHash": "0ee99b61774bb1a7df638ca707ce5ac95518978bd7fcadc903b8baba90cab0ed",
     "formEndpoint": "",
     "youtubeChannelId": "",
     "youtubeApiKey": "",
@@ -115,9 +116,9 @@ window.SITE_CONTENT = {
   "contact": {
     "phones": ["+233 24 478 3760"],
     "whatsapp": "233244783760",
-    "email": "",
+    "email": "thywordinternationalworshipcentre@gmail.com",
     "address": "Church Premises, Kasoa Old Barrier, Ashbread Road, Kasoa, Ghana",
-    "mapQuery": "Kasoa Old Barrier, Kasoa, Ghana",
+    "mapQuery": "Thyword International Worship Centre",
     "officeHours": "Monday to Friday, 9:00 AM to 5:00 PM"
   },
 

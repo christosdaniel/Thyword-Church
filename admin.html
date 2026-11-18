@@ -56,12 +56,24 @@
 </style>
 </head>
 <body>
+<div id="gate" style="position:fixed;inset:0;z-index:300;background:linear-gradient(120deg,var(--green-900),var(--green-700) 60%,var(--red-700));display:flex;align-items:center;justify-content:center;padding:16px">
+  <form id="gateForm" style="background:#fff;border-radius:18px;padding:2rem;width:100%;max-width:380px;text-align:center;box-shadow:var(--shadow)">
+    <img src="assets/images/logo.png" alt="Logo" style="width:90px;margin:0 auto 1rem">
+    <h2 style="font-size:1.3rem">Admin Login</h2>
+    <p class="help" style="color:var(--muted);font-size:.9rem">This area is for church administrators only.</p>
+    <input type="password" id="gatePass" placeholder="Admin password" autocomplete="current-password" style="margin-bottom:.8rem" autofocus>
+    <button class="btn btn-red" type="submit" style="width:100%">Log in</button>
+    <p id="gateMsg" style="color:var(--red-600);font-weight:600;min-height:1.4em;margin:.8rem 0 0;font-size:.9rem"></p>
+    <a href="index.html" style="font-size:.85rem">&larr; Back to website</a>
+  </form>
+</div>
 <div class="adm-top">
   <div class="container">
     <a class="brand" href="index.html" target="_blank"><img src="assets/images/logo.png" alt="Logo"><span class="brand-text"><span class="brand-name">Website Admin</span><span class="brand-tag" style="color:var(--gold)">Thyword International Worship Centre</span></span></a>
     <div class="adm-actions">
       <span class="unsaved hidden" id="unsaved">Unsaved changes</span>
       <span class="conn" id="connState">Not connected</span>
+      <button class="btn btn-outline btn-sm" id="logoutBtn" type="button">Log out</button>
       <button class="btn btn-outline btn-sm" id="downloadBtn" type="button">Download file</button>
       <button class="btn btn-gold btn-sm" id="publishBtn" type="button">Save &amp; Publish</button>
     </div>
@@ -74,7 +86,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<script src="data/content.js"></script>
+<script>document.write('<script src="data/content.js?v=' + Date.now() + '"><\/script>');</script>
 <script src="assets/js/admin.js"></script>
 </body>
 </html>

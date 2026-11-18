@@ -36,14 +36,15 @@
     <div class="reveal">
       <span class="eyebrow">Send a Message</span>
       <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800">Prayer requests, enquiries &amp; counselling</h2>
+      <p style="color:var(--muted)">Fill in your name, email address, phone number and request. It is sent straight to the church's email, <strong id="churchEmail"></strong>, and we will reply to you.</p>
       <form id="contactForm" class="form-grid" novalidate>
         <div><label for="cf-name">Full name *</label><input id="cf-name" name="name" required></div>
-        <div><label for="cf-phone">Phone / WhatsApp</label><input id="cf-phone" name="phone" type="tel"></div>
-        <div><label for="cf-email">Email</label><input id="cf-email" name="email" type="email"></div>
+        <div><label for="cf-phone">Phone number *</label><input id="cf-phone" name="phone" type="tel" required></div>
+        <div><label for="cf-email">Email address *</label><input id="cf-email" name="email" type="email" required placeholder="Any email: Gmail, Yahoo, Outlook..."></div>
         <div><label for="cf-topic">Subject</label>
           <select id="cf-topic" name="topic"><option>General Enquiry</option><option>Prayer Request</option><option>Counselling</option><option>Testimony</option><option>Membership</option><option>Partnership / Giving</option></select></div>
-        <div class="full"><label for="cf-msg">Message *</label><textarea id="cf-msg" name="message" required></textarea></div>
-        <div class="full"><button class="btn btn-red" type="submit">Send Message</button><div class="form-status" role="status"></div></div>
+        <div class="full"><label for="cf-msg">Your request / message *</label><textarea id="cf-msg" name="message" required></textarea></div>
+        <div class="full"><button class="btn btn-red" type="submit">Send to Church Email</button><div class="form-status" role="status"></div></div>
       </form>
     </div>
     <div class="reveal">

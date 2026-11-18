@@ -163,7 +163,7 @@
       (ct.email ? '<li><a href="mailto:' + esc(ct.email) + '">' + esc(ct.email) + "</a></li>" : "") +
       (ct.address ? "<li>" + esc(ct.address) + "</li>" : "") +
       "</ul></div>" +
-      '</div><div class="footer-bottom"><span>&copy; ' + year + " " + esc(S.churchName) + " (" + esc(S.tagline) + '). All rights reserved.</span><a href="admin.html" rel="nofollow">Admin</a></div></div></footer>' +
+      '</div><div class="footer-bottom"><span><span id="copyMark">&copy;</span> ' + year + " " + esc(S.churchName) + " (" + esc(S.tagline) + '). All rights reserved.</span><span>' + esc(S.motto) + '</span></div></div></footer>' +
       (waLink() ? '<a class="whatsapp-float" href="' + waLink("Hello Thyword International Worship Centre,") + '" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">' + big(ICON.wa, 30) + "</a>" : "");
   }
 
@@ -357,7 +357,7 @@
   function sendForm(data) {
     // Sends the form to the admin's inbox. Uses settings.formEndpoint (e.g. Formspree) if set,
     // otherwise FormSubmit.co with settings.adminEmail. No server needed.
-    var url = S.formEndpoint || (S.adminEmail ? "https://formsubmit.co/ajax/" + encodeURIComponent(S.adminEmail) : "");
+    var url = S.formEndpoint || (S.adminEmail ? "https://formsubmit.co/ajax/" + S.adminEmail.trim() : "");
     if (!url) return Promise.reject(new Error("not-configured"));
     return fetch(url, {
       method: "POST",
@@ -614,15 +614,16 @@
       return '<div class="status-row"><span class="plat">' + ICON.clock + " " + esc(t.name) + '</span><span class="pill">' + esc(t.day) + " " + esc(t.time) + "</span></div>";
     }).join("");
 
+    if ($("#churchEmail")) $("#churchEmail").textContent = ct.email || "";
     var form = $("#contactForm");
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var st = $(".form-status", form), btn = $("button[type=submit]", form);
       var data = { name: form.name.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim(), topic: form.topic.value, message: form.message.value.trim() };
-      if (!data.name || !data.message || (!data.email && !data.phone)) { st.className = "form-status err"; st.textContent = "Please add your name, a message, and an email or phone number."; return; }
+      if (!data.name || !data.phone || !data.message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { st.className = "form-status err"; st.textContent = "Please fill in your name, a valid email address, your phone number and your request."; return; }
       btn.disabled = true; st.className = "form-status"; st.textContent = "Sending...";
-      sendForm({ _subject: "Website message (" + data.topic + ") from " + data.name, _template: "table", _captcha: "false", name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
-        .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your message has been sent. We will get back to you soon."; form.reset(); })
+      sendForm({ _subject: "Website request (" + data.topic + ") from " + data.name, _template: "table", _captcha: "false", _replyto: data.email, name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
+        .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your request has been sent to the church's email. We will get back to you soon."; form.reset(); })
         .catch(function () {
           // Fall back to WhatsApp so the message is never lost
           var text = "Hello, my name is " + data.name + ".\n" + data.topic + ": " + data.message + (data.phone ? "\nPhone: " + data.phone : "") + (data.email ? "\nEmail: " + data.email : "");
@@ -634,6 +635,22 @@
     $("#subscribeBox").innerHTML = subscribeBlock();
   };
 
+  /* ---------- hidden admin entrance ----------
+   * There is no public link to the admin area. To open it from the website,
+   * tap the (c) symbol at the bottom of any page 5 times quickly, or press
+   * Ctrl + Shift + A. The admin page itself asks for the admin password. */
+  function bindAdminEntrance() {
+    var taps = 0, timer;
+    var mark = $("#copyMark");
+    if (mark) mark.addEventListener("click", function () {
+      taps++; clearTimeout(timer); timer = setTimeout(function () { taps = 0; }, 1500);
+      if (taps >= 5) window.location.href = "admin.html";
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) { e.preventDefault(); window.location.href = "admin.html"; }
+    });
+  }
+
   /* ---------- boot ---------- */
   loadContent(function (content) {
     C = content; S = C.settings || {};
@@ -643,6 +660,7 @@
     if (pages[page]) pages[page]();
     bindZoom();
     bindSubscribe();
+    bindAdminEntrance();
     tickCountdowns(); setInterval(tickCountdowns, 1000);
     updateLive();
     reveal();

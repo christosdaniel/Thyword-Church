@@ -385,6 +385,21 @@
       };
       $("#c-out").onclick = function () { conn = { branch: "main" }; saveConn(); fileSha = null; toast("Disconnected. The token was removed from this browser."); render(); };
 
+      var pw = document.createElement("div"); pw.className = "panel";
+      pw.innerHTML = '<h2>Admin Password</h2><p class="help">Change the password used to open this admin page. After changing it, click <b>Save &amp; Publish</b>. The new password works on all devices a few minutes later.</p>' +
+        '<div class="fields"><div><label>New password</label><input type="password" id="pw1" autocomplete="new-password"></div><div><label>Repeat new password</label><input type="password" id="pw2" autocomplete="new-password"></div></div>' +
+        '<button class="btn btn-green btn-sm" id="pwSave" type="button" style="margin-top:1rem">Change password</button>';
+      P.appendChild(pw);
+      $("#pwSave").onclick = function () {
+        var a = $("#pw1").value, b = $("#pw2").value;
+        if (a.length < 8) { toast("Use at least 8 characters.", true); return; }
+        if (a !== b) { toast("The two passwords do not match.", true); return; }
+        window.__setAdminPassword(a).then(function () {
+          try { sessionStorage.setItem("tiwc-admin-ok", data.settings.adminPasswordHash); } catch (e) {}
+          $("#pw1").value = $("#pw2").value = ""; toast("Password changed. Now click Save & Publish.");
+        });
+      };
+
       P.appendChild(objectPanel("Website Settings", "", data.settings, [
         ["churchName", "Church name"], ["tagline", "Tagline"], ["motto", "Motto"], ["logo", "Logo", "image"],
         ["adminEmail", "Admin email (receives subscriptions & messages)", "text", { full: true, help: "Subscribe and contact forms are delivered to this address by the free FormSubmit.co service. The first time someone submits, FormSubmit sends a one-time activation email to this address. Click the link in it." }],
@@ -398,6 +413,38 @@
 
   $("#publishBtn").onclick = publish;
   $("#downloadBtn").onclick = download;
-  render();
-  if (connected()) loadFromGitHub().catch(function (e) { toast("Could not load from GitHub: " + e.message, true); });
+
+  /* ---------- admin login ----------
+   * The admin page is hidden from the public website and protected by a password.
+   * Only a SHA-256 fingerprint of the password is stored in content.js. Publishing
+   * also needs the GitHub token, which only administrators have. */
+  function sha256(text) {
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+    });
+  }
+  function unlocked() { try { return sessionStorage.getItem("tiwc-admin-ok") === ((data.settings || {}).adminPasswordHash || ""); } catch (e) { return false; } }
+  function start() {
+    $("#gate").remove();
+    render();
+    if (connected()) loadFromGitHub().catch(function (e) { toast("Could not load from GitHub: " + e.message, true); });
+  }
+  $("#logoutBtn").onclick = function () {
+    if (dirty && !confirm("You have unsaved changes. Log out anyway?")) return;
+    dirty = false; try { sessionStorage.removeItem("tiwc-admin-ok"); } catch (e) {}
+    location.href = "index.html";
+  };
+  window.__setAdminPassword = function (pw) { return sha256(pw).then(function (h) { data.settings.adminPasswordHash = h; markDirty(); }); };
+  if (!window.crypto || !crypto.subtle) {
+    $("#gateMsg").textContent = "Please open the admin page over https (your live website address).";
+  } else if (unlocked()) start();
+  else {
+    $("#gateForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      sha256($("#gatePass").value).then(function (h) {
+        if (h === (data.settings || {}).adminPasswordHash) { try { sessionStorage.setItem("tiwc-admin-ok", h); } catch (er) {} start(); }
+        else { $("#gateMsg").textContent = "Incorrect password."; $("#gatePass").select(); }
+      });
+    });
+  }
 })();
