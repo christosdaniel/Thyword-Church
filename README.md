@@ -56,7 +56,7 @@ All content lives in **`data/content.js`**, so you can also edit that file by ha
 
 ## 3. Email sign-ups and contact messages
 
-The church email `thywordinternationalworshipcentre@gmail.com` is set as the **Admin email** (you can change it in **Admin → Settings**). Visitors can use any email provider (Gmail, Yahoo, Outlook and others). The contact form asks for name, email, phone number and the request. Sign-ups ("Get upcoming event & live service alerts") and contact-form messages are delivered there by the free [FormSubmit](https://formsubmit.co) service. The first time someone submits, FormSubmit sends a one-time **activation email** to that address. Click the link in it. If you prefer [Formspree](https://formspree.io), paste its form URL in *Custom form endpoint*.
+The church email `thywordintlworshipcentre@gmail.com` is set as the **Admin email** (you can change it in **Admin → Settings**). Visitors can use any email provider (Gmail, Yahoo, Outlook and others). The contact form asks for name, email, phone number and the request. Sign-ups ("Get upcoming event & live service alerts") and contact-form messages are delivered there by the free [FormSubmit](https://formsubmit.co) service. The first time someone submits, FormSubmit sends a one-time **activation email** to that address. Click the link in it. If you prefer [Formspree](https://formspree.io), paste its form URL in *Custom form endpoint*.
 
 Until an email is set, the contact form falls back to WhatsApp.
 

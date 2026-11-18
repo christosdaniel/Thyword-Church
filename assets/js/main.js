@@ -625,9 +625,12 @@
       sendForm({ _subject: "Website request (" + data.topic + ") from " + data.name, _template: "table", _captcha: "false", _replyto: data.email, name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
         .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your request has been sent to the church's email. We will get back to you soon."; form.reset(); })
         .catch(function () {
-          // Fall back to WhatsApp so the message is never lost
-          var text = "Hello, my name is " + data.name + ".\n" + data.topic + ": " + data.message + (data.phone ? "\nPhone: " + data.phone : "") + (data.email ? "\nEmail: " + data.email : "");
-          if (waLink()) { st.className = "form-status ok"; st.innerHTML = 'Opening WhatsApp to send your message... <a href="' + waLink(text) + '" target="_blank" rel="noopener">tap here if it did not open</a>.'; window.open(waLink(text), "_blank"); }
+          // If the online form service can't be reached, open the visitor's own email app
+          // with the request already written, addressed to the church's email.
+          var to = (C.contact || {}).email || S.adminEmail;
+          var body = "Name: " + data.name + "\nEmail: " + data.email + "\nPhone: " + data.phone + "\nSubject: " + data.topic + "\n\n" + data.message;
+          var mail = "mailto:" + to + "?subject=" + encodeURIComponent("Website request (" + data.topic + ") from " + data.name) + "&body=" + encodeURIComponent(body);
+          if (to) { st.className = "form-status ok"; st.innerHTML = 'Opening your email app to send your request to ' + esc(to) + '... <a href="' + mail + '">tap here if it did not open</a>.'; window.location.href = mail; }
           else { st.className = "form-status err"; st.textContent = "Sorry, we couldn't send that right now. Please call us instead."; }
         })
         .then(function () { btn.disabled = false; });
