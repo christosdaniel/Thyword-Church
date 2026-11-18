@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Website Admin | Thyword International Worship Centre</title>
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body { background: var(--bg-soft); }
+  .adm-top { background: var(--green-900); color: #fff; position: sticky; top: 0; z-index: 40; }
+  .adm-top .container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; flex-wrap: wrap; padding: .5rem 0; }
+  .adm-top .brand-name { color: #fff; }
+  .adm-top .brand img { width: 46px; height: 46px; }
+  .adm-actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+  .conn { font-size: .8rem; padding: .3rem .7rem; border-radius: 999px; background: rgba(255,255,255,.12); }
+  .conn.ok { background: var(--mint); color: var(--green-900); font-weight: 700; }
+  .adm-wrap { display: grid; grid-template-columns: 230px 1fr; gap: 1.5rem; padding: 1.5rem 0 4rem; }
+  @media (max-width: 860px) { .adm-wrap { grid-template-columns: 1fr; } }
+  .adm-tabs { display: flex; flex-direction: column; gap: .3rem; position: sticky; top: 90px; align-self: start; }
+  @media (max-width: 860px) { .adm-tabs { flex-direction: row; overflow-x: auto; position: static; padding-bottom: .3rem; } }
+  .adm-tabs button { text-align: left; border: 0; background: #fff; padding: .75rem 1rem; border-radius: 10px; font-family: var(--font-head); font-weight: 600; color: var(--green-800); cursor: pointer; white-space: nowrap; }
+  .adm-tabs button.active { background: var(--green-700); color: #fff; }
+  .panel { background: #fff; border-radius: var(--radius); box-shadow: 0 4px 16px rgba(7,46,45,.06); padding: 1.6rem; margin-bottom: 1.2rem; }
+  .panel h2 { font-size: 1.35rem; }
+  .panel > p.help, .help { color: var(--muted); font-size: .88rem; }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; }
+  .fields .full { grid-column: 1 / -1; }
+  @media (max-width: 640px) { .fields { grid-template-columns: 1fr; } }
+  .item { border: 1.5px solid var(--line); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; background: #fcfdfc; }
+  .item-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .8rem; }
+  .item-head strong { font-family: var(--font-head); color: var(--green-800); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-tools { display: flex; gap: .3rem; flex: 0 0 auto; }
+  .icon-btn { border: 1.5px solid var(--line); background: #fff; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: .95rem; color: var(--green-800); }
+  .icon-btn:hover { border-color: var(--green-600); }
+  .icon-btn.del:hover { background: var(--red-600); color: #fff; border-color: var(--red-600); }
+  .media-field { display: flex; gap: .5rem; align-items: center; }
+  .media-field input[type=text] { flex: 1; }
+  .thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; background: var(--bg-soft); flex: 0 0 64px; }
+  .switch { display: flex; align-items: center; gap: .8rem; padding: 1rem; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; font-weight: 700; }
+  .switch input { width: 22px; height: 22px; accent-color: var(--red-600); }
+  .switch.on { border-color: var(--red-600); background: #fff1f1; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--green-900); color: #fff; padding: .9rem 1.4rem; border-radius: 12px; box-shadow: var(--shadow); z-index: 200; max-width: calc(100% - 32px); display: none; }
+  .toast.show { display: block; }
+  .toast.err { background: var(--red-600); }
+  .steps { padding-left: 1.2rem; font-size: .9rem; }
+  .steps li { margin-bottom: .4rem; }
+  .dropzone { border: 2px dashed var(--mint); background: var(--mint-100); border-radius: 12px; padding: 1.4rem; text-align: center; margin-bottom: 1rem; }
+  .progress { font-size: .85rem; color: var(--green-700); font-weight: 600; margin-top: .5rem; min-height: 1.2em; }
+  .unsaved { background: var(--gold); color: var(--green-900); font-weight: 800; font-size: .75rem; padding: .25rem .6rem; border-radius: 999px; }
+  code { background: var(--bg-soft); padding: .1rem .35rem; border-radius: 5px; font-size: .85em; }
+</style>
+</head>
+<body>
+<div class="adm-top">
+  <div class="container">
+    <a class="brand" href="index.html" target="_blank"><img src="assets/images/logo.png" alt="Logo"><span class="brand-text"><span class="brand-name">Website Admin</span><span class="brand-tag" style="color:var(--gold)">Thyword International Worship Centre</span></span></a>
+    <div class="adm-actions">
+      <span class="unsaved hidden" id="unsaved">Unsaved changes</span>
+      <span class="conn" id="connState">Not connected</span>
+      <button class="btn btn-outline btn-sm" id="downloadBtn" type="button">Download file</button>
+      <button class="btn btn-gold btn-sm" id="publishBtn" type="button">Save &amp; Publish</button>
+    </div>
+  </div>
+</div>
+
+<div class="container adm-wrap">
+  <nav class="adm-tabs" id="tabs"></nav>
+  <div id="panels"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="data/content.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

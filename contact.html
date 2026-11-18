@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact Us | Thyword International Worship Centre</title>
+<meta name="description" content="Contact Thyword International Worship Centre: phone, WhatsApp, email, location and branches.">
+<meta name="theme-color" content="#0e4c4b">
+<meta property="og:title" content="Contact Us | Thyword International Worship Centre">
+<meta property="og:description" content="Contact Thyword International Worship Centre: phone, WhatsApp, email, location and branches.">
+<meta property="og:image" content="assets/images/logo.png">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="contact">
+<div id="site-header"></div>
+<noscript><p style="padding:1rem;text-align:center">Please enable JavaScript to view this website.</p></noscript>
+<main>
+<section class="page-hero"><div class="container">
+  <div class="crumbs"><a href="index.html">Home</a> / Contact</div>
+  <h1>Contact Us</h1>
+  <p>We'd love to hear from you. Call, chat on WhatsApp, send an email or visit any of our branches.</p>
+</div></section>
+
+<section class="section">
+  <div class="container">
+    <div class="contact-grid" id="contactCards"></div>
+  </div>
+</section>
+<section class="section section-soft" style="padding-top:4rem">
+  <div class="container split" style="align-items:start">
+    <div class="reveal">
+      <span class="eyebrow">Send a Message</span>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800">Prayer requests, enquiries &amp; counselling</h2>
+      <form id="contactForm" class="form-grid" novalidate>
+        <div><label for="cf-name">Full name *</label><input id="cf-name" name="name" required></div>
+        <div><label for="cf-phone">Phone / WhatsApp</label><input id="cf-phone" name="phone" type="tel"></div>
+        <div><label for="cf-email">Email</label><input id="cf-email" name="email" type="email"></div>
+        <div><label for="cf-topic">Subject</label>
+          <select id="cf-topic" name="topic"><option>General Enquiry</option><option>Prayer Request</option><option>Counselling</option><option>Testimony</option><option>Membership</option><option>Partnership / Giving</option></select></div>
+        <div class="full"><label for="cf-msg">Message *</label><textarea id="cf-msg" name="message" required></textarea></div>
+        <div class="full"><button class="btn btn-red" type="submit">Send Message</button><div class="form-status" role="status"></div></div>
+      </form>
+    </div>
+    <div class="reveal">
+      <div class="map" id="map"></div>
+      <div class="status-card" style="margin-top:1.2rem">
+        <h3 style="font-size:1.1rem">Service Times</h3>
+        <div id="serviceTimes"></div>
+      </div>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap" id="socialLinks"></div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="section-head"><span class="eyebrow">One Church, Many Locations</span><h2>Our Branches</h2></div>
+    <div class="branch-list" id="branchList"></div>
+  </div>
+</section>
+<section class="section" style="padding-top:0">
+  <div class="container" id="subscribeBox"></div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
