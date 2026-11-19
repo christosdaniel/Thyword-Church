@@ -495,6 +495,56 @@
     return web;
   }
 
+  /* ---------- "Send with" pop-up: after pressing Send/Subscribe the member picks an app ---------- */
+  var CHOICES = [
+    { id: "gmail", name: "Gmail", note: "Opens Gmail", color: "#ea4335", icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5z"/></svg>' },
+    { id: "outlook", name: "Outlook / Hotmail", note: "Opens Outlook", color: "#0a64d8", icon: ICON.mail.replace(/16/g, "22") },
+    { id: "yahoo", name: "Yahoo Mail", note: "Opens Yahoo Mail", color: "#6001d2", icon: ICON.mail.replace(/16/g, "22") },
+    { id: "app", name: "Other email app", note: "iPhone Mail, Samsung Email\u2026", color: "#0e4c4b", icon: ICON.mail.replace(/16/g, "22") },
+    { id: "website", name: "Send from this website", note: "No email app needed", color: "#b3111a", icon: big(ICON.church, 22) }
+  ];
+  var chooser;
+  // opts: { title, subject, body, onWebsite(), onOpened(name, link) }
+  function chooseSendApp(opts) {
+    var to = (C.contact || {}).email || S.adminEmail;
+    var last = "";
+    try { last = localStorage.getItem("tiwc-send-via") || ""; } catch (e) {}
+    if (!chooser) {
+      chooser = document.createElement("div");
+      chooser.className = "send-sheet";
+      chooser.setAttribute("role", "dialog");
+      chooser.setAttribute("aria-modal", "true");
+      chooser.setAttribute("aria-labelledby", "sendSheetTitle");
+      document.body.appendChild(chooser);
+      chooser.addEventListener("click", function (e) { if (e.target === chooser) closeChooser(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && chooser.classList.contains("open")) closeChooser(); });
+    }
+    var list = CHOICES.filter(function (c) { return c.id === "website" ? !!(S.formEndpoint || S.adminEmail) : !!to; });
+    chooser.innerHTML = '<div class="sheet-panel"><div class="sheet-grab"></div>' +
+      '<div class="sheet-head"><div><h3 id="sendSheetTitle">' + esc(opts.title || "Send with") + '</h3><p>Choose how you would like to send it to the church' + (to ? " (" + esc(to) + ")" : "") + '.</p></div>' +
+      '<button class="sheet-close" type="button" aria-label="Close">&times;</button></div>' +
+      '<div class="sheet-list">' + list.map(function (c) {
+        return '<button type="button" class="sheet-opt" data-via="' + c.id + '"><span class="sheet-ico" style="background:' + c.color + '">' + c.icon + '</span>' +
+          '<span class="sheet-txt"><b>' + esc(c.name) + "</b><small>" + c.note + "</small></span>" + (c.id === last ? '<span class="sheet-last">Last used</span>' : "") + "</button>";
+      }).join("") + "</div></div>";
+    $(".sheet-close", chooser).onclick = closeChooser;
+    $$(".sheet-opt", chooser).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var via = b.getAttribute("data-via");
+        try { localStorage.setItem("tiwc-send-via", via); } catch (e) {}
+        closeChooser();
+        if (via === "website") { opts.onWebsite(); return; }
+        // Opened right inside the tap, so phones and browsers allow the new app/tab
+        var link = openCompose(via, to, opts.subject, opts.body);
+        if (opts.onOpened) opts.onOpened((PLATFORMS[via] || PLATFORMS.app).name, link);
+      });
+    });
+    chooser.classList.add("open");
+    document.body.classList.add("sheet-open");
+    setTimeout(function () { var f = $(".sheet-opt", chooser); if (f) f.focus(); }, 50);
+  }
+  function closeChooser() { if (chooser) chooser.classList.remove("open"); document.body.classList.remove("sheet-open"); }
+
   function bindSubscribe() {
     $$(".js-subscribe").forEach(function (form) {
       form.addEventListener("submit", function (e) {
@@ -502,14 +552,22 @@
         var note = $(".note", form), btn = $("button", form);
         var email = form.email.value.trim(), name = form.name ? form.name.value.trim() : "";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { note.textContent = "Please enter a valid email address."; return; }
-        btn.disabled = true; note.textContent = "Sending...";
-        sendForm({ _subject: "New subscriber for event alerts: " + email, _template: "table", _captcha: "false", _replyto: email, type: "Event & live alerts subscription", name: name, email: email, date: new Date().toString() })
-          .then(function () { note.textContent = "Thank you! You've been added to receive our upcoming event and live alerts."; form.reset(); })
-          .catch(function () {
-            var link = mailtoChurch("Please add me to event alerts", "Name: " + name + "\nEmail: " + email);
-            note.innerHTML = link ? 'Opening your email app to complete your subscription... <a href="' + link + '" style="color:#fff;text-decoration:underline">tap here if it did not open</a>.' : "Sorry, we couldn't send that right now. Please reach us on WhatsApp instead.";
-          })
-          .then(function () { btn.disabled = false; });
+        chooseSendApp({
+          title: "Subscribe with",
+          subject: "Please add me to event alerts",
+          body: "Hello Thyword International Worship Centre,\n\nPlease add me to your list for upcoming events and live service alerts.\n\nName: " + (name || "-") + "\nEmail: " + email,
+          onOpened: function (appName, link) {
+            note.innerHTML = "Opening " + esc(appName) + "... Press <b>Send</b> there to finish subscribing. " +
+              '<a href="' + esc(link) + '" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Tap here if it did not open</a>.';
+          },
+          onWebsite: function () {
+            btn.disabled = true; note.textContent = "Sending...";
+            sendForm({ _subject: "New subscriber for event alerts: " + email, _template: "table", _captcha: "false", _replyto: email, type: "Event & live alerts subscription", name: name, email: email, date: new Date().toString() })
+              .then(function () { note.textContent = "Thank you! You've been added to receive our upcoming event and live alerts."; form.reset(); })
+              .catch(function () { note.innerHTML = "Sorry, the website couldn't send it right now. Press <b>Subscribe</b> again and choose Gmail, Outlook, Yahoo or your email app."; })
+              .then(function () { btn.disabled = false; });
+          }
+        });
       });
     });
   }
@@ -789,51 +847,67 @@
 
     if ($("#churchEmail")) $("#churchEmail").textContent = ct.email || "";
     var form = $("#contactForm");
-    var sendBtn = $("#cf-send");
-    var labels = { website: "Send to Church Email", gmail: "Open Gmail to Send", outlook: "Open Outlook to Send", yahoo: "Open Yahoo Mail to Send", app: "Open My Email App" };
-    var setVia = function (v) {
-      $$('input[name="via"]', form).forEach(function (r) { r.checked = r.value === v; r.closest(".send-opt").classList.toggle("on", r.checked); });
-      sendBtn.textContent = labels[v] || labels.website;
-    };
-    var savedVia = "website";
-    try { savedVia = localStorage.getItem("tiwc-send-via") || "website"; } catch (e) {}
-    setVia(labels[savedVia] ? savedVia : "website");
-    $$('input[name="via"]', form).forEach(function (r) {
-      r.addEventListener("change", function () { setVia(r.value); try { localStorage.setItem("tiwc-send-via", r.value); } catch (e) {} });
-    });
-
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var st = $(".form-status", form), btn = sendBtn;
-      var via = (($('input[name="via"]:checked', form) || {}).value) || "website";
+      var st = $(".form-status", form), btn = $("button[type=submit]", form);
       var data = { name: form.name.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim(), topic: form.topic.value, message: form.message.value.trim() };
       if (!data.name || !data.phone || !data.message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { st.className = "form-status err"; st.textContent = "Please fill in your name, a valid email address, your phone number and your request."; return; }
-      var to = (C.contact || {}).email || S.adminEmail;
       var subject = "Website request (" + data.topic + ") from " + data.name;
       var body = "Name: " + data.name + "\nEmail: " + data.email + "\nPhone: " + data.phone + "\nSubject: " + data.topic + "\n\n" + data.message;
-
-      if (via !== "website") {
-        // Open the member's chosen email platform with everything filled in
-        if (!to) { st.className = "form-status err"; st.textContent = "The church email is not set yet. Please call us instead."; return; }
-        var link = openCompose(via, to, subject, body), name = (PLATFORMS[via] || PLATFORMS.app).name;
-        st.className = "form-status ok";
-        st.innerHTML = "Opening " + esc(name) + " with your request ready. Please press <b>Send</b> there to deliver it to the church. " +
-          '<a href="' + esc(link) + '" target="_blank" rel="noopener">Tap here if it did not open</a>.';
-        return;
-      }
-
-      btn.disabled = true; st.className = "form-status"; st.textContent = "Sending...";
-      sendForm({ _subject: subject, _template: "table", _captcha: "false", _replyto: data.email, name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
-        .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your request has been sent to the church's email. We will get back to you soon."; form.reset(); setVia(via); })
-        .catch(function () {
-          // If the website's sending service can't be reached, let the member pick their own email instead
-          st.className = "form-status err";
-          st.innerHTML = "Sorry, the website couldn't send it right now. Please choose <b>Gmail</b>, <b>Outlook</b>, <b>Yahoo Mail</b> or <b>Other email app</b> above and press the button again. Your message is still filled in.";
-        })
-        .then(function () { btn.disabled = false; });
+      st.className = "form-status"; st.textContent = "";
+      chooseSendApp({
+        title: "Send with",
+        subject: subject,
+        body: body,
+        onOpened: function (appName, link) {
+          st.className = "form-status ok";
+          st.innerHTML = "Opening " + esc(appName) + " with your request ready. Please press <b>Send</b> there to deliver it to the church. " +
+            '<a href="' + esc(link) + '" target="_blank" rel="noopener">Tap here if it did not open</a>.';
+        },
+        onWebsite: function () {
+          btn.disabled = true; st.className = "form-status"; st.textContent = "Sending...";
+          sendForm({ _subject: subject, _template: "table", _captcha: "false", _replyto: data.email, name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
+            .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your request has been sent to the church's email. We will get back to you soon."; form.reset(); })
+            .catch(function () {
+              st.className = "form-status err";
+              st.innerHTML = "Sorry, the website couldn't send it right now. Press <b>Send to Church</b> again and choose Gmail, Outlook, Yahoo or your email app. Your message is still filled in.";
+            })
+            .then(function () { btn.disabled = false; });
+        }
+      });
     });
     $("#subscribeBox").innerHTML = subscribeBlock();
   };
+
+  /* ---------- header: hides after 5 seconds without scrolling, comes back on scroll ---------- */
+  function autoHideHeader() {
+    var header = $(".site-header");
+    if (!header) return;
+    var timer, hovering = false;
+    var stuck = function () { return header.getBoundingClientRect().top <= 0 && window.scrollY > 0; };
+    var busy = function () {
+      return hovering || header.contains(document.activeElement) || ($(".main-nav") || {}).classList && $(".main-nav").classList.contains("open");
+    };
+    var show = function () { header.classList.remove("header-hidden"); };
+    var schedule = function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (busy()) return schedule();
+        if (stuck()) header.classList.add("header-hidden");   // at the very top the header stays in place
+      }, 5000);
+    };
+    var wake = function () { show(); schedule(); };
+    window.addEventListener("scroll", wake, { passive: true });
+    window.addEventListener("touchmove", wake, { passive: true });
+    window.addEventListener("wheel", wake, { passive: true });
+    document.addEventListener("keydown", function (e) { if (/^(Arrow|Page|Home|End| )/.test(e.key)) wake(); });
+    header.addEventListener("mouseenter", function () { hovering = true; show(); });
+    header.addEventListener("mouseleave", function () { hovering = false; schedule(); });
+    header.addEventListener("focusin", show);
+    // A thin strip at the top of the screen brings it back on computers
+    document.addEventListener("mousemove", function (e) { if (e.clientY < 12) wake(); });
+    schedule();
+  }
 
   /* ---------- boot ---------- */
   loadContent(function (content) {
@@ -845,6 +919,7 @@
     if (pages[page]) pages[page]();
     bindZoom();
     bindSubscribe();
+    autoHideHeader();
     tickCountdowns(); setInterval(tickCountdowns, 1000);
     updateLive();
     reveal();
