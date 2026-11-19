@@ -36,7 +36,7 @@
     <div class="reveal">
       <span class="eyebrow">Send a Message</span>
       <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800">Prayer requests, enquiries &amp; counselling</h2>
-      <p style="color:var(--muted)">Fill in your name, email address, phone number and request. It is sent straight to the church's email, <strong id="churchEmail"></strong>, and we will reply to you.</p>
+      <p style="color:var(--muted)">Fill in your name, email address, phone number and request. Then choose how to send it: straight from this website, or from your own Gmail, Outlook, Yahoo or other email app. It goes to the church's email, <strong id="churchEmail"></strong>, and we will reply to you.</p>
       <form id="contactForm" class="form-grid" novalidate>
         <div><label for="cf-name">Full name *</label><input id="cf-name" name="name" required></div>
         <div><label for="cf-phone">Phone number *</label><input id="cf-phone" name="phone" type="tel" required></div>
@@ -44,7 +44,17 @@
         <div><label for="cf-topic">Subject</label>
           <select id="cf-topic" name="topic"><option>General Enquiry</option><option>Prayer Request</option><option>Counselling</option><option>Testimony</option><option>Membership</option><option>Partnership / Giving</option></select></div>
         <div class="full"><label for="cf-msg">Your request / message *</label><textarea id="cf-msg" name="message" required></textarea></div>
-        <div class="full"><button class="btn btn-red" type="submit">Send to Church Email</button><div class="form-status" role="status"></div></div>
+        <fieldset class="full send-via">
+          <legend>How would you like to send it?</legend>
+          <div class="send-options">
+            <label class="send-opt"><input type="radio" name="via" value="website" checked><span><b>This website</b><small>Sent for you. No email app needed</small></span></label>
+            <label class="send-opt"><input type="radio" name="via" value="gmail"><span><b>Gmail</b><small>Opens Gmail</small></span></label>
+            <label class="send-opt"><input type="radio" name="via" value="outlook"><span><b>Outlook / Hotmail</b><small>Opens Outlook</small></span></label>
+            <label class="send-opt"><input type="radio" name="via" value="yahoo"><span><b>Yahoo Mail</b><small>Opens Yahoo Mail</small></span></label>
+            <label class="send-opt"><input type="radio" name="via" value="app"><span><b>Other email app</b><small>iPhone Mail, Samsung Email&hellip;</small></span></label>
+          </div>
+        </fieldset>
+        <div class="full"><button class="btn btn-red" type="submit" id="cf-send">Send to Church Email</button><div class="form-status" role="status"></div></div>
       </form>
     </div>
     <div class="reveal">

@@ -77,6 +77,13 @@ From then on, tap the icon and you go straight in, already connected. Use **Log 
 
 Requests from the contact form (name, email, phone number and the request) and email sign-ups go to **thywordintlworshipcentre@gmail.com**. Visitors can use any email provider (Gmail, Yahoo, Outlook and others). Delivery is handled by the free [FormSubmit](https://formsubmit.co) service.
 
+**Members choose how to send.** Under the message, the form asks *"How would you like to send it?"*:
+- **This website**: sent for them through FormSubmit. No email app needed.
+- **Gmail**, **Outlook / Hotmail** or **Yahoo Mail**: opens that service (the app on iPhone if it's installed, otherwise the website) with the church address, subject and message already filled in. The member just presses **Send**.
+- **Other email app**: opens the phone's or computer's own email app (iPhone Mail, Samsung Email and others).
+
+The form remembers each member's choice on their device.
+
 **One-time activation (required):**
 1. Open the **published** website (the `https://` address) and send one test request from the Contact page.
 2. Within a few minutes FormSubmit emails **thywordintlworshipcentre@gmail.com** with the subject *"Action Required: Activate FormSubmit"*. Look in **Spam/Promotions** too.

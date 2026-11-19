@@ -449,3 +449,16 @@ textarea { min-height: 140px; resize: vertical; }
   .mobile-sermons { padding: .4rem .65rem; font-size: .68rem; }
 }
 .video-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Contact form: choose how to send */
+.send-via { border: 0; padding: 0; margin: .2rem 0 0; min-width: 0; }
+.send-via legend { font-weight: 700; font-size: .88rem; color: var(--green-800); margin-bottom: .5rem; padding: 0; }
+.send-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .5rem; }
+.send-opt { position: relative; display: flex; align-items: center; gap: .6rem; margin: 0; padding: .7rem .85rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; transition: border-color .2s, background .2s; }
+.send-opt:hover { border-color: var(--green-600); }
+.send-opt input { width: 18px; height: 18px; flex: 0 0 18px; accent-color: var(--red-600); margin: 0; }
+.send-opt span { display: flex; flex-direction: column; line-height: 1.25; }
+.send-opt b { font-size: .9rem; color: var(--green-800); }
+.send-opt small { font-size: .74rem; color: var(--muted); font-weight: 400; }
+.send-opt.on { border-color: var(--red-600); background: #fff5f5; }
+@media (max-width: 520px) { .send-options { grid-template-columns: 1fr 1fr; } .send-opt { padding: .6rem .65rem; } }

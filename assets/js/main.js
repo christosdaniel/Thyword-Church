@@ -460,6 +460,41 @@
     window.location.href = link;
     return link;
   }
+  /* ---------- open the member's chosen email platform ---------- */
+  var PLATFORMS = {
+    gmail: { name: "Gmail",
+      web: function (t, s, b) { return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(t) + "&su=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); },
+      ios: function (t, s, b) { return "googlegmail://co?to=" + encodeURIComponent(t) + "&subject=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); } },
+    outlook: { name: "Outlook",
+      web: function (t, s, b) { return "https://outlook.live.com/mail/0/deeplink/compose?to=" + encodeURIComponent(t) + "&subject=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); },
+      ios: function (t, s, b) { return "ms-outlook://compose?to=" + encodeURIComponent(t) + "&subject=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); } },
+    yahoo: { name: "Yahoo Mail",
+      web: function (t, s, b) { return "https://compose.mail.yahoo.com/?to=" + encodeURIComponent(t) + "&subject=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); },
+      ios: function (t, s, b) { return "ymail://mail/compose?to=" + encodeURIComponent(t) + "&subject=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); } },
+    app: { name: "your email app",
+      web: function (t, s, b) { return "mailto:" + t + "?subject=" + encodeURIComponent(s) + "&body=" + encodeURIComponent(b); } }
+  };
+  var IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var IS_MOBILE = IS_IOS || /Android|Mobi/i.test(navigator.userAgent);
+  // Returns the link it opened (also shown to the member as a backup "tap here" link)
+  function openCompose(via, to, subject, body) {
+    var P = PLATFORMS[via] || PLATFORMS.app, web = P.web(to, subject, body);
+    if (via === "app") { window.location.href = web; return web; }
+    if (IS_IOS && P.ios) {
+      // Try the installed app first; if it isn't installed, open the website version
+      var left = false, onHide = function () { left = true; };
+      document.addEventListener("visibilitychange", onHide, { once: true });
+      window.location.href = P.ios(to, subject, body);
+      setTimeout(function () { if (!left && document.visibilityState === "visible") window.location.href = web; }, 1600);
+      return web;
+    }
+    if (IS_MOBILE) { window.location.href = web; return web; }
+    // (no "noopener" flag here: with it, browsers report every new tab as blocked)
+    var w = window.open(web, "_blank");
+    if (w) { try { w.opener = null; } catch (e) {} } else window.location.href = web;
+    return web;
+  }
+
   function bindSubscribe() {
     $$(".js-subscribe").forEach(function (form) {
       form.addEventListener("submit", function (e) {
@@ -754,21 +789,46 @@
 
     if ($("#churchEmail")) $("#churchEmail").textContent = ct.email || "";
     var form = $("#contactForm");
+    var sendBtn = $("#cf-send");
+    var labels = { website: "Send to Church Email", gmail: "Open Gmail to Send", outlook: "Open Outlook to Send", yahoo: "Open Yahoo Mail to Send", app: "Open My Email App" };
+    var setVia = function (v) {
+      $$('input[name="via"]', form).forEach(function (r) { r.checked = r.value === v; r.closest(".send-opt").classList.toggle("on", r.checked); });
+      sendBtn.textContent = labels[v] || labels.website;
+    };
+    var savedVia = "website";
+    try { savedVia = localStorage.getItem("tiwc-send-via") || "website"; } catch (e) {}
+    setVia(labels[savedVia] ? savedVia : "website");
+    $$('input[name="via"]', form).forEach(function (r) {
+      r.addEventListener("change", function () { setVia(r.value); try { localStorage.setItem("tiwc-send-via", r.value); } catch (e) {} });
+    });
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var st = $(".form-status", form), btn = $("button[type=submit]", form);
+      var st = $(".form-status", form), btn = sendBtn;
+      var via = (($('input[name="via"]:checked', form) || {}).value) || "website";
       var data = { name: form.name.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim(), topic: form.topic.value, message: form.message.value.trim() };
       if (!data.name || !data.phone || !data.message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { st.className = "form-status err"; st.textContent = "Please fill in your name, a valid email address, your phone number and your request."; return; }
+      var to = (C.contact || {}).email || S.adminEmail;
+      var subject = "Website request (" + data.topic + ") from " + data.name;
+      var body = "Name: " + data.name + "\nEmail: " + data.email + "\nPhone: " + data.phone + "\nSubject: " + data.topic + "\n\n" + data.message;
+
+      if (via !== "website") {
+        // Open the member's chosen email platform with everything filled in
+        if (!to) { st.className = "form-status err"; st.textContent = "The church email is not set yet. Please call us instead."; return; }
+        var link = openCompose(via, to, subject, body), name = (PLATFORMS[via] || PLATFORMS.app).name;
+        st.className = "form-status ok";
+        st.innerHTML = "Opening " + esc(name) + " with your request ready. Please press <b>Send</b> there to deliver it to the church. " +
+          '<a href="' + esc(link) + '" target="_blank" rel="noopener">Tap here if it did not open</a>.';
+        return;
+      }
+
       btn.disabled = true; st.className = "form-status"; st.textContent = "Sending...";
-      sendForm({ _subject: "Website request (" + data.topic + ") from " + data.name, _template: "table", _captcha: "false", _replyto: data.email, name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
-        .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your request has been sent to the church's email. We will get back to you soon."; form.reset(); })
+      sendForm({ _subject: subject, _template: "table", _captcha: "false", _replyto: data.email, name: data.name, email: data.email, phone: data.phone, topic: data.topic, message: data.message })
+        .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! Your request has been sent to the church's email. We will get back to you soon."; form.reset(); setVia(via); })
         .catch(function () {
-          // If the online form service can't be reached, open the visitor's own email app
-          // with the request already written, addressed to the church's email.
-          var body = "Name: " + data.name + "\nEmail: " + data.email + "\nPhone: " + data.phone + "\nSubject: " + data.topic + "\n\n" + data.message;
-          var mail = mailtoChurch("Website request (" + data.topic + ") from " + data.name, body);
-          if (mail) { st.className = "form-status ok"; st.innerHTML = 'Opening your email app to send your request to the church... <a href="' + mail + '">tap here if it did not open</a>.'; }
-          else { st.className = "form-status err"; st.textContent = "Sorry, we couldn't send that right now. Please call us instead."; }
+          // If the website's sending service can't be reached, let the member pick their own email instead
+          st.className = "form-status err";
+          st.innerHTML = "Sorry, the website couldn't send it right now. Please choose <b>Gmail</b>, <b>Outlook</b>, <b>Yahoo Mail</b> or <b>Other email app</b> above and press the button again. Your message is still filled in.";
         })
         .then(function () { btn.disabled = false; });
     });
