@@ -1,7 +1,8 @@
-/* Thyword website admin
- * Edits data/content.js and uploads pictures/videos straight to the GitHub
- * repository that hosts the website, using a GitHub access token that is kept
- * only in this browser. Without a token you can still edit and download the file. */
+/* Thyword website admin (standalone)
+ * This admin tool is a single file kept OFF the public website. Open it from your
+ * own computer or phone. It loads data/content.js from the GitHub repository,
+ * lets you edit it, uploads pictures/videos and publishes everything back to
+ * GitHub with an access token that is kept only on this device. */
 (function () {
   "use strict";
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -12,6 +13,7 @@
 
   var CONTENT_PATH = "data/content.js";
   var data = clone(window.SITE_CONTENT || {});
+  var loaded = !!window.SITE_CONTENT;
   var fileSha = null;
   var dirty = false;
 
@@ -21,11 +23,13 @@
   function saveConn() { try { localStorage.setItem("tiwc-admin-conn", JSON.stringify(conn)); } catch (e) {} }
   function connected() { return !!(conn.owner && conn.repo && conn.token); }
   // Guess owner/repo when hosted on GitHub Pages (owner.github.io/repo)
+  conn.owner = conn.owner || "christosdaniel";
+  conn.repo = conn.repo || "Thyword-Church";
   if (!conn.owner && /\.github\.io$/.test(location.hostname)) {
     conn.owner = location.hostname.split(".")[0];
     conn.repo = location.pathname.split("/").filter(Boolean)[0] || (conn.owner + ".github.io");
   }
-  conn.branch = conn.branch || "main";
+  conn.branch = conn.branch || "";
 
   /* ---------- UI helpers ---------- */
   var toastTimer;
@@ -58,6 +62,12 @@
   }
   function b64Text(str) { var bytes = new TextEncoder().encode(str), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
   function textFromB64(b64) { var bin = atob(b64.replace(/\s/g, "")), bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+  // Picture previews: relative paths are shown from the repository on GitHub
+  function mediaUrl(p) {
+    if (!p || /^(https?:|data:|blob:)/.test(p)) return p || "";
+    if (!conn.owner || !conn.repo || !conn.branch) return p;
+    return "https://raw.githubusercontent.com/" + conn.owner + "/" + conn.repo + "/" + encodeURIComponent(conn.branch) + "/" + p.replace(/^\.?\//, "");
+  }
   function enc(p) { return p.split("/").map(encodeURIComponent).join("/"); }
 
   function parseContentFile(text) {
@@ -66,18 +76,24 @@
   }
   function buildContentFile() {
     return "/*\n * THYWORD INTERNATIONAL WORSHIP CENTRE — WEBSITE CONTENT\n * -------------------------------------------------------\n" +
-      " * Everything shown on the website comes from this one file.\n * The easiest way to update it is the Admin page (admin.html), which edits\n" +
+      " * Everything shown on the website comes from this one file.\n * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits\n" +
       " * and saves this file for you. You can also edit it by hand. Keep the\n * structure, and put text inside \"quotes\" followed by a comma.\n" +
       " * Last updated: " + new Date().toString() + "\n */\nwindow.SITE_CONTENT = " + JSON.stringify(data, null, 2) + ";\n";
   }
 
+  function detectBranch() {
+    if (conn.branch) return Promise.resolve();
+    return gh("").then(function (r) { conn.branch = r.default_branch || "main"; saveConn(); });
+  }
   function loadFromGitHub() {
-    return gh("/contents/" + CONTENT_PATH + "?ref=" + encodeURIComponent(conn.branch)).then(function (f) {
+    return detectBranch().then(function () { return gh("/contents/" + CONTENT_PATH + "?ref=" + encodeURIComponent(conn.branch)).then(function (f) {
       fileSha = f.sha;
       data = parseContentFile(textFromB64(f.content));
+      loaded = true;
+      rememberHash();
       dirty = false; $("#unsaved").classList.add("hidden");
       render();
-    });
+    }); });
   }
 
   function putFile(path, base64, message) {
@@ -89,6 +105,7 @@
 
   function publish() {
     if (!connected()) { toast("Connect to GitHub first (Settings tab), or use 'Download file'.", true); showTab("connect"); return; }
+    if (!loaded) { toast("Load the website content first: Settings tab, Connect & load content.", true); showTab("connect"); return; }
     var btn = $("#publishBtn"); btn.disabled = true; btn.textContent = "Publishing...";
     var doPut = function () {
       return gh("/contents/" + CONTENT_PATH, { method: "PUT", body: { message: "Update website content (" + today() + ")", content: b64Text(buildContentFile()), branch: conn.branch, sha: fileSha || undefined } });
@@ -104,6 +121,7 @@
   }
 
   function download() {
+    if (!loaded) { toast("Load the website content first (Settings tab).", true); return; }
     var blob = new Blob([buildContentFile()], { type: "text/javascript" });
     var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "content.js"; a.click();
     toast("Downloaded content.js. Replace data/content.js in the website folder with it.");
@@ -179,7 +197,7 @@
     else if (type === "select") html = '<select id="' + id + '" data-key="' + key + '">' + opt.choices.map(function (c) { return "<option" + (c === val ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") + "</select>";
     else if (type === "image" || type === "video") {
       var isImg = type === "image";
-      html = '<div class="media-field">' + (isImg ? '<img class="thumb" src="' + esc(val || "") + '" alt="" onerror="this.style.visibility=\'hidden\'" onload="this.style.visibility=\'visible\'">' : "") +
+      html = '<div class="media-field">' + (isImg ? '<img class="thumb" src="' + esc(mediaUrl(val)) + '" alt="" onerror="this.style.visibility=\'hidden\'" onload="this.style.visibility=\'visible\'">' : "") +
         '<input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="' + (isImg ? "assets/uploads/... or https://..." : "Video file path, or YouTube/Facebook link") + '">' +
         '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept="' + (isImg ? "image/*" : "video/*") + '" data-upload="' + key + '" data-kind="' + type + '"></label></div>';
     } else if (type === "list") html = '<input type="text" id="' + id + '" data-key="' + key + '" data-type="list" value="' + esc((val || []).join(", ")) + '">';
@@ -194,7 +212,7 @@
         if (t === "bool") { obj[key] = el.checked; el.closest(".switch").classList.toggle("on", el.checked); }
         else if (t === "list") obj[key] = el.value.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
         else obj[key] = el.value;
-        var th = el.parentNode.querySelector(".thumb"); if (th) th.src = el.value;
+        var th = el.parentNode.querySelector(".thumb"); if (th) th.src = mediaUrl(el.value);
         markDirty(); if (onChange) onChange(key);
       });
     });
@@ -280,7 +298,7 @@
 
     if (!connected() && current !== "connect") {
       var w = document.createElement("div"); w.className = "panel"; w.style.borderLeft = "5px solid var(--gold)";
-      w.innerHTML = '<strong>Not connected to GitHub.</strong> <span class="help">You can edit and download the content file, but to publish and upload pictures/videos directly, open the <a href="#" id="goConnect">Settings tab</a>.</span>';
+      w.innerHTML = '<strong>Not connected to GitHub.</strong> <span class="help">Open the <a href="#" id="goConnect">Settings tab</a> and connect with your GitHub token to load the website content, publish changes and upload pictures/videos.</span>';
       P.appendChild(w); $("#goConnect").onclick = function (e) { e.preventDefault(); showTab("connect"); };
     }
 
@@ -372,16 +390,16 @@
         '<ol class="steps"><li>Sign in to GitHub and open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained token</a>.</li><li>Give it a name (e.g. "Church website"), choose an expiry, and under <b>Repository access</b> select only the website repository.</li><li>Under <b>Permissions → Repository permissions</b>, set <b>Contents</b> to <b>Read and write</b>.</li><li>Click <b>Generate token</b>, copy it, and paste it below.</li></ol>' +
         '<div class="fields"><div><label>GitHub username / organisation</label><input id="c-owner" value="' + esc(conn.owner) + '" placeholder="e.g. christosdaniel"></div>' +
         '<div><label>Repository name</label><input id="c-repo" value="' + esc(conn.repo) + '" placeholder="e.g. Thyword-Church"></div>' +
-        '<div><label>Branch the website is published from</label><input id="c-branch" value="' + esc(conn.branch) + '" placeholder="main"></div>' +
+        '<div><label>Branch the website is published from</label><input id="c-branch" value="' + esc(conn.branch) + '" placeholder="Leave empty to detect automatically"></div>' +
         '<div><label>Access token</label><input id="c-token" type="password" value="' + esc(conn.token) + '" placeholder="github_pat_..."></div></div>' +
         '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem"><button class="btn btn-green btn-sm" id="c-save" type="button">Connect &amp; load content</button><button class="btn btn-outline-dark btn-sm" id="c-out" type="button">Disconnect this browser</button></div>';
       P.appendChild(c);
       $("#c-save").onclick = function () {
-        conn = { owner: $("#c-owner").value.trim(), repo: $("#c-repo").value.trim(), branch: $("#c-branch").value.trim() || "main", token: $("#c-token").value.trim() };
+        conn = { owner: $("#c-owner").value.trim(), repo: $("#c-repo").value.trim(), branch: $("#c-branch").value.trim(), token: $("#c-token").value.trim() };
         if (!connected()) { toast("Please fill in all the fields.", true); return; }
         if (dirty && !confirm("Loading from GitHub will replace your unsaved changes on this page. Continue?")) return;
         saveConn();
-        loadFromGitHub().then(function () { toast("Connected. Latest content loaded."); }).catch(function (e) { toast("Could not connect: " + e.message, true); setConnState(); });
+        loadFromGitHub().then(function () { toast("Connected. Latest content loaded."); }).catch(function (e) { toast(e.status === 401 ? "GitHub did not accept the token. Check it was copied fully and has not expired." : e.status === 404 ? "Repository or file not found. Check the username, repository name and branch, and that the token has access to this repository." : "Could not connect: " + e.message, true); setConnState(); });
       };
       $("#c-out").onclick = function () { conn = { branch: "main" }; saveConn(); fileSha = null; toast("Disconnected. The token was removed from this browser."); render(); };
 
@@ -418,12 +436,37 @@
    * The admin page is hidden from the public website and protected by a password.
    * Only a SHA-256 fingerprint of the password is stored in content.js. Publishing
    * also needs the GitHub token, which only administrators have. */
-  function sha256(text) {
-    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)).then(function (buf) {
-      return Array.prototype.map.call(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
-    });
+  // Pure-JavaScript SHA-256, so the login works anywhere, even when the file is opened from a phone or computer.
+  function sha256hex(str) {
+    var K = [], H = [], i, j, isP = function (n) { for (var f = 2; f * f <= n; f++) if (n % f === 0) return false; return true; }, frac = function (x) { return ((x - Math.floor(x)) * 4294967296) | 0; };
+    for (var n = 2, c = 0; c < 64; n++) if (isP(n)) { if (c < 8) H[c] = frac(Math.pow(n, 1 / 2)); K[c++] = frac(Math.pow(n, 1 / 3)); }
+    var bytes = Array.prototype.slice.call(new TextEncoder().encode(str)), bitLen = bytes.length * 8;
+    bytes.push(0x80); while (bytes.length % 64 !== 56) bytes.push(0);
+    for (i = 7; i >= 0; i--) bytes.push(i > 3 ? 0 : (bitLen >>> (i * 8)) & 255);
+    var rotr = function (x, r) { return (x >>> r) | (x << (32 - r)); };
+    for (i = 0; i < bytes.length; i += 64) {
+      var W = [], a = H[0], b = H[1], c2 = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (j = 0; j < 64; j++) {
+        if (j < 16) W[j] = (bytes[i + j * 4] << 24) | (bytes[i + j * 4 + 1] << 16) | (bytes[i + j * 4 + 2] << 8) | bytes[i + j * 4 + 3];
+        else { var s0 = rotr(W[j - 15], 7) ^ rotr(W[j - 15], 18) ^ (W[j - 15] >>> 3), s1 = rotr(W[j - 2], 17) ^ rotr(W[j - 2], 19) ^ (W[j - 2] >>> 10); W[j] = (W[j - 16] + s0 + W[j - 7] + s1) | 0; }
+        var t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[j] + W[j]) | 0;
+        var t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c2) ^ (b & c2))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c2; c2 = b; b = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c2) | 0; H[3] = (H[3] + d) | 0; H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    return H.map(function (x) { return ("00000000" + (x >>> 0).toString(16)).slice(-8); }).join("");
   }
-  function unlocked() { try { return sessionStorage.getItem("tiwc-admin-ok") === ((data.settings || {}).adminPasswordHash || ""); } catch (e) { return false; } }
+  function sha256(text) { return Promise.resolve(sha256hex(text)); }
+  // Starting password: Thyword@2026 (change it in Settings > Admin Password).
+  var DEFAULT_HASH = "0ee99b61774bb1a7df638ca707ce5ac95518978bd7fcadc903b8baba90cab0ed";
+  function rememberHash() { var h = (data.settings || {}).adminPasswordHash; if (h) try { localStorage.setItem("tiwc-admin-hash", h); } catch (e) {} }
+  function expectedHash() {
+    var h = (data.settings || {}).adminPasswordHash;
+    if (!h) try { h = localStorage.getItem("tiwc-admin-hash"); } catch (e) {}
+    return h || DEFAULT_HASH;
+  }
+  function unlocked() { try { return sessionStorage.getItem("tiwc-admin-ok") === expectedHash(); } catch (e) { return false; } }
   function start() {
     $("#gate").remove();
     render();
@@ -434,17 +477,17 @@
     dirty = false; try { sessionStorage.removeItem("tiwc-admin-ok"); } catch (e) {}
     location.href = "index.html";
   };
-  window.__setAdminPassword = function (pw) { return sha256(pw).then(function (h) { data.settings.adminPasswordHash = h; markDirty(); }); };
-  if (!window.crypto || !crypto.subtle) {
-    $("#gateMsg").textContent = "Please open the admin page over https (your live website address).";
-  } else if (unlocked()) start();
+  window.__setAdminPassword = function (pw) { return sha256(pw).then(function (h) { data.settings.adminPasswordHash = h; rememberHash(); markDirty(); }); };
+  if (unlocked()) start();
   else {
     $("#gateForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      sha256($("#gatePass").value).then(function (h) {
-        if (h === (data.settings || {}).adminPasswordHash) { try { sessionStorage.setItem("tiwc-admin-ok", h); } catch (er) {} start(); }
-        else { $("#gateMsg").textContent = "Incorrect password."; $("#gatePass").select(); }
+      var pw = $("#gatePass").value.trim();
+      sha256(pw).then(function (h) {
+        if (h === expectedHash() || (!loaded && h === DEFAULT_HASH)) { try { sessionStorage.setItem("tiwc-admin-ok", expectedHash()); } catch (er) {} start(); }
+        else { $("#gateMsg").textContent = "Incorrect password. Check capital letters (the first letter T is a capital)."; $("#gatePass").select(); }
       });
     });
+    $("#gateShow").addEventListener("click", function () { var i = $("#gatePass"); i.type = i.type === "password" ? "text" : "password"; });
   }
 })();

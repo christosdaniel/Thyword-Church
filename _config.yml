@@ -1,0 +1,5 @@
+# GitHub Pages settings
+# The _admin folder (the private admin tool) is never published.
+exclude:
+  - _admin
+  - README.md

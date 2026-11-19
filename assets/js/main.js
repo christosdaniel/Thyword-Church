@@ -355,15 +355,34 @@
 
   /* ---------- forms (subscribe / contact) ---------- */
   function sendForm(data) {
-    // Sends the form to the admin's inbox. Uses settings.formEndpoint (e.g. Formspree) if set,
-    // otherwise FormSubmit.co with settings.adminEmail. No server needed.
+    // Sends the form to the church's inbox. Uses settings.formEndpoint (e.g. Formspree) if set,
+    // otherwise FormSubmit.co with settings.adminEmail. No server needed, but the page must be
+    // opened from the published website (https://...), not as a file on a computer or phone.
     var url = S.formEndpoint || (S.adminEmail ? "https://formsubmit.co/ajax/" + S.adminEmail.trim() : "");
     if (!url) return Promise.reject(new Error("not-configured"));
+    if (location.protocol === "file:") return Promise.reject(new Error("not-hosted"));
     return fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data)
-    }).then(function (r) { if (!r.ok) throw new Error("failed"); return r.json().catch(function () { return {}; }); });
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        // FormSubmit answers 200 with success "false" when the form still needs activation
+        if (!r.ok || j.success === false || j.success === "false") {
+          if (window.console) console.warn("Form service reply:", j.message || r.status);
+          throw new Error(j.message || "failed");
+        }
+        return j;
+      });
+    });
+  }
+  // Backup: open the visitor's own email app with everything filled in, addressed to the church
+  function mailtoChurch(subject, body) {
+    var to = (C.contact || {}).email || S.adminEmail;
+    if (!to) return "";
+    var link = "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    window.location.href = link;
+    return link;
   }
   function bindSubscribe() {
     $$(".js-subscribe").forEach(function (form) {
@@ -373,13 +392,11 @@
         var email = form.email.value.trim(), name = form.name ? form.name.value.trim() : "";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { note.textContent = "Please enter a valid email address."; return; }
         btn.disabled = true; note.textContent = "Sending...";
-        sendForm({ _subject: "New subscriber for event alerts: " + email, _template: "table", _captcha: "false", type: "Newsletter / alerts subscription", name: name, email: email, date: new Date().toString() })
+        sendForm({ _subject: "New subscriber for event alerts: " + email, _template: "table", _captcha: "false", _replyto: email, type: "Event & live alerts subscription", name: name, email: email, date: new Date().toString() })
           .then(function () { note.textContent = "Thank you! You've been added to receive our upcoming event and live alerts."; form.reset(); })
-          .catch(function (err) {
-            if (err.message === "not-configured" && (C.contact || {}).email) {
-              window.location.href = "mailto:" + C.contact.email + "?subject=" + encodeURIComponent("Please add me to event alerts") + "&body=" + encodeURIComponent("Name: " + name + "\nEmail: " + email);
-              note.textContent = "Opening your email app to complete your subscription...";
-            } else note.textContent = "Sorry, we couldn't send that right now. Please reach us on WhatsApp instead.";
+          .catch(function () {
+            var link = mailtoChurch("Please add me to event alerts", "Name: " + name + "\nEmail: " + email);
+            note.innerHTML = link ? 'Opening your email app to complete your subscription... <a href="' + link + '" style="color:#fff;text-decoration:underline">tap here if it did not open</a>.' : "Sorry, we couldn't send that right now. Please reach us on WhatsApp instead.";
           })
           .then(function () { btn.disabled = false; });
       });
@@ -627,32 +644,15 @@
         .catch(function () {
           // If the online form service can't be reached, open the visitor's own email app
           // with the request already written, addressed to the church's email.
-          var to = (C.contact || {}).email || S.adminEmail;
           var body = "Name: " + data.name + "\nEmail: " + data.email + "\nPhone: " + data.phone + "\nSubject: " + data.topic + "\n\n" + data.message;
-          var mail = "mailto:" + to + "?subject=" + encodeURIComponent("Website request (" + data.topic + ") from " + data.name) + "&body=" + encodeURIComponent(body);
-          if (to) { st.className = "form-status ok"; st.innerHTML = 'Opening your email app to send your request to ' + esc(to) + '... <a href="' + mail + '">tap here if it did not open</a>.'; window.location.href = mail; }
+          var mail = mailtoChurch("Website request (" + data.topic + ") from " + data.name, body);
+          if (mail) { st.className = "form-status ok"; st.innerHTML = 'Opening your email app to send your request to the church... <a href="' + mail + '">tap here if it did not open</a>.'; }
           else { st.className = "form-status err"; st.textContent = "Sorry, we couldn't send that right now. Please call us instead."; }
         })
         .then(function () { btn.disabled = false; });
     });
     $("#subscribeBox").innerHTML = subscribeBlock();
   };
-
-  /* ---------- hidden admin entrance ----------
-   * There is no public link to the admin area. To open it from the website,
-   * tap the (c) symbol at the bottom of any page 5 times quickly, or press
-   * Ctrl + Shift + A. The admin page itself asks for the admin password. */
-  function bindAdminEntrance() {
-    var taps = 0, timer;
-    var mark = $("#copyMark");
-    if (mark) mark.addEventListener("click", function () {
-      taps++; clearTimeout(timer); timer = setTimeout(function () { taps = 0; }, 1500);
-      if (taps >= 5) window.location.href = "admin.html";
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) { e.preventDefault(); window.location.href = "admin.html"; }
-    });
-  }
 
   /* ---------- boot ---------- */
   loadContent(function (content) {
@@ -663,7 +663,6 @@
     if (pages[page]) pages[page]();
     bindZoom();
     bindSubscribe();
-    bindAdminEntrance();
     tickCountdowns(); setInterval(tickCountdowns, 1000);
     updateLive();
     reveal();

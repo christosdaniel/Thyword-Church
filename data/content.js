@@ -2,7 +2,7 @@
  * THYWORD INTERNATIONAL WORSHIP CENTRE — WEBSITE CONTENT
  * -------------------------------------------------------
  * Everything shown on the website comes from this one file.
- * The easiest way to update it is the Admin page (admin.html), which edits
+ * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
  */

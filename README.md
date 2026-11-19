@@ -11,7 +11,6 @@ A responsive church website (phones, tablets and computers) with these pages:
 | Videos | `videos.html` | Uploaded clips plus YouTube and Facebook videos (and the latest YouTube uploads, once an API key is set) |
 | Watch Live | `live.html` | YouTube and Facebook live player, live status, Facebook page feed |
 | Contact | `contact.html` | Phone, WhatsApp, email, map, message form and all branches |
-| Admin | `admin.html` | Where you update the website, every day if you like |
 
 Every page has the logo at the top left (it links back to Home), a red **"WE ARE LIVE"** banner whenever a stream is on, a WhatsApp chat button, and a footer listing all branches.
 
@@ -19,26 +18,25 @@ Every page has the logo at the top left (it links back to Home), a red **"WE ARE
 
 ## 1. Put the website online (GitHub Pages, free)
 
-1. Merge this branch into `main` on GitHub.
-2. On GitHub, open the repository, then **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, pick `main` and `/ (root)`, then **Save**.
-4. After a minute the site is live at `https://<your-username>.github.io/<repository-name>/`. You can attach your own domain on the same page.
+The contact form and email sign-up **only work on the published website** (an `https://` address). They do not work when the HTML files are opened directly on a computer or phone.
 
-## 2. Update the website every day (Admin page)
+1. On GitHub, open the repository, then **Settings → Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**. Pick the branch the website is on (at the moment `claude/amazing-newton-rx7ekz`, or `main` if you merge it), pick `/ (root)`, then **Save**.
+3. After a minute or two the site is live at `https://christosdaniel.github.io/Thyword-Church/`. You can attach your own domain on the same page.
 
-There is **no public link** to the admin area, so members won't see it. To open it from the website:
-- tap the **©** symbol at the very bottom of any page **5 times quickly**, or
-- press **Ctrl + Shift + A** on a computer, or
-- go straight to `https://<your-site>/admin.html`.
+## 2. The admin tool (kept separate from the website)
 
-The admin page then asks for the **admin password**. The starting password is `Thyword@2026`. Change it straight away in **Admin → Settings → Admin Password**, then click **Save & Publish**. Publishing also needs the GitHub token, which only administrators have, so even someone who guesses the page address cannot change the website.
+The admin tool is **one standalone file**: `_admin/Thyword-Admin.html`. It is **not published** on the website. GitHub Pages skips the `_admin` folder (see `_config.yml`), so members cannot reach it.
 
-**First time only:** go to the **Settings** tab and connect GitHub:
-1. Create a token at <https://github.com/settings/personal-access-tokens/new>.
-2. Under *Repository access*, choose only this repository. Under *Permissions → Contents*, choose **Read and write**.
-3. Paste the token, your GitHub username, the repository name and branch `main`, then click **Connect & load content**.
+Keep the file on the administrator's computer or phone and open it in a web browser (Chrome works best). To get it, open `_admin/Thyword-Admin.html` on GitHub, click **Download raw file**, and save it.
 
-The token is saved only in that browser. Never share it.
+1. **Log in** with the admin password. The starting password is `Thyword@2026` (capital **T**). Change it in **Settings → Admin Password**, then click **Save & Publish**.
+2. **First time only: connect GitHub** in the **Settings** tab:
+   1. Create a token at <https://github.com/settings/personal-access-tokens/new>.
+   2. Under *Repository access*, choose only `Thyword-Church`. Under *Permissions → Contents*, choose **Read and write**.
+   3. Paste the token. Username and repository are already filled in. Leave *Branch* empty and it is detected automatically. Click **Connect & load content**.
+
+   The token is saved only on that device. Never share it. The token is the real lock: without it nobody can change the website.
 
 **Each day:**
 - **Live & Notice**: switch "We are LIVE on YouTube/Facebook" on when a service starts and off when it ends. You can also paste the live video link. Edit the gold announcement bar here.
@@ -50,15 +48,20 @@ The token is saved only in that browser. Never share it.
 
 Then click **Save & Publish**. Changes appear on the website within 1–2 minutes.
 
-> No token? You can still edit, click **Download file**, and replace `data/content.js` with the downloaded file.
-
 All content lives in **`data/content.js`**, so you can also edit that file by hand on GitHub.
 
-## 3. Email sign-ups and contact messages
+*For developers:* the admin tool is built from `_admin/admin.template.html`, `_admin/admin.js` and `assets/css/style.css`. After changing them, run `python3 _admin/build.py`.
 
-The church email `thywordintlworshipcentre@gmail.com` is set as the **Admin email** (you can change it in **Admin → Settings**). Visitors can use any email provider (Gmail, Yahoo, Outlook and others). The contact form asks for name, email, phone number and the request. Sign-ups ("Get upcoming event & live service alerts") and contact-form messages are delivered there by the free [FormSubmit](https://formsubmit.co) service. The first time someone submits, FormSubmit sends a one-time **activation email** to that address. Click the link in it. If you prefer [Formspree](https://formspree.io), paste its form URL in *Custom form endpoint*.
+## 3. Contact form and email sign-ups
 
-Until an email is set, the contact form falls back to WhatsApp.
+Requests from the contact form (name, email, phone number and the request) and email sign-ups go to **thywordintlworshipcentre@gmail.com**. Visitors can use any email provider (Gmail, Yahoo, Outlook and others). Delivery is handled by the free [FormSubmit](https://formsubmit.co) service.
+
+**One-time activation (required):**
+1. Open the **published** website (the `https://` address) and send one test request from the Contact page.
+2. Within a few minutes FormSubmit emails **thywordintlworshipcentre@gmail.com** with the subject *"Action Required: Activate FormSubmit"*. Look in **Spam/Promotions** too.
+3. Click **Activate Form**. From then on every request arrives in the inbox.
+
+If the form service can't be reached, or the form is not activated yet, the website opens the visitor's own email app with the request already written and addressed to the church, so the message still reaches you. To use [Formspree](https://formspree.io) instead, paste its form URL in **Admin → Settings → Custom form endpoint**.
 
 ## 4. Live stream detection
 
@@ -69,11 +72,11 @@ Until an email is set, the contact form falls back to WhatsApp.
 ## Folder layout
 
 ```
-index.html, pictures.html, videos.html, live.html, contact.html, admin.html
+index.html, pictures.html, videos.html, live.html, contact.html
+_admin/Thyword-Admin.html  ← the private admin tool (not published)
 data/content.js          ← all website text, events, photos, videos, branches
 assets/css/style.css     ← design (colours taken from the church logo)
 assets/js/main.js        ← builds the pages from content.js
-assets/js/admin.js       ← the Admin page
 assets/images/           ← logo, pastor photos, gallery, event flyers
 assets/videos/           ← starter video clip
 assets/uploads/          ← files uploaded from the Admin page go here
