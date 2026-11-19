@@ -519,6 +519,160 @@ body.sheet-open { overflow: hidden; }
 .badge-past { display: inline-block; background: var(--bg-soft); color: var(--green-800); border: 1.5px solid var(--line); padding: .2rem .7rem; border-radius: 999px; font-weight: 800; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
 .past-ago { font-size: .82rem; color: var(--muted); font-weight: 600; }
 
+/* ---------- Header drop-down menus ---------- */
+.has-drop { position: relative; }
+.drop-btn { display: inline-flex; align-items: center; gap: .3rem; background: none; border: 0; cursor: pointer; padding: .5rem .6rem; color: var(--green-800); font-family: var(--font-head); font-weight: 600; font-size: .9rem; border-radius: 8px; white-space: nowrap; }
+.drop-btn:hover, .drop-btn.active, .has-drop.open > .drop-btn { color: var(--red-600); background: var(--mint-100); }
+.drop-btn svg { transition: transform .2s; }
+.has-drop.open > .drop-btn svg { transform: rotate(180deg); }
+.drop { list-style: none; margin: 0; padding: .4rem; position: absolute; top: calc(100% + 6px); left: 0; min-width: 210px; background: #fff; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--line); display: none; flex-direction: column !important; align-items: stretch !important; gap: .1rem !important; z-index: 60; }
+.drop::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; }
+.has-drop.open > .drop { display: flex; }
+@media (hover: hover) and (min-width: 981px) { .has-drop:hover > .drop { display: flex; } }
+.main-nav .drop a { padding: .55rem .8rem; font-size: .88rem; white-space: nowrap; }
+@media (min-width: 981px) and (max-width: 1240px) { .drop-btn { padding: .45rem .42rem; font-size: .82rem; } }
+@media (max-width: 980px) {
+  .drop-btn { width: 100%; justify-content: space-between; padding: .8rem 1rem; font-size: .95rem; }
+  .drop { position: static; box-shadow: none; border: 0; border-left: 3px solid var(--mint); border-radius: 0; margin: 0 0 .3rem 1rem; padding: 0 0 0 .3rem; min-width: 0; }
+}
+
+/* ---------- Get involved (home) ---------- */
+.involve-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+@media (max-width: 860px) { .involve-grid { grid-template-columns: 1fr; } }
+.involve-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; box-shadow: var(--shadow); color: var(--ink); display: flex; flex-direction: column; transition: transform .2s; }
+.involve-card:hover { transform: translateY(-4px); color: var(--ink); }
+.ic-ico { width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center; color: #fff; margin-bottom: 1rem; }
+.involve-card h3 { font-size: 1.2rem; }
+.involve-card p { color: var(--muted); flex: 1; }
+.ic-more { color: var(--red-600); font-weight: 700; font-family: var(--font-head); font-size: .9rem; }
+
+/* ---------- Branches page ---------- */
+.branch-jump { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin-bottom: 2.5rem; }
+.branch-jump a { border: 2px solid var(--line); border-radius: 999px; padding: .45rem 1rem; font-weight: 700; font-size: .85rem; color: var(--green-800); font-family: var(--font-head); background: #fff; }
+.branch-jump a:hover { border-color: var(--green-700); background: var(--mint-100); }
+.branch-jump a.hq { background: var(--gold); border-color: var(--gold); color: var(--green-900); }
+.branch-stack { display: flex; flex-direction: column; gap: 2rem; }
+.branch-full { background: #fff; border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 16px); }
+.branch-full.is-hq { border: 2px solid var(--gold); }
+.bf-head { background: linear-gradient(100deg, var(--green-900), var(--green-700) 65%, var(--red-700)); background-size: cover; background-position: center; color: #fff; padding: 1.6rem 1.8rem; }
+.bf-head h2 { color: #fff; margin: .35rem 0 .2rem; font-size: clamp(1.4rem, 3vw, 1.9rem); }
+.bf-tag { display: inline-block; background: rgba(255,255,255,.15); color: var(--mint); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: .25rem .7rem; border-radius: 999px; }
+.is-hq .bf-tag { background: var(--gold); color: var(--green-900); }
+.bf-loc { margin: 0; color: #d9efe4; display: flex; align-items: center; gap: .4rem; }
+.bf-grid { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; padding: 1.8rem; }
+@media (max-width: 860px) { .bf-grid { grid-template-columns: 1fr; padding: 1.3rem; gap: 1.4rem; } }
+.bf-pastor { text-align: center; }
+.bf-pphoto { width: 180px; height: 180px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; border: 5px solid var(--mint-100); box-shadow: 0 8px 24px rgba(7,46,45,.15); background: var(--bg-soft); display: grid; place-items: center; }
+.bf-pphoto img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.bf-pphoto img.ph, .tr-photo img.ph { width: 60%; height: 60%; object-fit: contain; opacity: .55; }
+.bf-pastor small { color: var(--red-600); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .74rem; }
+.bf-pastor h3 { margin: .2rem 0 .6rem; font-size: 1.15rem; }
+.bf-pastor p { color: var(--muted); font-size: .9rem; text-align: left; }
+.bf-info h4 { font-size: .82rem; text-transform: uppercase; letter-spacing: .1em; color: var(--red-600); margin: 1.3rem 0 .6rem; }
+.bf-info h4:first-child { margin-top: 0; }
+.bf-about { color: var(--ink); }
+.bf-list { list-style: none; padding: 0; margin: 0; }
+.bf-list li { display: flex; gap: .5rem; align-items: center; padding: .35rem 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+.bf-list svg { color: var(--green-600); flex: 0 0 16px; }
+.bf-chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+.bf-chips span { background: var(--mint-100); color: var(--green-800); padding: .35rem .8rem; border-radius: 999px; font-size: .85rem; font-weight: 600; }
+.bf-progs { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .6rem; }
+.bf-progs li { display: flex; gap: .9rem; align-items: center; background: var(--bg-soft); border-radius: 12px; padding: .6rem .8rem; }
+.bf-progs .pd { flex: 0 0 52px; height: 52px; border-radius: 10px; background: var(--red-600); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; font-family: var(--font-head); }
+.bf-progs .pd b { font-size: 1.25rem; }
+.bf-progs .pd small { font-size: .65rem; text-transform: uppercase; font-weight: 700; letter-spacing: .06em; }
+.bf-progs strong { display: block; color: var(--green-800); }
+.bf-progs div small { color: var(--muted); font-size: .84rem; }
+.muted { color: var(--muted); font-size: .9rem; }
+.bf-contact { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; }
+.bf-contact .btn svg { flex: 0 0 auto; }
+.bf-contact-line { color: var(--muted); font-size: .85rem; margin: .7rem 0 0; word-break: break-word; }
+.btn.bf-wa { background: #25d366; color: #fff; }
+.btn.bf-wa:hover { background: #1ebe5a; color: #fff; }
+.trustee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.4rem; }
+.trustee { background: #fff; border-radius: var(--radius); padding: 1.6rem 1.2rem; text-align: center; box-shadow: var(--shadow); border-top: 4px solid var(--gold); }
+.tr-photo { width: 140px; height: 140px; border-radius: 50%; overflow: hidden; margin: 0 auto 1rem; background: var(--bg-soft); display: grid; place-items: center; border: 4px solid var(--mint-100); }
+.tr-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.trustee h3 { font-size: 1.05rem; margin-bottom: .2rem; }
+.tr-pos { color: var(--red-600); font-weight: 700; font-size: .88rem; margin: 0 0 .5rem; }
+.tr-bio { color: var(--muted); font-size: .88rem; margin: 0; }
+a.branch-card { color: var(--ink); transition: border-color .2s, transform .2s; }
+a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px); color: var(--ink); }
+.branch-card.is-hq { border: 2px solid var(--gold); }
+.hq-badge { background: var(--gold); color: var(--green-900); font-size: .65rem; padding: .1rem .45rem; border-radius: 99px; vertical-align: middle; }
+.branch-more { color: var(--red-600) !important; font-weight: 700; font-size: .8rem !important; margin-top: .3rem !important; }
+.footer-branches a { color: #b9d3c8; }
+
+/* ---------- Bible School ---------- */
+.bs-about { align-items: center; }
+.bs-text h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 800; }
+.bs-details { list-style: none; padding: 0; margin: 1rem 0; }
+.bs-details li { padding: .45rem 0; border-bottom: 1px dashed var(--line); }
+.bs-details b { color: var(--green-800); margin-right: .3rem; }
+.bs-image img { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); aspect-ratio: 4 / 3; object-fit: cover; }
+.bs-ph { aspect-ratio: 4 / 3; border-radius: var(--radius); background: linear-gradient(135deg, var(--green-800), var(--green-600) 60%, var(--red-700)); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-family: var(--font-head); font-weight: 800; font-size: 1.3rem; }
+.bs-ph img { width: 110px; margin-bottom: .8rem; }
+.bs-steps { list-style: none; padding: 0; margin: 0 auto; max-width: 760px; counter-reset: s; display: flex; flex-direction: column; gap: .8rem; }
+.bs-steps li { display: flex; gap: 1rem; align-items: center; background: #fff; border-radius: 14px; padding: 1rem 1.2rem; box-shadow: 0 4px 14px rgba(7,46,45,.06); }
+.bs-steps li span { flex: 0 0 40px; height: 40px; border-radius: 50%; background: var(--green-700); color: #fff; display: grid; place-items: center; font-weight: 800; font-family: var(--font-head); }
+.bs-steps li p { margin: 0; }
+.bs-enroll { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; margin-top: 2rem; }
+.form-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.form-card { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem; color: var(--ink); transition: border-color .2s, transform .2s; }
+.form-card:hover { border-color: var(--red-600); transform: translateY(-2px); color: var(--ink); }
+.fc-ico { flex: 0 0 52px; height: 52px; border-radius: 12px; background: var(--red-600); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: .78rem; font-family: var(--font-head); }
+.form-card > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.form-card b { color: var(--green-800); }
+.form-card small { color: var(--muted); }
+.fc-dl { color: var(--green-700); }
+
+/* ---------- Give ---------- */
+.give-wrap { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+@media (max-width: 920px) { .give-wrap { grid-template-columns: 1fr; } }
+.give-intro { font-size: 1.08rem; }
+.give-step { margin-top: 2rem; }
+.give-step h3 { display: flex; align-items: center; gap: .6rem; font-size: 1.15rem; margin-bottom: .9rem; }
+.give-step h3 span { width: 32px; height: 32px; border-radius: 50%; background: var(--red-600); color: #fff; display: grid; place-items: center; font-size: .95rem; flex: 0 0 32px; }
+#giveTo { font-size: 1rem; font-weight: 600; padding: .9rem 1rem; }
+.offer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .6rem; }
+.offer { text-align: left; border: 2px solid var(--line); background: #fff; border-radius: 12px; padding: .85rem 1rem; cursor: pointer; font: inherit; display: flex; flex-direction: column; gap: .2rem; transition: border-color .2s, background .2s; }
+.offer:hover { border-color: var(--green-600); }
+.offer b { color: var(--green-800); }
+.offer small { color: var(--muted); font-size: .8rem; }
+.offer.on { border-color: var(--red-600); background: #fff5f5; }
+.pay-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+@media (max-width: 560px) { .pay-tabs { grid-template-columns: 1fr; } }
+.pay-tabs button { border: 2px solid var(--line); background: #fff; border-radius: 12px; padding: .8rem; cursor: pointer; font: inherit; font-weight: 700; color: var(--green-800); display: flex; align-items: center; gap: .6rem; }
+.pay-tabs button.active { border-color: var(--green-700); background: var(--mint-100); }
+.pay-logo { flex: 0 0 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-size: .7rem; font-weight: 800; }
+.pay-logo.momo { background: #ffcc00; color: #003a5d; }
+.pay-logo.telecel { background: #e30613; color: #fff; font-size: 1.1rem; }
+.pay-logo.bank { background: var(--green-700); color: #fff; font-size: 1.1rem; }
+.pay-summary { margin: 1rem 0 .6rem; color: var(--muted); font-size: .92rem; }
+.pay-summary b { color: var(--green-800); }
+.pay-panel { background: var(--bg-soft); border-radius: 14px; padding: 1.2rem; }
+.pay-row { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; border-bottom: 1px dashed var(--line); flex-wrap: wrap; }
+.pay-row span { color: var(--muted); font-size: .85rem; min-width: 130px; }
+.pay-row b { flex: 1; color: var(--green-900); font-size: 1.05rem; word-break: break-word; }
+.copy-btn { border: 1.5px solid var(--green-700); background: #fff; color: var(--green-700); border-radius: 999px; padding: .3rem .9rem; font-weight: 700; font-size: .8rem; cursor: pointer; }
+.copy-btn.copied { background: var(--green-700); color: #fff; }
+.pay-steps { margin: 1rem 0 0; padding-left: 1.2rem; font-size: .92rem; }
+.pay-steps li { margin-bottom: .35rem; }
+.pay-note { font-size: .9rem; color: var(--muted); margin: .4rem 0 .6rem; }
+.pay-missing { background: #fff8e1; border: 1px solid #f2d27a; border-radius: 10px; padding: 1rem; font-size: .92rem; }
+.give-online { margin-top: 1rem; }
+.give-confirm { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.6rem; position: sticky; top: calc(var(--header-h) + 16px); border-top: 4px solid var(--red-600); }
+.give-confirm h3 { font-size: 1.15rem; margin-bottom: .2rem; }
+.give-confirm p { color: var(--muted); font-size: .88rem; }
+.give-confirm input { margin-bottom: .8rem; }
+.gc-actions { display: flex; flex-direction: column; gap: .5rem; margin-top: .4rem; }
+/* Drop-downs: stronger rules so the general ".main-nav ul" menu style can't force them open */
+.main-nav .drop { display: none; flex-direction: column; align-items: stretch; gap: .1rem; padding: .4rem; }
+.main-nav .has-drop.open > .drop { display: flex; }
+@media (hover: hover) and (min-width: 981px) { .main-nav .has-drop:hover > .drop { display: flex; } }
+@media (max-width: 980px) { .main-nav .drop { padding: 0 0 0 .3rem; margin: 0 0 .3rem 1rem; } }
+@media (min-width: 981px) { .site-header .brand-tag { white-space: nowrap; font-size: .62rem; letter-spacing: .08em; } .site-header .brand-text { max-width: 250px; } }
+
 </style>
 <style>
   body { background: var(--bg-soft); }
@@ -573,6 +727,11 @@ body.sheet-open { overflow: hidden; }
     .adm-actions { width: 100%; justify-content: space-between; }
     .conn { font-size: .72rem; }
   }
+  .sub-heading { font-family: var(--font-head); font-weight: 800; color: var(--red-600); text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; border-top: 1px solid var(--line); padding-top: .9rem; margin-top: .3rem; }
+  .sub-list { display: flex; flex-direction: column; gap: .6rem; }
+  .sub-item { position: relative; border: 1px dashed var(--line); border-radius: 10px; padding: .8rem 3rem .8rem .8rem; background: #fff; }
+  .sub-del { position: absolute; top: .6rem; right: .6rem; }
+  .sub-list > .btn { align-self: flex-start; }
   code { background: var(--bg-soft); padding: .1rem .35rem; border-radius: 5px; font-size: .85em; }
 </style>
 </head>
@@ -787,6 +946,13 @@ body.sheet-open { overflow: hidden; }
       return uploadBlob(b, folder, file.name, ext);
     });
   }
+  var MAX_DOC_MB = 25;
+  function uploadDoc(file) {
+    if (file.size > MAX_DOC_MB * 1024 * 1024) return Promise.reject(new Error("This file is larger than " + MAX_DOC_MB + " MB. Please make it smaller (e.g. save as PDF) and try again."));
+    if (/^image\//.test(file.type)) return uploadImage(file, "forms");
+    var ext = (file.name.split(".").pop() || "pdf").toLowerCase();
+    return uploadBlob(file, "forms", file.name, ext);
+  }
   var MAX_VIDEO_MB = 50;
   function uploadVideo(file) {
     if (file.size > MAX_VIDEO_MB * 1024 * 1024) return Promise.reject(new Error("This video is larger than " + MAX_VIDEO_MB + " MB. Upload long sermons to YouTube or Facebook and add the link instead."));
@@ -800,7 +966,9 @@ body.sheet-open { overflow: hidden; }
   // types: text, textarea, date, bool, image, video, select, list (comma separated)
   function fieldHtml(obj, f, idPrefix) {
     var key = f[0], label = f[1], type = f[2] || "text", opt = f[3] || {}, val = obj[key], id = idPrefix + "-" + key;
-    var cls = opt.full || type === "textarea" || type === "image" || type === "video" ? "full" : "";
+    var cls = opt.full || type === "textarea" || type === "image" || type === "video" || type === "lines" || type === "file" || type === "sublist" ? "full" : "";
+    if (type === "heading") return '<div class="full sub-heading">' + label + (opt.help ? '<span class="help"> ' + opt.help + "</span>" : "") + "</div>";
+    if (type === "sublist") return '<div class="full"><label>' + label + "</label>" + (opt.help ? '<div class="help" style="margin-bottom:.5rem">' + opt.help + "</div>" : "") + '<div class="sub-list" data-sub="' + key + '"></div></div>';
     var help = opt.help ? '<div class="help">' + opt.help + "</div>" : "";
     var html;
     if (type === "textarea") html = '<textarea id="' + id + '" data-key="' + key + '" rows="' + (opt.rows || 4) + '">' + esc(val) + "</textarea>";
@@ -811,7 +979,11 @@ body.sheet-open { overflow: hidden; }
       html = '<div class="media-field">' + (isImg ? '<img class="thumb" src="' + esc(mediaUrl(val)) + '" alt="" onerror="this.style.visibility=\'hidden\'" onload="this.style.visibility=\'visible\'">' : "") +
         '<input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="' + (isImg ? "assets/uploads/... or https://..." : "Video file path, or YouTube/Facebook link") + '">' +
         '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept="' + (isImg ? "image/*" : "video/*") + '" data-upload="' + key + '" data-kind="' + type + '"></label></div>';
-    } else if (type === "list") html = '<input type="text" id="' + id + '" data-key="' + key + '" data-type="list" value="' + esc((val || []).join(", ")) + '">';
+    } else if (type === "lines") html = '<textarea id="' + id + '" data-key="' + key + '" data-type="lines" rows="' + (opt.rows || 3) + '" placeholder="One per line">' + esc((Array.isArray(val) ? val : String(val || "").split("\n")).join("\n")) + "</textarea>";
+    else if (type === "file") html = '<div class="media-field"><input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="Upload a PDF / Word file, or paste a link">' +
+        '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,image/*" data-upload="' + key + '" data-kind="file"></label></div>' +
+        (val ? '<a class="help" href="' + esc(mediaUrl(val)) + '" target="_blank" rel="noopener">Open current file</a>' : "");
+    else if (type === "list") html = '<input type="text" id="' + id + '" data-key="' + key + '" data-type="list" value="' + esc((val || []).join(", ")) + '">';
     else html = '<input type="' + (type === "date" ? "date" : "text") + '" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '">';
     return '<div class="' + cls + '"><label for="' + id + '">' + label + "</label>" + html + help + "</div>";
   }
@@ -822,6 +994,7 @@ body.sheet-open { overflow: hidden; }
       el.addEventListener(el.type === "checkbox" || el.tagName === "SELECT" ? "change" : "input", function () {
         if (t === "bool") { obj[key] = el.checked; el.closest(".switch").classList.toggle("on", el.checked); }
         else if (t === "list") obj[key] = el.value.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+        else if (t === "lines") obj[key] = el.value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
         else obj[key] = el.value;
         var th = el.parentNode.querySelector(".thumb"); if (th) th.src = mediaUrl(el.value);
         markDirty(); if (onChange) onChange(key);
@@ -832,7 +1005,8 @@ body.sheet-open { overflow: hidden; }
         var file = inp.files[0]; if (!file) return;
         var key = inp.getAttribute("data-upload"), kind = inp.getAttribute("data-kind");
         var label = inp.parentNode; label.firstChild.textContent = "Uploading...";
-        var p = kind === "video" ? uploadVideo(file).then(function (r) { obj[key] = r.src; if (r.poster && "poster" in obj) obj.poster = r.poster; if ("type" in obj) obj.type = "file"; return r.src; })
+        var p = kind === "file" ? uploadDoc(file).then(function (path) { obj[key] = path; if ("title" in obj && !obj.title) obj.title = file.name.replace(/\.[^.]+$/, ""); return path; })
+          : kind === "video" ? uploadVideo(file).then(function (r) { obj[key] = r.src; if (r.poster && "poster" in obj) obj.poster = r.poster; if ("type" in obj) obj.type = "file"; return r.src; })
           : uploadImage(file, "images").then(function (path) { obj[key] = path; return path; });
         p.then(function () { markDirty(); render(); toast("Uploaded. Remember to click Save & Publish."); })
           .catch(function (e) { toast(e.message, true); label.firstChild.textContent = "Upload"; });
@@ -846,6 +1020,24 @@ body.sheet-open { overflow: hidden; }
       '<div class="fields">' + fields.map(function (f) { return fieldHtml(obj, f, title.replace(/\W/g, "")); }).join("") + "</div>" + (extra || "");
     bindFields(div, obj);
     return div;
+  }
+
+  function subList(box, arr, fields, noun) {
+    function draw() {
+      box.innerHTML = "";
+      arr.forEach(function (x, i) {
+        var el = document.createElement("div"); el.className = "sub-item";
+        el.innerHTML = '<button class="icon-btn del sub-del" type="button" title="Delete">&times;</button><div class="fields">' +
+          fields.map(function (f) { return fieldHtml(x, f, "s" + i + Math.random().toString(36).slice(2, 6)); }).join("") + "</div>";
+        bindFields(el, x);
+        $(".sub-del", el).onclick = function () { if (!confirm("Delete this " + noun + "?")) return; arr.splice(i, 1); markDirty(); draw(); };
+        box.appendChild(el);
+      });
+      var add = document.createElement("button"); add.type = "button"; add.className = "btn btn-outline-dark btn-sm"; add.textContent = "+ Add " + noun;
+      add.onclick = function () { var n = {}; fields.forEach(function (f) { n[f[0]] = ""; }); arr.push(n); markDirty(); draw(); };
+      box.appendChild(add);
+    }
+    draw();
   }
 
   function listPanel(title, help, arr, fields, opts) {
@@ -864,6 +1056,11 @@ body.sheet-open { overflow: hidden; }
           '<button class="icon-btn del" data-act="del" title="Delete" type="button">&times;</button></span></div>' +
           '<div class="fields">' + fields.map(function (f) { return fieldHtml(it, f, "i" + i + title.replace(/\W/g, "")); }).join("") + "</div>";
         bindFields(el, it, function (k) { if (k === (opts.titleKey || fields[0][0])) $("strong", el).textContent = it[k] || "(untitled)"; });
+        fields.forEach(function (f) {
+          if (f[2] !== "sublist") return;
+          if (!Array.isArray(it[f[0]])) it[f[0]] = [];
+          subList($('[data-sub="' + f[0] + '"]', el), it[f[0]], f[3].fields, f[3].noun || "item");
+        });
         $$("[data-act]", el).forEach(function (b) {
           b.onclick = function () {
             var act = b.getAttribute("data-act");
@@ -890,12 +1087,19 @@ body.sheet-open { overflow: hidden; }
     ["serviceTimes", "events", "words", "photos", "videos", "branches"].forEach(function (k) { data[k] = data[k] || []; });
     data.hero.media = data.hero.media || [];
     data.contact.phones = data.contact.phones || [];
+    data.trustees = data.trustees || [];
+    data.bibleSchool = data.bibleSchool || {};
+    ["forms", "photos", "details", "howToEnroll"].forEach(function (k) { data.bibleSchool[k] = data.bibleSchool[k] || []; });
+    data.giving = data.giving || {};
+    data.giving.offerings = data.giving.offerings || [];
+    data.giving.branchOfferings = data.giving.branchOfferings || [];
   }
 
   /* ---------- tabs ---------- */
   var TABS = [
     ["today", "Live & Notice"], ["events", "Events"], ["words", "Pastor's Words"], ["photos", "Pictures"], ["videos", "Videos"],
-    ["home", "Home & About"], ["times", "Service Times"], ["contact", "Contact & Branches"], ["connect", "Settings"]
+    ["home", "Home & About"], ["times", "Service Times"], ["branches", "Branches"], ["trustees", "Board of Trustees"], ["bible", "Bible School"],
+    ["giving", "Giving"], ["contact", "Contact"], ["connect", "Settings"]
   ];
   var current = "today";
   function showTab(t) { current = t; render(); window.scrollTo(0, 0); }
@@ -989,11 +1193,77 @@ body.sheet-open { overflow: hidden; }
       P.appendChild(listPanel("Service Times", "Weekly services shown on the home, live and contact pages.", data.serviceTimes, [["name", "Service name"], ["day", "Day"], ["time", "Time"]], { noun: "service" }));
     }
     if (current === "contact") {
-      P.appendChild(objectPanel("Contact Details", "", data.contact, [
+      P.appendChild(objectPanel("Contact Details", "Branches are now edited in the <b>Branches</b> tab.", data.contact, [
         ["phones", "Phone numbers (separate with commas)", "list", { full: true }], ["whatsapp", "WhatsApp number (country code, digits only)", "text", { help: "e.g. 233244783760" }],
         ["email", "Church email"], ["officeHours", "Office hours"], ["address", "Address", "text", { full: true }], ["mapQuery", "Map search (what to show on Google Maps)", "text", { full: true }]
       ]));
-      P.appendChild(listPanel("Branches", "Branches show in the footer of every page and on the Contact page.", data.branches, [["name", "Branch name"], ["location", "Location / address"], ["phone", "Phone (optional)"]], { noun: "branch" }));
+    }
+    if (current === "branches") {
+      P.appendChild(listPanel("Branches", "Each branch gets its own section on the <b>Branches &amp; Pastors</b> page, and appears in the footer and on the Contact page. Tick <b>Headquarters</b> for the HQ: it is always shown first. Use the arrows to change the order.", data.branches, [
+        ["name", "Branch name"], ["location", "Location / address"], ["hq", "This is the Headquarters", "bool", { full: true }],
+        ["about", "About this branch", "textarea", { rows: 3 }], ["image", "Branch photo (optional, shown behind the branch name)", "image"],
+        ["h1", "Pastor", "heading"],
+        ["pastorName", "Pastor's name"], ["pastorTitle", "Title", "text", { help: "e.g. Resident Pastor, Branch Pastor" }],
+        ["pastorPhoto", "Pastor's photo", "image"], ["pastorBio", "About the pastor", "textarea", { rows: 3 }],
+        ["h2", "Contact", "heading"],
+        ["phone", "Telephone"], ["whatsapp", "WhatsApp number", "text", { help: "e.g. 0244783760 or 233244783760" }], ["email", "Email"],
+        ["mapQuery", "Google Maps search (optional)", "text", { help: "e.g. Thyword International Worship Centre, Potsin" }],
+        ["h3", "Services, activities &amp; programmes", "heading"],
+        ["serviceTimes", "Service times (one per line)", "lines", { help: "e.g. Sunday: Worship Service - 8:30 AM" }],
+        ["activities", "Activities (one per line)", "lines", { help: "e.g. Bible studies, Prayer meeting, Youth fellowship" }],
+        ["programs", "Upcoming programmes", "sublist", { noun: "programme", help: "Past programmes hide automatically.", fields: [["title", "Programme"], ["date", "Date", "date"], ["time", "Time"], ["details", "Details (optional)"]] }],
+        ["h4", "Giving to this branch", "heading", { help: "(optional, leave empty to use the Headquarters accounts)" }],
+        ["momoNumber", "MTN MoMo number"], ["momoName", "MoMo account name"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
+        ["bankName", "Bank name"], ["bankAccountName", "Bank account name"], ["bankAccountNumber", "Bank account number"]
+      ], { noun: "branch", blank: function () { return { pastorTitle: "Branch Pastor", serviceTimes: [], activities: [], programs: [] }; } }));
+    }
+    if (current === "trustees") {
+      P.appendChild(listPanel("Board of Trustees", "Shown on the Branches &amp; Pastors page. Use the arrows to set the order (e.g. Chairman first).", data.trustees, [
+        ["name", "Name"], ["position", "Position", "text", { help: "e.g. Chairman, Secretary, Treasurer, Member" }], ["photo", "Photo", "image"], ["bio", "Short note (optional)", "textarea", { rows: 2 }]
+      ], { noun: "trustee" }));
+    }
+    if (current === "bible") {
+      var B = data.bibleSchool;
+      P.appendChild(objectPanel("Bible School", "Shown on the Bible School page.", B, [
+        ["title", "Name of the school"], ["image", "Main picture", "image"], ["intro", "About the school", "textarea", { rows: 4 }],
+        ["details", "Key details (one per line)", "lines", { help: "e.g. Duration: 6 months / Classes: Tuesdays 6:00 PM / Venue: Headquarters / Fee: GHS 100" }],
+        ["howToEnroll", "How to enroll (one step per line)", "lines", { rows: 5 }],
+        ["contactPhone", "Enrollment phone (optional)"], ["contactWhatsapp", "Enrollment WhatsApp (optional)"],
+        ["enrollLink", "Online enrollment link (optional)", "text", { full: true, help: "e.g. a Google Form link. Leave empty if not used." }]
+      ]));
+      P.appendChild(listPanel("Enrollment Forms", "Upload the forms people can download (PDF works best for everyone).", B.forms, [
+        ["title", "Form name"], ["file", "Form file", "file"], ["description", "Short note (optional)", "text", { full: true }]
+      ], { noun: "form" }));
+      var topB = '<div class="dropzone"><strong>Add Bible School pictures</strong><p class="help" style="margin:.3rem 0 .8rem">Select several pictures at once. Large photos are resized automatically.</p>' +
+        '<label class="btn btn-red btn-sm" style="margin:0;color:#fff">Select pictures<input type="file" id="bulkBible" multiple accept="image/*" hidden></label><div class="progress" id="bibleProgress"></div></div>';
+      var bp = listPanel("Bible School Pictures", "", B.photos, [["src", "Picture", "image"], ["caption", "Caption"]], { noun: "picture", titleKey: "caption", top: topB });
+      P.appendChild(bp);
+      $("#bulkBible").onchange = function () {
+        var files = Array.prototype.slice.call(this.files), prog = $("#bibleProgress"), done = 0, added = [];
+        if (!connected()) { toast("Connect to GitHub first (Settings tab) to upload.", true); return; }
+        var next = function () {
+          if (!files.length) { prog.textContent = "Uploaded " + done + " picture(s). Click Save & Publish to show them."; Array.prototype.unshift.apply(B.photos, added); markDirty(); bp.redraw(); return; }
+          var f = files.shift(); prog.textContent = "Uploading " + f.name + " (" + (done + 1) + ")...";
+          uploadImage(f, "images").then(function (path) { added.push({ src: path, caption: "" }); done++; next(); }).catch(function (e) { toast(f.name + ": " + e.message, true); next(); });
+        };
+        next();
+      };
+    }
+    if (current === "giving") {
+      var G = data.giving;
+      P.appendChild(objectPanel("Giving: Headquarters accounts", "Shown on the <b>Give</b> page. Branches without their own accounts (set in the Branches tab) use these.", G, [
+        ["intro", "Introduction", "textarea", { rows: 2 }], ["verse", "Bible verse", "textarea", { rows: 2 }], ["verseRef", "Verse reference"],
+        ["h1", "MTN Mobile Money", "heading"], ["momoNumber", "MoMo number"], ["momoName", "MoMo account name"],
+        ["h2", "Telecel Cash", "heading"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
+        ["h3", "Bank transfer", "heading"], ["bankName", "Bank name"], ["bankAccountName", "Account name"], ["bankAccountNumber", "Account number"], ["bankBranch", "Bank branch"],
+        ["h4", "Other", "heading"],
+        ["branchOfferings", "Giving types for branches (one per line)", "lines", { help: "e.g. Offering / Tithe / Donation" }],
+        ["confirmWhatsapp", "WhatsApp number for giving confirmations (optional)", "text", { help: "Leave empty to use the main church WhatsApp." }],
+        ["onlineLink", "Online payment link (optional)", "text", { full: true, help: "If you set up Paystack, Hubtel or similar, paste the payment page link to show a 'Pay Online' button." }]
+      ]));
+      P.appendChild(listPanel("Headquarters offerings", "The offering types people can choose when giving to the Headquarters.", G.offerings, [
+        ["name", "Offering name"], ["description", "Short description (optional)"]
+      ], { noun: "offering" }));
     }
     if (current === "connect") {
       var c = document.createElement("div"); c.className = "panel";

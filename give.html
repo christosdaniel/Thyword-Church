@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Give | Thyword International Worship Centre</title>
+<meta name="description" content="Give tithes, offerings and donations to Thyword International Worship Centre headquarters or a branch by MTN Mobile Money, Telecel Cash or bank transfer.">
+<meta name="theme-color" content="#0e4c4b">
+<meta property="og:title" content="Give | Thyword International Worship Centre">
+<meta property="og:description" content="Give tithes, offerings and donations to Thyword International Worship Centre headquarters or a branch by MTN Mobile Money, Telecel Cash or bank transfer.">
+<meta property="og:image" content="assets/images/logo.png">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261119-6">
+</head>
+<body data-page="give">
+<div id="site-header"></div>
+<noscript><p style="padding:1rem;text-align:center">Please enable JavaScript to view this website.</p></noscript>
+<main>
+
+<section class="page-hero"><div class="container">
+  <div class="crumbs"><a href="index.html">Home</a> / Give</div>
+  <h1>Give</h1>
+  <p>Tithes, offerings and donations, to the headquarters or to any branch.</p>
+</div></section>
+
+<section class="section">
+  <div class="container give-wrap">
+    <div class="give-main">
+      <p class="give-intro" id="giveIntro"></p>
+      <blockquote class="verse" id="giveVerse"></blockquote>
+
+      <div class="give-step">
+        <h3><span>1</span> Who are you giving to?</h3>
+        <select id="giveTo" aria-label="Give to"></select>
+      </div>
+      <div class="give-step">
+        <h3><span>2</span> What are you giving?</h3>
+        <div class="offer-grid" id="giveOfferings"></div>
+      </div>
+      <div class="give-step">
+        <h3><span>3</span> How would you like to give?</h3>
+        <div class="pay-tabs" id="payTabs">
+          <button type="button" data-m="momo" class="active"><span class="pay-logo momo">MoMo</span> MTN Mobile Money</button>
+          <button type="button" data-m="telecel"><span class="pay-logo telecel">T</span> Telecel Cash</button>
+          <button type="button" data-m="bank"><span class="pay-logo bank">&#127974;</span> Bank Transfer</button>
+        </div>
+        <div class="pay-summary">Giving: <b id="giveSummary"></b></div>
+        <div class="pay-panel" id="payPanel"></div>
+        <div id="giveOnline" class="give-online"></div>
+      </div>
+    </div>
+
+    <aside class="give-side">
+      <form class="give-confirm" id="giveConfirm" novalidate>
+        <h3>After giving, let us know</h3>
+        <p>So we can record your gift and pray with you.</p>
+        <label for="gc-name">Your name *</label><input id="gc-name" name="name">
+        <label for="gc-amount">Amount (GHS) *</label><input id="gc-amount" name="amount" inputmode="decimal" placeholder="e.g. 100">
+        <label for="gc-txn">Transaction ID</label><input id="gc-txn" name="txn" placeholder="From your MoMo / bank message">
+        <label for="gc-phone">Phone</label><input id="gc-phone" name="phone" type="tel">
+        <div class="gc-actions">
+          <button class="btn bf-wa" type="button" id="confirmWa">Send on WhatsApp</button>
+          <button class="btn btn-outline-dark" type="button" id="confirmEmail">Send by Email</button>
+        </div>
+        <div class="form-status" role="status"></div>
+      </form>
+    </aside>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/main.js?v=20261119-4"></script>
+</body>
+</html>

@@ -176,6 +176,13 @@
       return uploadBlob(b, folder, file.name, ext);
     });
   }
+  var MAX_DOC_MB = 25;
+  function uploadDoc(file) {
+    if (file.size > MAX_DOC_MB * 1024 * 1024) return Promise.reject(new Error("This file is larger than " + MAX_DOC_MB + " MB. Please make it smaller (e.g. save as PDF) and try again."));
+    if (/^image\//.test(file.type)) return uploadImage(file, "forms");
+    var ext = (file.name.split(".").pop() || "pdf").toLowerCase();
+    return uploadBlob(file, "forms", file.name, ext);
+  }
   var MAX_VIDEO_MB = 50;
   function uploadVideo(file) {
     if (file.size > MAX_VIDEO_MB * 1024 * 1024) return Promise.reject(new Error("This video is larger than " + MAX_VIDEO_MB + " MB. Upload long sermons to YouTube or Facebook and add the link instead."));
@@ -189,7 +196,9 @@
   // types: text, textarea, date, bool, image, video, select, list (comma separated)
   function fieldHtml(obj, f, idPrefix) {
     var key = f[0], label = f[1], type = f[2] || "text", opt = f[3] || {}, val = obj[key], id = idPrefix + "-" + key;
-    var cls = opt.full || type === "textarea" || type === "image" || type === "video" ? "full" : "";
+    var cls = opt.full || type === "textarea" || type === "image" || type === "video" || type === "lines" || type === "file" || type === "sublist" ? "full" : "";
+    if (type === "heading") return '<div class="full sub-heading">' + label + (opt.help ? '<span class="help"> ' + opt.help + "</span>" : "") + "</div>";
+    if (type === "sublist") return '<div class="full"><label>' + label + "</label>" + (opt.help ? '<div class="help" style="margin-bottom:.5rem">' + opt.help + "</div>" : "") + '<div class="sub-list" data-sub="' + key + '"></div></div>';
     var help = opt.help ? '<div class="help">' + opt.help + "</div>" : "";
     var html;
     if (type === "textarea") html = '<textarea id="' + id + '" data-key="' + key + '" rows="' + (opt.rows || 4) + '">' + esc(val) + "</textarea>";
@@ -200,7 +209,11 @@
       html = '<div class="media-field">' + (isImg ? '<img class="thumb" src="' + esc(mediaUrl(val)) + '" alt="" onerror="this.style.visibility=\'hidden\'" onload="this.style.visibility=\'visible\'">' : "") +
         '<input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="' + (isImg ? "assets/uploads/... or https://..." : "Video file path, or YouTube/Facebook link") + '">' +
         '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept="' + (isImg ? "image/*" : "video/*") + '" data-upload="' + key + '" data-kind="' + type + '"></label></div>';
-    } else if (type === "list") html = '<input type="text" id="' + id + '" data-key="' + key + '" data-type="list" value="' + esc((val || []).join(", ")) + '">';
+    } else if (type === "lines") html = '<textarea id="' + id + '" data-key="' + key + '" data-type="lines" rows="' + (opt.rows || 3) + '" placeholder="One per line">' + esc((Array.isArray(val) ? val : String(val || "").split("\n")).join("\n")) + "</textarea>";
+    else if (type === "file") html = '<div class="media-field"><input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="Upload a PDF / Word file, or paste a link">' +
+        '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,image/*" data-upload="' + key + '" data-kind="file"></label></div>' +
+        (val ? '<a class="help" href="' + esc(mediaUrl(val)) + '" target="_blank" rel="noopener">Open current file</a>' : "");
+    else if (type === "list") html = '<input type="text" id="' + id + '" data-key="' + key + '" data-type="list" value="' + esc((val || []).join(", ")) + '">';
     else html = '<input type="' + (type === "date" ? "date" : "text") + '" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '">';
     return '<div class="' + cls + '"><label for="' + id + '">' + label + "</label>" + html + help + "</div>";
   }
@@ -211,6 +224,7 @@
       el.addEventListener(el.type === "checkbox" || el.tagName === "SELECT" ? "change" : "input", function () {
         if (t === "bool") { obj[key] = el.checked; el.closest(".switch").classList.toggle("on", el.checked); }
         else if (t === "list") obj[key] = el.value.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+        else if (t === "lines") obj[key] = el.value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
         else obj[key] = el.value;
         var th = el.parentNode.querySelector(".thumb"); if (th) th.src = mediaUrl(el.value);
         markDirty(); if (onChange) onChange(key);
@@ -221,7 +235,8 @@
         var file = inp.files[0]; if (!file) return;
         var key = inp.getAttribute("data-upload"), kind = inp.getAttribute("data-kind");
         var label = inp.parentNode; label.firstChild.textContent = "Uploading...";
-        var p = kind === "video" ? uploadVideo(file).then(function (r) { obj[key] = r.src; if (r.poster && "poster" in obj) obj.poster = r.poster; if ("type" in obj) obj.type = "file"; return r.src; })
+        var p = kind === "file" ? uploadDoc(file).then(function (path) { obj[key] = path; if ("title" in obj && !obj.title) obj.title = file.name.replace(/\.[^.]+$/, ""); return path; })
+          : kind === "video" ? uploadVideo(file).then(function (r) { obj[key] = r.src; if (r.poster && "poster" in obj) obj.poster = r.poster; if ("type" in obj) obj.type = "file"; return r.src; })
           : uploadImage(file, "images").then(function (path) { obj[key] = path; return path; });
         p.then(function () { markDirty(); render(); toast("Uploaded. Remember to click Save & Publish."); })
           .catch(function (e) { toast(e.message, true); label.firstChild.textContent = "Upload"; });
@@ -235,6 +250,24 @@
       '<div class="fields">' + fields.map(function (f) { return fieldHtml(obj, f, title.replace(/\W/g, "")); }).join("") + "</div>" + (extra || "");
     bindFields(div, obj);
     return div;
+  }
+
+  function subList(box, arr, fields, noun) {
+    function draw() {
+      box.innerHTML = "";
+      arr.forEach(function (x, i) {
+        var el = document.createElement("div"); el.className = "sub-item";
+        el.innerHTML = '<button class="icon-btn del sub-del" type="button" title="Delete">&times;</button><div class="fields">' +
+          fields.map(function (f) { return fieldHtml(x, f, "s" + i + Math.random().toString(36).slice(2, 6)); }).join("") + "</div>";
+        bindFields(el, x);
+        $(".sub-del", el).onclick = function () { if (!confirm("Delete this " + noun + "?")) return; arr.splice(i, 1); markDirty(); draw(); };
+        box.appendChild(el);
+      });
+      var add = document.createElement("button"); add.type = "button"; add.className = "btn btn-outline-dark btn-sm"; add.textContent = "+ Add " + noun;
+      add.onclick = function () { var n = {}; fields.forEach(function (f) { n[f[0]] = ""; }); arr.push(n); markDirty(); draw(); };
+      box.appendChild(add);
+    }
+    draw();
   }
 
   function listPanel(title, help, arr, fields, opts) {
@@ -253,6 +286,11 @@
           '<button class="icon-btn del" data-act="del" title="Delete" type="button">&times;</button></span></div>' +
           '<div class="fields">' + fields.map(function (f) { return fieldHtml(it, f, "i" + i + title.replace(/\W/g, "")); }).join("") + "</div>";
         bindFields(el, it, function (k) { if (k === (opts.titleKey || fields[0][0])) $("strong", el).textContent = it[k] || "(untitled)"; });
+        fields.forEach(function (f) {
+          if (f[2] !== "sublist") return;
+          if (!Array.isArray(it[f[0]])) it[f[0]] = [];
+          subList($('[data-sub="' + f[0] + '"]', el), it[f[0]], f[3].fields, f[3].noun || "item");
+        });
         $$("[data-act]", el).forEach(function (b) {
           b.onclick = function () {
             var act = b.getAttribute("data-act");
@@ -279,12 +317,19 @@
     ["serviceTimes", "events", "words", "photos", "videos", "branches"].forEach(function (k) { data[k] = data[k] || []; });
     data.hero.media = data.hero.media || [];
     data.contact.phones = data.contact.phones || [];
+    data.trustees = data.trustees || [];
+    data.bibleSchool = data.bibleSchool || {};
+    ["forms", "photos", "details", "howToEnroll"].forEach(function (k) { data.bibleSchool[k] = data.bibleSchool[k] || []; });
+    data.giving = data.giving || {};
+    data.giving.offerings = data.giving.offerings || [];
+    data.giving.branchOfferings = data.giving.branchOfferings || [];
   }
 
   /* ---------- tabs ---------- */
   var TABS = [
     ["today", "Live & Notice"], ["events", "Events"], ["words", "Pastor's Words"], ["photos", "Pictures"], ["videos", "Videos"],
-    ["home", "Home & About"], ["times", "Service Times"], ["contact", "Contact & Branches"], ["connect", "Settings"]
+    ["home", "Home & About"], ["times", "Service Times"], ["branches", "Branches"], ["trustees", "Board of Trustees"], ["bible", "Bible School"],
+    ["giving", "Giving"], ["contact", "Contact"], ["connect", "Settings"]
   ];
   var current = "today";
   function showTab(t) { current = t; render(); window.scrollTo(0, 0); }
@@ -378,11 +423,77 @@
       P.appendChild(listPanel("Service Times", "Weekly services shown on the home, live and contact pages.", data.serviceTimes, [["name", "Service name"], ["day", "Day"], ["time", "Time"]], { noun: "service" }));
     }
     if (current === "contact") {
-      P.appendChild(objectPanel("Contact Details", "", data.contact, [
+      P.appendChild(objectPanel("Contact Details", "Branches are now edited in the <b>Branches</b> tab.", data.contact, [
         ["phones", "Phone numbers (separate with commas)", "list", { full: true }], ["whatsapp", "WhatsApp number (country code, digits only)", "text", { help: "e.g. 233244783760" }],
         ["email", "Church email"], ["officeHours", "Office hours"], ["address", "Address", "text", { full: true }], ["mapQuery", "Map search (what to show on Google Maps)", "text", { full: true }]
       ]));
-      P.appendChild(listPanel("Branches", "Branches show in the footer of every page and on the Contact page.", data.branches, [["name", "Branch name"], ["location", "Location / address"], ["phone", "Phone (optional)"]], { noun: "branch" }));
+    }
+    if (current === "branches") {
+      P.appendChild(listPanel("Branches", "Each branch gets its own section on the <b>Branches &amp; Pastors</b> page, and appears in the footer and on the Contact page. Tick <b>Headquarters</b> for the HQ: it is always shown first. Use the arrows to change the order.", data.branches, [
+        ["name", "Branch name"], ["location", "Location / address"], ["hq", "This is the Headquarters", "bool", { full: true }],
+        ["about", "About this branch", "textarea", { rows: 3 }], ["image", "Branch photo (optional, shown behind the branch name)", "image"],
+        ["h1", "Pastor", "heading"],
+        ["pastorName", "Pastor's name"], ["pastorTitle", "Title", "text", { help: "e.g. Resident Pastor, Branch Pastor" }],
+        ["pastorPhoto", "Pastor's photo", "image"], ["pastorBio", "About the pastor", "textarea", { rows: 3 }],
+        ["h2", "Contact", "heading"],
+        ["phone", "Telephone"], ["whatsapp", "WhatsApp number", "text", { help: "e.g. 0244783760 or 233244783760" }], ["email", "Email"],
+        ["mapQuery", "Google Maps search (optional)", "text", { help: "e.g. Thyword International Worship Centre, Potsin" }],
+        ["h3", "Services, activities &amp; programmes", "heading"],
+        ["serviceTimes", "Service times (one per line)", "lines", { help: "e.g. Sunday: Worship Service - 8:30 AM" }],
+        ["activities", "Activities (one per line)", "lines", { help: "e.g. Bible studies, Prayer meeting, Youth fellowship" }],
+        ["programs", "Upcoming programmes", "sublist", { noun: "programme", help: "Past programmes hide automatically.", fields: [["title", "Programme"], ["date", "Date", "date"], ["time", "Time"], ["details", "Details (optional)"]] }],
+        ["h4", "Giving to this branch", "heading", { help: "(optional, leave empty to use the Headquarters accounts)" }],
+        ["momoNumber", "MTN MoMo number"], ["momoName", "MoMo account name"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
+        ["bankName", "Bank name"], ["bankAccountName", "Bank account name"], ["bankAccountNumber", "Bank account number"]
+      ], { noun: "branch", blank: function () { return { pastorTitle: "Branch Pastor", serviceTimes: [], activities: [], programs: [] }; } }));
+    }
+    if (current === "trustees") {
+      P.appendChild(listPanel("Board of Trustees", "Shown on the Branches &amp; Pastors page. Use the arrows to set the order (e.g. Chairman first).", data.trustees, [
+        ["name", "Name"], ["position", "Position", "text", { help: "e.g. Chairman, Secretary, Treasurer, Member" }], ["photo", "Photo", "image"], ["bio", "Short note (optional)", "textarea", { rows: 2 }]
+      ], { noun: "trustee" }));
+    }
+    if (current === "bible") {
+      var B = data.bibleSchool;
+      P.appendChild(objectPanel("Bible School", "Shown on the Bible School page.", B, [
+        ["title", "Name of the school"], ["image", "Main picture", "image"], ["intro", "About the school", "textarea", { rows: 4 }],
+        ["details", "Key details (one per line)", "lines", { help: "e.g. Duration: 6 months / Classes: Tuesdays 6:00 PM / Venue: Headquarters / Fee: GHS 100" }],
+        ["howToEnroll", "How to enroll (one step per line)", "lines", { rows: 5 }],
+        ["contactPhone", "Enrollment phone (optional)"], ["contactWhatsapp", "Enrollment WhatsApp (optional)"],
+        ["enrollLink", "Online enrollment link (optional)", "text", { full: true, help: "e.g. a Google Form link. Leave empty if not used." }]
+      ]));
+      P.appendChild(listPanel("Enrollment Forms", "Upload the forms people can download (PDF works best for everyone).", B.forms, [
+        ["title", "Form name"], ["file", "Form file", "file"], ["description", "Short note (optional)", "text", { full: true }]
+      ], { noun: "form" }));
+      var topB = '<div class="dropzone"><strong>Add Bible School pictures</strong><p class="help" style="margin:.3rem 0 .8rem">Select several pictures at once. Large photos are resized automatically.</p>' +
+        '<label class="btn btn-red btn-sm" style="margin:0;color:#fff">Select pictures<input type="file" id="bulkBible" multiple accept="image/*" hidden></label><div class="progress" id="bibleProgress"></div></div>';
+      var bp = listPanel("Bible School Pictures", "", B.photos, [["src", "Picture", "image"], ["caption", "Caption"]], { noun: "picture", titleKey: "caption", top: topB });
+      P.appendChild(bp);
+      $("#bulkBible").onchange = function () {
+        var files = Array.prototype.slice.call(this.files), prog = $("#bibleProgress"), done = 0, added = [];
+        if (!connected()) { toast("Connect to GitHub first (Settings tab) to upload.", true); return; }
+        var next = function () {
+          if (!files.length) { prog.textContent = "Uploaded " + done + " picture(s). Click Save & Publish to show them."; Array.prototype.unshift.apply(B.photos, added); markDirty(); bp.redraw(); return; }
+          var f = files.shift(); prog.textContent = "Uploading " + f.name + " (" + (done + 1) + ")...";
+          uploadImage(f, "images").then(function (path) { added.push({ src: path, caption: "" }); done++; next(); }).catch(function (e) { toast(f.name + ": " + e.message, true); next(); });
+        };
+        next();
+      };
+    }
+    if (current === "giving") {
+      var G = data.giving;
+      P.appendChild(objectPanel("Giving: Headquarters accounts", "Shown on the <b>Give</b> page. Branches without their own accounts (set in the Branches tab) use these.", G, [
+        ["intro", "Introduction", "textarea", { rows: 2 }], ["verse", "Bible verse", "textarea", { rows: 2 }], ["verseRef", "Verse reference"],
+        ["h1", "MTN Mobile Money", "heading"], ["momoNumber", "MoMo number"], ["momoName", "MoMo account name"],
+        ["h2", "Telecel Cash", "heading"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
+        ["h3", "Bank transfer", "heading"], ["bankName", "Bank name"], ["bankAccountName", "Account name"], ["bankAccountNumber", "Account number"], ["bankBranch", "Bank branch"],
+        ["h4", "Other", "heading"],
+        ["branchOfferings", "Giving types for branches (one per line)", "lines", { help: "e.g. Offering / Tithe / Donation" }],
+        ["confirmWhatsapp", "WhatsApp number for giving confirmations (optional)", "text", { help: "Leave empty to use the main church WhatsApp." }],
+        ["onlineLink", "Online payment link (optional)", "text", { full: true, help: "If you set up Paystack, Hubtel or similar, paste the payment page link to show a 'Pay Online' button." }]
+      ]));
+      P.appendChild(listPanel("Headquarters offerings", "The offering types people can choose when giving to the Headquarters.", G.offerings, [
+        ["name", "Offering name"], ["description", "Short description (optional)"]
+      ], { noun: "offering" }));
     }
     if (current === "connect") {
       var c = document.createElement("div"); c.className = "panel";

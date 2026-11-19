@@ -109,6 +109,30 @@
   }
 
   /* ---------- header & footer ---------- */
+  /* ---------- branches / lists helpers ---------- */
+  function slugify(t) { return String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "branch"; }
+  function lines(v) { return (Array.isArray(v) ? v : String(v || "").split(/\n/)).map(function (x) { return String(x).trim(); }).filter(Boolean); }
+  function digits(v) { return String(v || "").replace(/\D/g, ""); }
+  function waTo(number, text) { var n = digits(number); if (n.charAt(0) === "0") n = "233" + n.slice(1); return n ? "https://wa.me/" + n + (text ? "?text=" + encodeURIComponent(text) : "") : ""; }
+  // Headquarters first, then the rest in the order set in the admin
+  function branchList() {
+    var list = (C.branches || []).map(function (b) { var o = {}; for (var k in b) o[k] = b[k]; o.id = slugify(b.name); return o; });
+    return list.filter(function (b) { return b.hq; }).concat(list.filter(function (b) { return !b.hq; }));
+  }
+  function hqBranch() { return branchList().filter(function (b) { return b.hq; })[0] || null; }
+  function copyText(text, btn) {
+    var done = function () { if (!btn) return; var t = btn.textContent; btn.textContent = "Copied!"; btn.classList.add("copied"); setTimeout(function () { btn.textContent = t; btn.classList.remove("copied"); }, 1600); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+    else fallback();
+    function fallback() { var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} ta.remove(); }
+  }
+
+  function navDrop(label, items, pages) {
+    var cur = document.body.getAttribute("data-page"), on = pages.indexOf(cur) >= 0;
+    return '<li class="has-drop"><button type="button" class="drop-btn' + (on ? " active" : "") + '" aria-expanded="false">' + label +
+      ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>' +
+      '<ul class="drop">' + items.map(function (i) { return '<li><a href="' + i[0] + '">' + i[1] + "</a></li>"; }).join("") + "</ul></li>";
+  }
   function navLink(href, label, page) {
     var cur = document.body.getAttribute("data-page");
     return '<li><a href="' + href + '"' + (cur === page ? ' class="active"' : "") + ">" + label + "</a></li>";
@@ -143,10 +167,11 @@
       '<button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>' +
       '<nav class="main-nav" aria-label="Main"><ul>' +
       navLink("index.html", "Home", "home") +
-      navLink("index.html#about", "About", "") +
+      navDrop("About", [["index.html#about", "About Us"], ["branches.html", "Branches &amp; Pastors"], ["branches.html#trustees", "Board of Trustees"]], ["branches"]) +
+      navLink("bibleschool.html", "Bible School", "bibleschool") +
       navLink("index.html#events", "Events", "") +
-      navLink("pictures.html", "Pictures", "pictures") +
-      navLink("videos.html", "Videos", "videos") +
+      navDrop("Media", [["sermons.html", "Watch Sermons"], ["pictures.html", "Pictures"], ["videos.html", "Videos"], ["live.html", "Watch Live"]], ["pictures", "videos", "sermons", "live"]) +
+      navLink("give.html", "Give", "give") +
       navLink("contact.html", "Contact", "contact") +
       '<li class="nav-cta"><a class="btn btn-gold btn-sm' + (document.body.getAttribute("data-page") === "sermons" ? " is-current" : "") + '" href="sermons.html">' + big(ICON.play, 14) + ' Watch Sermons</a></li>' +
       '<li class="nav-live"><a class="btn btn-red btn-sm" href="live.html">' + big(ICON.tv, 16) + ' Watch Live</a><span class="live-badge">LIVE</span></li>' +
@@ -159,15 +184,25 @@
       var open = nav.classList.toggle("open");
       toggle.setAttribute("aria-expanded", open);
     });
-    $$(".main-nav a").forEach(function (a) { a.addEventListener("click", function () { nav.classList.remove("open"); }); });
+    $$(".main-nav a").forEach(function (a) { a.addEventListener("click", function () { nav.classList.remove("open"); $$(".has-drop.open").forEach(function (d) { d.classList.remove("open"); }); }); });
+    // Drop-down menus: tap/click to open (hover also opens them on computers)
+    $$(".drop-btn").forEach(function (b) {
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var li = b.parentNode, open = !li.classList.contains("open");
+        $$(".has-drop.open").forEach(function (d) { if (d !== li) { d.classList.remove("open"); $(".drop-btn", d).setAttribute("aria-expanded", "false"); } });
+        li.classList.toggle("open", open); b.setAttribute("aria-expanded", open);
+      });
+    });
+    document.addEventListener("click", function () { $$(".has-drop.open").forEach(function (d) { d.classList.remove("open"); $(".drop-btn", d).setAttribute("aria-expanded", "false"); }); });
     var close = $(".announce-close");
     if (close) close.addEventListener("click", function () { $("#announce").remove(); store("tiwc-ann-closed", ann.text); });
   }
 
   function renderFooter() {
     var ct = C.contact || {};
-    var branches = (C.branches || []).map(function (b) {
-      return "<li>" + ICON.pin.replace(/16/g, "14") + "<span>" + esc(b.name) + "</span></li>";
+    var branches = branchList().map(function (b) {
+      return "<li>" + ICON.pin.replace(/16/g, "14") + '<a href="branches.html#' + b.id + '">' + esc(b.name) + (b.hq ? " (HQ)" : "") + "</a></li>";
     }).join("");
     var phones = (ct.phones || []).map(function (p) {
       return "<li>" + '<a href="' + telLink(p) + '">' + esc(p) + "</a></li>";
@@ -183,7 +218,7 @@
       (waLink() ? '<a href="' + waLink() + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + ICON.wa + "</a>" : "") +
       "</div></div>" +
       "<div><h4>Our Branches</h4><ul class=\"footer-branches\">" + branches + "</ul></div>" +
-      '<div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="index.html#about">About Us</a></li><li><a href="index.html#events">Upcoming Events</a></li><li><a href="pictures.html">Pictures</a></li><li><a href="sermons.html">Watch Sermons</a></li><li><a href="videos.html">Videos</a></li><li><a href="live.html">Watch Live</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>' +
+      '<div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="index.html#about">About Us</a></li><li><a href="branches.html">Branches &amp; Pastors</a></li><li><a href="bibleschool.html">Bible School</a></li><li><a href="give.html">Give / Donate</a></li><li><a href="index.html#events">Events</a></li><li><a href="pictures.html">Pictures</a></li><li><a href="sermons.html">Watch Sermons</a></li><li><a href="videos.html">Videos</a></li><li><a href="live.html">Watch Live</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>' +
       "<div><h4>Contact</h4><ul>" + phones +
       (waLink() ? '<li><a href="' + waLink() + '" target="_blank" rel="noopener">Chat on WhatsApp</a></li>' : "") +
       (ct.email ? '<li><a href="mailto:' + esc(ct.email) + '">' + esc(ct.email) + "</a></li>" : "") +
@@ -784,6 +819,188 @@
     $("#subscribeBox").innerHTML = subscribeBlock();
   };
 
+
+  /* ---------- Branches & Pastors + Board of Trustees ---------- */
+  pages.branches = function () {
+    var list = branchList(), today = new Date(); today.setHours(0, 0, 0, 0);
+    $("#branchJump").innerHTML = list.map(function (b) { return '<a href="#' + b.id + '"' + (b.hq ? ' class="hq"' : "") + ">" + esc(b.name) + "</a>"; }).join("");
+    $("#branchCards").innerHTML = list.map(function (b) {
+      var P = C.pastor || {}, ct = C.contact || {};
+      // Headquarters falls back to the Head Pastor and the main church contacts
+      var pName = b.pastorName || (b.hq ? P.name : ""), pPhoto = b.pastorPhoto || (b.hq ? P.photo : ""), pBio = b.pastorBio || (b.hq ? P.bio : "");
+      var pTitle = b.pastorTitle || (b.hq ? (P.role || "Head Pastor") : "Branch Pastor");
+      var phone = b.phone || (b.hq ? (ct.phones || [])[0] : ""), wa = b.whatsapp || (b.hq ? ct.whatsapp : ""), email = b.email || (b.hq ? ct.email : "");
+      var progs = (b.programs || []).filter(function (x) { if (!x.title) return false; var d = eventDate(x); return !d || d >= today; })
+        .sort(function (a, c) { return (a.date || "9999").localeCompare(c.date || "9999"); });
+      var map = b.mapQuery || (b.location ? b.location + ", Ghana" : "");
+      return '<article class="branch-full reveal' + (b.hq ? " is-hq" : "") + '" id="' + b.id + '">' +
+        '<header class="bf-head"' + (b.image ? ' style="background-image:linear-gradient(100deg,rgba(7,46,45,.92),rgba(7,46,45,.6)),url(\'' + esc(b.image) + '\')"' : "") + '>' +
+          '<span class="bf-tag">' + (b.hq ? "Headquarters" : "Branch") + "</span><h2>" + esc(b.name) + "</h2>" +
+          (b.location ? '<p class="bf-loc">' + ICON.pin + " " + esc(b.location) + "</p>" : "") + "</header>" +
+        '<div class="bf-grid">' +
+          '<div class="bf-pastor">' +
+            '<div class="bf-pphoto">' + (pPhoto ? '<img src="' + esc(pPhoto) + '" alt="' + esc(pName) + '" loading="lazy">' : '<img class="ph" src="' + esc(S.logo) + '" alt="">') + "</div>" +
+            "<small>" + esc(pTitle) + "</small><h3>" + (pName ? esc(pName) : "Pastor details coming soon") + "</h3>" +
+            (pBio ? "<p>" + esc(pBio) + "</p>" : "") + "</div>" +
+          '<div class="bf-info">' +
+            (b.about ? '<p class="bf-about">' + esc(b.about) + "</p>" : "") +
+            (lines(b.serviceTimes).length ? '<h4>Service times</h4><ul class="bf-list">' + lines(b.serviceTimes).map(function (x) { return "<li>" + ICON.clock + " " + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
+            (lines(b.activities).length ? '<h4>Activities</h4><div class="bf-chips">' + lines(b.activities).map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("") + "</div>" : "") +
+            "<h4>Upcoming programmes</h4>" +
+            (progs.length ? '<ul class="bf-progs">' + progs.map(function (x) {
+              var d = (x.date || "").split("-").map(Number);
+              return "<li>" + (d.length === 3 ? '<span class="pd"><b>' + d[2] + "</b><small>" + MONTHS[d[1] - 1] + "</small></span>" : '<span class="pd"><b>&bull;</b></span>') +
+                "<div><strong>" + esc(x.title) + "</strong>" + (x.time || x.details ? "<small>" + esc([x.time, x.details].filter(Boolean).join(" · ")) + "</small>" : "") + "</div></li>";
+            }).join("") + "</ul>" : '<p class="muted">No upcoming programmes listed yet.</p>') +
+            '<div class="bf-contact">' +
+              (phone ? '<a class="btn btn-green btn-sm" href="' + telLink(phone) + '">' + ICON.phone + " Call</a>" : "") +
+              (wa ? '<a class="btn btn-sm bf-wa" href="' + waTo(wa, "Hello " + b.name + ",") + '" target="_blank" rel="noopener">' + ICON.wa + " WhatsApp</a>" : "") +
+              (email ? '<a class="btn btn-outline-dark btn-sm" href="mailto:' + esc(email) + '">' + ICON.mail + " Email</a>" : "") +
+              (map ? '<a class="btn btn-outline-dark btn-sm" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(map) + '" target="_blank" rel="noopener">' + ICON.pin + " Directions</a>" : "") +
+              '<a class="btn btn-gold btn-sm" href="give.html?to=' + (b.hq ? "hq" : b.id) + '">Give to ' + (b.hq ? "Headquarters" : "this branch") + "</a>" +
+            "</div>" + (phone || wa || email ? '<p class="bf-contact-line">' + [phone, email].filter(Boolean).map(esc).join(" &middot; ") + "</p>" : "") +
+          "</div></div></article>";
+    }).join("");
+
+    var T = C.trustees || [];
+    $("#trusteeGrid").innerHTML = T.length ? T.map(function (t) {
+      return '<div class="trustee reveal"><div class="tr-photo">' + (t.photo ? '<img src="' + esc(t.photo) + '" alt="' + esc(t.name) + '" loading="lazy">' : '<img class="ph" src="' + esc(S.logo) + '" alt="">') + "</div>" +
+        "<h3>" + esc(t.name) + '</h3><p class="tr-pos">' + esc(t.position) + "</p>" + (t.bio ? '<p class="tr-bio">' + esc(t.bio) + "</p>" : "") + "</div>";
+    }).join("") : '<div class="empty">Board of Trustees profiles are coming soon.</div>';
+    $("#subscribeBox").innerHTML = subscribeBlock();
+  };
+
+  /* ---------- Bible School ---------- */
+  pages.bibleschool = function () {
+    var B = C.bibleSchool || {}, ct = C.contact || {};
+    var phone = B.contactPhone || (ct.phones || [])[0], wa = B.contactWhatsapp || ct.whatsapp;
+    $("#bsAbout").innerHTML = '<div class="bs-text reveal"><span class="eyebrow">About the School</span><h2>' + esc(B.title || "Bible School") + "</h2>" +
+      (B.intro ? "<p>" + esc(B.intro) + "</p>" : "") +
+      (lines(B.details).length ? '<ul class="bs-details">' + lines(B.details).map(function (x) {
+        var i = x.indexOf(":"); return "<li>" + (i > 0 ? "<b>" + esc(x.slice(0, i)) + ":</b>" + esc(x.slice(i + 1)) : esc(x)) + "</li>"; }).join("") + "</ul>" : "") +
+      '<div class="hero-actions"><a class="btn btn-red" href="#enroll">How to Enroll</a>' + ((B.forms || []).length ? '<a class="btn btn-outline-dark" href="#forms">Download Forms</a>' : "") + "</div></div>" +
+      '<div class="bs-image reveal">' + (B.image || ((B.photos || [])[0] || {}).src ? '<img src="' + esc(B.image || B.photos[0].src) + '" alt="Bible School">' : '<div class="bs-ph"><img src="' + esc(S.logo) + '" alt=""><p>' + esc(B.title || "Bible School") + "</p></div>") + "</div>";
+
+    var steps = lines(B.howToEnroll);
+    $("#bsSteps").innerHTML = steps.map(function (x, i) { return '<li class="reveal"><span>' + (i + 1) + "</span><p>" + esc(x) + "</p></li>"; }).join("");
+    var subject = "Bible School enrollment";
+    var msg = "Hello, I would like to enroll in the " + (B.title || "Bible School") + ". Please send me the details.";
+    $("#bsEnroll").innerHTML =
+      (B.enrollLink ? '<a class="btn btn-red" href="' + esc(B.enrollLink) + '" target="_blank" rel="noopener">Enroll Online</a>' : "") +
+      (wa ? '<a class="btn bf-wa" href="' + waTo(wa, msg) + '" target="_blank" rel="noopener">' + ICON.wa + " Enroll on WhatsApp</a>" : "") +
+      (phone ? '<a class="btn btn-green" href="' + telLink(phone) + '">' + ICON.phone + " Call " + esc(phone) + "</a>" : "") +
+      '<button class="btn btn-outline-dark" type="button" id="bsEmail">' + ICON.mail + " Enroll by Email</button>";
+    $("#bsEmail").addEventListener("click", function () {
+      var st = $("#bsStatus");
+      chooseSendApp({ title: "Enroll by email", subject: subject, body: msg + "\n\nName:\nPhone:\n",
+        onOpened: function (n, link) { st.innerHTML = "Opening " + esc(n) + "... add your name and phone, then press <b>Send</b>. " + '<a href="' + esc(link) + '" target="_blank" rel="noopener">Tap here if it did not open</a>.'; },
+        onWebsite: function () { window.location.href = "contact.html"; } });
+    });
+
+    var forms = B.forms || [];
+    $("#formsSection").classList.toggle("hidden", !forms.length);
+    $("#bsForms").innerHTML = forms.map(function (f) {
+      var ext = (String(f.file || "").split("?")[0].split(".").pop() || "").toUpperCase();
+      return '<a class="form-card reveal" href="' + esc(f.file) + '" download target="_blank" rel="noopener"><span class="fc-ico">' + (ext && ext.length <= 4 ? esc(ext) : "FILE") + "</span>" +
+        "<span><b>" + esc(f.title || "Enrollment form") + "</b>" + (f.description ? "<small>" + esc(f.description) + "</small>" : "<small>Tap to download</small>") + "</span>" +
+        '<span class="fc-dl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg></span></a>';
+    }).join("");
+
+    var photos = B.photos || [];
+    $("#bsPhotos").innerHTML = photos.length ? photos.map(photoItem).join("") : '<div class="empty">Pictures from recent Bible School classes are coming soon.</div>';
+    bindPhotos($("#bsPhotos"), photos);
+    $("#subscribeBox").innerHTML = subscribeBlock();
+  };
+
+  /* ---------- Give: tithes, offerings & donations ---------- */
+  pages.give = function () {
+    var G = C.giving || {}, ct = C.contact || {};
+    var hqName = (hqBranch() || {}).location ? "Headquarters (" + hqBranch().location.split(",")[0] + ")" : "Headquarters";
+    var hqAcct = { momoNumber: G.momoNumber, momoName: G.momoName, telecelNumber: G.telecelNumber, telecelName: G.telecelName, bankName: G.bankName, bankAccountName: G.bankAccountName, bankAccountNumber: G.bankAccountNumber, bankBranch: G.bankBranch };
+    var recips = [{ id: "hq", name: hqName, short: "HQ", offerings: (G.offerings || []).filter(function (o) { return o.name; }), acct: hqAcct, own: true }];
+    branchList().filter(function (b) { return !b.hq; }).forEach(function (b) {
+      var own = !!(b.momoNumber || b.telecelNumber || b.bankAccountNumber);
+      recips.push({ id: b.id, name: b.name, short: b.name, offerings: lines(G.branchOfferings).map(function (n) { return { name: n }; }), own: own,
+        acct: own ? { momoNumber: b.momoNumber, momoName: b.momoName, telecelNumber: b.telecelNumber, telecelName: b.telecelName, bankName: b.bankName, bankAccountName: b.bankAccountName, bankAccountNumber: b.bankAccountNumber } : hqAcct });
+    });
+    if (G.intro) $("#giveIntro").textContent = G.intro;
+    $("#giveVerse").innerHTML = G.verse ? esc(G.verse) + "<cite>" + esc(G.verseRef || "") + "</cite>" : "";
+    var want = (location.search.match(/[?&]to=([\w-]+)/) || [])[1] || "hq";
+    var cur = recips.filter(function (r) { return r.id === want; })[0] || recips[0], offering = "", method = "momo";
+    var sel = $("#giveTo");
+    sel.innerHTML = recips.map(function (r) { return '<option value="' + r.id + '"' + (r === cur ? " selected" : "") + ">" + esc(r.name) + "</option>"; }).join("");
+
+    function drawOfferings() {
+      var list = cur.offerings.length ? cur.offerings : [{ name: "Offering" }];
+      if (!list.some(function (o) { return o.name === offering; })) offering = list[0].name;
+      $("#giveOfferings").innerHTML = list.map(function (o) {
+        return '<button type="button" class="offer' + (o.name === offering ? " on" : "") + '" data-o="' + esc(o.name) + '"><b>' + esc(o.name) + "</b>" + (o.description ? "<small>" + esc(o.description) + "</small>" : "") + "</button>";
+      }).join("");
+      $$("#giveOfferings .offer").forEach(function (b) { b.onclick = function () { offering = b.getAttribute("data-o"); drawOfferings(); drawMethod(); }; });
+    }
+    function row(label, value, copy) {
+      if (!value) return "";
+      return '<div class="pay-row"><span>' + label + "</span><b>" + esc(value) + "</b>" + (copy ? '<button type="button" class="copy-btn" data-copy="' + esc(value) + '">Copy</button>' : "") + "</div>";
+    }
+    function drawMethod() {
+      $$("#payTabs button").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-m") === method); });
+      var a = cur.acct, ref = offering + " - " + cur.short + " - Your name", html = "";
+      var missing = '<div class="pay-missing">These details are being updated. Please contact the church office' +
+        (ct.whatsapp ? ' on <a href="' + waTo(ct.whatsapp, "Hello, I would like to give (" + offering + " - " + cur.name + "). Please send me the payment details.") + '" target="_blank" rel="noopener">WhatsApp</a>' : "") +
+        ((ct.phones || [])[0] ? ' or call <a href="' + telLink(ct.phones[0]) + '">' + esc(ct.phones[0]) + "</a>" : "") + ".</div>";
+      if (method === "momo") {
+        html = a.momoNumber ? row("MoMo number", a.momoNumber, true) + row("Account name", a.momoName) + row("Reference", ref, true) +
+          '<ol class="pay-steps"><li>Dial <b>*170#</b> (or open the MoMo app).</li><li>Choose <b>Transfer Money</b>, then <b>MoMo User</b>.</li><li>Enter the number above and check the name shows <b>' + esc(a.momoName || "the church") + "</b>.</li><li>Enter the amount and use the reference above, then confirm with your PIN.</li></ol>" : missing;
+      } else if (method === "telecel") {
+        html = a.telecelNumber ? row("Telecel Cash number", a.telecelNumber, true) + row("Account name", a.telecelName) + row("Reference", ref, true) +
+          '<ol class="pay-steps"><li>Dial <b>*110#</b> (or open the Telecel Cash app).</li><li>Choose <b>Send Money</b>.</li><li>Enter the number above and check the name shows <b>' + esc(a.telecelName || "the church") + "</b>.</li><li>Enter the amount and use the reference above, then confirm with your PIN.</li></ol>" : missing;
+      } else {
+        html = a.bankAccountNumber ? row("Bank", a.bankName) + row("Account name", a.bankAccountName) + row("Account number", a.bankAccountNumber, true) + row("Branch", a.bankBranch) + row("Reference", ref, true) +
+          '<p class="pay-note">Transfer from your bank app, internet banking or at any bank branch, and use the reference above.</p>' : missing;
+      }
+      if (!cur.own) html = '<p class="pay-note">' + esc(cur.name) + " receives gifts through the Headquarters accounts below. Please keep <b>" + esc(cur.short) + "</b> in your reference so it reaches the branch.</p>" + html;
+      $("#payPanel").innerHTML = html;
+      $$("#payPanel .copy-btn").forEach(function (b) { b.onclick = function () { copyText(b.getAttribute("data-copy"), b); }; });
+      $("#giveSummary").textContent = offering + " → " + cur.name;
+    }
+    sel.addEventListener("change", function () { cur = recips.filter(function (r) { return r.id === sel.value; })[0]; drawOfferings(); drawMethod(); });
+    $$("#payTabs button").forEach(function (b) { b.onclick = function () { method = b.getAttribute("data-m"); drawMethod(); }; });
+    if (G.onlineLink) { $("#giveOnline").innerHTML = '<a class="btn btn-red" href="' + esc(G.onlineLink) + '" target="_blank" rel="noopener">Pay Online (card / mobile money)</a>'; }
+    drawOfferings(); drawMethod();
+
+    // After giving: let the church know
+    var form = $("#giveConfirm");
+    function confirmText() {
+      var methods = { momo: "MTN Mobile Money", telecel: "Telecel Cash", bank: "Bank transfer" };
+      return "Hello, I have given to Thyword International Worship Centre.\n\nGiven to: " + cur.name + "\nOffering: " + offering +
+        "\nAmount: GHS " + (form.amount.value.trim() || "-") + "\nMethod: " + methods[method] + "\nTransaction ID: " + (form.txn.value.trim() || "-") +
+        "\nName: " + form.name.value.trim() + (form.phone.value.trim() ? "\nPhone: " + form.phone.value.trim() : "");
+    }
+    function check() {
+      var st = $(".form-status", form);
+      if (!form.name.value.trim() || !form.amount.value.trim()) { st.className = "form-status err"; st.textContent = "Please add your name and the amount you gave."; return false; }
+      st.className = "form-status"; st.textContent = ""; return true;
+    }
+    $("#confirmWa").addEventListener("click", function () {
+      if (!check()) return;
+      var n = G.confirmWhatsapp || ct.whatsapp, link = waTo(n, confirmText());
+      if (link) window.open(link, "_blank");
+    });
+    $("#confirmEmail").addEventListener("click", function () {
+      if (!check()) return;
+      var st = $(".form-status", form);
+      chooseSendApp({ title: "Send with", subject: "Giving confirmation: " + offering + " - " + cur.name + " - " + form.name.value.trim(), body: confirmText(),
+        onOpened: function (n, link) { st.className = "form-status ok"; st.innerHTML = "Opening " + esc(n) + "... press <b>Send</b> there. " + '<a href="' + esc(link) + '" target="_blank" rel="noopener">Tap here if it did not open</a>.'; },
+        onWebsite: function () {
+          st.className = "form-status"; st.textContent = "Sending...";
+          sendForm({ _subject: "Giving confirmation: " + offering + " - " + cur.name, _template: "table", _captcha: "false", message: confirmText() })
+            .then(function () { st.className = "form-status ok"; st.textContent = "Thank you! The church has been notified. God bless you."; form.reset(); })
+            .catch(function () { st.className = "form-status err"; st.textContent = "Sorry, that didn't send. Please use WhatsApp or choose an email app."; });
+        } });
+    });
+    if (!(G.confirmWhatsapp || ct.whatsapp)) $("#confirmWa").classList.add("hidden");
+  };
+
   pages.live = function () {
     var L = C.live || {};
     var tab = "youtube";
@@ -868,9 +1085,9 @@
       $("#map").innerHTML = '<iframe loading="lazy" title="Map" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=' + encodeURIComponent(ct.mapQuery || ct.address) + '&z=15&output=embed"></iframe>';
     }
 
-    $("#branchList").innerHTML = (C.branches || []).map(function (b) {
-      return '<div class="branch-card reveal">' + big(ICON.church, 22) + "<div><h4>" + esc(b.name) + "</h4><p>" + esc(b.location) + "</p>" +
-        (b.phone ? '<p><a href="' + telLink(b.phone) + '">' + esc(b.phone) + "</a></p>" : "") + "</div></div>";
+    $("#branchList").innerHTML = branchList().map(function (b) {
+      return '<a class="branch-card reveal' + (b.hq ? " is-hq" : "") + '" href="branches.html#' + b.id + '">' + big(ICON.church, 22) + "<div><h4>" + esc(b.name) + (b.hq ? ' <span class="hq-badge">HQ</span>' : "") + "</h4><p>" + esc(b.location) + "</p>" +
+        (b.phone ? "<p>" + esc(b.phone) + "</p>" : "") + '<p class="branch-more">Pastor, programmes &amp; contact &rarr;</p></div></a>';
     }).join("");
 
     $("#serviceTimes").innerHTML = (C.serviceTimes || []).map(function (t) {

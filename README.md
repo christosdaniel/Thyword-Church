@@ -11,6 +11,9 @@ A responsive church website (phones, tablets and computers) with these pages:
 | Watch Sermons | `sermons.html` | Featured sermon plus the full library of sermons from the YouTube channel; watch on the website or open on YouTube |
 | Videos | `videos.html` | Uploaded clips plus YouTube and Facebook videos (and the latest YouTube uploads, once an API key is set) |
 | Watch Live | `live.html` | YouTube and Facebook live player, live status, Facebook page feed |
+| Branches & Pastors | `branches.html` | Headquarters first, then every branch: pastor (photo and bio), about, service times, activities, upcoming programmes, contacts; plus the Board of Trustees |
+| Bible School | `bibleschool.html` | About the school, key details, how to enroll, downloadable forms, recent pictures |
+| Give | `give.html` | Tithes, offerings and donations to Headquarters (My Week of Promotion, Mission Support, Church Offering, Tithe) or any branch, by MTN MoMo, Telecel Cash or bank transfer, plus a giving confirmation by WhatsApp or email |
 | Contact | `contact.html` | Phone, WhatsApp, email, map, message form and all branches |
 
 Every page has the logo at the top left (it links back to Home), a red **"WE ARE LIVE"** banner whenever a stream is on, a WhatsApp chat button, and a footer listing all branches.
@@ -45,7 +48,11 @@ Keep the file on the administrator's computer or phone and open it in a web brow
 - **Pastor's Words**: add new quotes. The newest one shows first.
 - **Pictures**: choose an album name, then select many photos at once. Large photos are resized automatically.
 - **Videos**: upload short clips (up to 50 MB, MP4 is best), or add YouTube/Facebook links for full sermons.
-- **Home & About**, **Service Times**, **Contact & Branches**: change any text, photo, phone number or branch.
+- **Branches**: each branch's pastor (name, photo, bio), about, contacts, service times, activities, upcoming programmes and its own MoMo/Telecel/bank details. Tick *This is the Headquarters* for the HQ.
+- **Board of Trustees**: name, position and photo.
+- **Bible School**: details, how to enroll, enrollment forms (upload PDF/Word) and pictures.
+- **Giving**: Headquarters MoMo, Telecel Cash and bank details, offering types, and an optional online-payment link.
+- **Home & About**, **Service Times**, **Contact**: change any text, photo or phone number.
 
 Then click **Save & Publish**. Changes appear on the website within 1–2 minutes.
 
