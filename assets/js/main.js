@@ -72,6 +72,25 @@
       var d = eventDate(e); return d && d >= today;
     }).sort(function (a, b) { return eventDate(a) - eventDate(b); });
   }
+  // Past events: newest first. They always stay at least 7 days. After that they stay until deleted,
+  // unless "Remove past events after (days)" is set in Admin > Settings.
+  var MIN_PAST_DAYS = 7;
+  function pastEvents() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var keep = parseInt(S.pastEventDays, 10);
+    var limit = keep > 0 ? Math.max(keep, MIN_PAST_DAYS) : 0;
+    return (C.events || []).filter(function (e) {
+      var d = eventDate(e);
+      if (!d || d >= today) return false;
+      return !limit || daysSince(e) <= limit;
+    }).sort(function (a, b) { return eventDate(b) - eventDate(a); });
+  }
+  function daysSince(ev) {
+    var d = eventDate(ev); if (!d) return 0;
+    var day = new Date(d); day.setHours(0, 0, 0, 0);
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    return Math.round((today - day) / 864e5);
+  }
   function fmtDate(iso) {
     var d = (iso || "").split("-").map(Number);
     if (d.length < 3) return iso || "";
@@ -237,12 +256,16 @@
   var onLiveChange = null;
 
   /* ---------- shared building blocks ---------- */
-  function eventCard(ev) {
+  function eventCard(ev, past) {
     var d = eventDate(ev);
     var parts = (ev.date || "").split("-").map(Number);
     var id = "cd" + Math.random().toString(36).slice(2, 8);
     var isToday = d && new Date().toDateString() === d.toDateString();
-    return '<article class="event-card reveal"><div class="event-img">' +
+    var ago = past ? daysSince(ev) : 0;
+    var footer = past
+      ? '<div class="past-foot"><span class="badge-past">Past event</span>' + (ago <= MIN_PAST_DAYS ? '<span class="past-ago">Happened ' + (ago === 1 ? "yesterday" : ago + " days ago") + "</span>" : "") + "</div>"
+      : (isToday ? '<span class="badge-today">Happening today</span>' : '<div class="countdown" id="' + id + '" data-time="' + (d ? d.getTime() : "") + '"></div>');
+    return '<article class="event-card reveal' + (past ? " is-past" : "") + '"><div class="event-img">' +
       (ev.image ? '<img src="' + esc(ev.image) + '" alt="' + esc(ev.title) + '" loading="lazy" data-zoom="' + esc(ev.image) + '" data-caption="' + esc(ev.title) + '">' : "") +
       (parts.length === 3 ? '<div class="event-date"><b>' + parts[2] + "</b><small>" + MONTHS[parts[1] - 1] + " " + parts[0] + "</small></div>" : "") +
       '</div><div class="event-body"><h3>' + esc(ev.title) + "</h3>" +
@@ -251,9 +274,7 @@
       "<li>" + ICON.cal + "<span>" + fmtDate(ev.date) + (ev.time ? " &middot; " + esc(ev.time) : "") + "</span></li>" +
       (ev.location ? "<li>" + ICON.pin + "<span>" + esc(ev.location) + "</span></li>" : "") +
       "</ul>" + (ev.description ? "<p>" + esc(ev.description) + "</p>" : "") +
-      (isToday ? '<span class="badge-today">Happening today</span>' :
-        '<div class="countdown" id="' + id + '" data-time="' + (d ? d.getTime() : "") + '"></div>') +
-      "</div></article>";
+      footer + "</div></article>";
   }
   function tickCountdowns() {
     $$(".countdown[data-time]").forEach(function (el) {
@@ -410,8 +431,9 @@
       b.addEventListener("click", function () { openModal(list, +b.getAttribute("data-video"), "video"); });
     });
   }
-  function bindZoom() {
-    $$("[data-zoom]").forEach(function (img) {
+  function bindZoom(root) {
+    $$("[data-zoom]", root).forEach(function (img) {
+      if (img.__zoom) return; img.__zoom = true;
       img.addEventListener("click", function () { openModal([{ src: img.getAttribute("data-zoom"), caption: img.getAttribute("data-caption") }], 0, "photo"); });
     });
   }
@@ -648,9 +670,19 @@
     }).join("");
 
     // events
-    var up = upcomingEvents();
-    $("#eventsGrid").innerHTML = up.length ? up.slice(0, 6).map(eventCard).join("")
-      : '<div class="empty">No upcoming events right now. Check back soon or follow us on Facebook for updates.</div>';
+    var up = upcomingEvents(), past = pastEvents();
+    var showEvents = function (tab) {
+      $$("#eventTabs button").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-tab") === tab); b.setAttribute("aria-selected", b.getAttribute("data-tab") === tab); });
+      var list = tab === "past" ? past : up;
+      $("#eventsGrid").innerHTML = list.length
+        ? list.slice(0, 9).map(function (ev) { return eventCard(ev, tab === "past"); }).join("")
+        : '<div class="empty">' + (tab === "past" ? "No past events to show." : "No upcoming events right now. Check back soon or follow us on Facebook for updates.") + "</div>";
+      bindZoom($("#eventsGrid")); tickCountdowns(); reveal();
+    };
+    $("#eventTabs").innerHTML = '<button type="button" role="tab" data-tab="upcoming">Upcoming <span>' + up.length + '</span></button>' +
+      '<button type="button" role="tab" data-tab="past">Past Events <span>' + past.length + "</span></button>";
+    $$("#eventTabs button").forEach(function (b) { b.addEventListener("click", function () { showEvents(b.getAttribute("data-tab")); }); });
+    showEvents(up.length || !past.length ? "upcoming" : "past");
 
     // words from the pastor
     var words = (C.words || []).slice().sort(function (a, b) { return (b.date || "").localeCompare(a.date || ""); });

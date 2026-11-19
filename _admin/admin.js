@@ -314,7 +314,7 @@
       ]));
     }
     if (current === "events") {
-      P.appendChild(listPanel("Upcoming Events", "Events show on the home page with a countdown, sorted by date. Past events hide automatically.", data.events, [
+      P.appendChild(listPanel("Events", "Upcoming events show on the home page with a countdown. When the date has passed, an event moves to the <b>Past Events</b> tab automatically (shown for at least 7 days; you can set when they disappear in Settings).", data.events, [
         ["title", "Event title"], ["subtitle", "Subtitle / theme"], ["date", "Date", "date"], ["time", "Time", "text", { help: "e.g. 9:00 PM" }],
         ["location", "Venue", "text", { full: true }], ["image", "Flyer / picture", "image"], ["description", "Description", "textarea", { rows: 3 }]
       ], { noun: "event" }));
@@ -427,6 +427,7 @@
         ["formEndpoint", "Custom form endpoint (optional)", "text", { full: true, help: "Leave empty to use the admin email above. If you use Formspree, paste your form URL here (e.g. https://formspree.io/f/xxxx)." }],
         ["facebookPageUrl", "Facebook page link", "text", { full: true }], ["youtubeUrl", "YouTube channel link", "text", { full: true }],
         ["youtubeChannelId", "YouTube channel ID (starts with UC)", "text", { help: "YouTube → your channel → About/Share → Copy channel ID." }],
+        ["pastEventDays", "Remove past events after (days)", "text", { help: "Leave empty to keep past events until you delete them. Past events always stay at least 7 days." }],
         ["youtubeApiKey", "YouTube Data API key (optional)", "text", { help: "Enables automatic \"LIVE\" detection and shows your latest YouTube uploads. Create a free key at console.cloud.google.com (YouTube Data API v3) and restrict it to your website address." }]
       ]));
     }

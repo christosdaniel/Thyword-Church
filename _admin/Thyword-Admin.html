@@ -382,6 +382,143 @@ textarea { min-height: 140px; resize: vertical; }
 .main-nav a.btn-red:hover { background: var(--red-700); }
 .live-wrap .social-grid { grid-template-columns: 1fr; }
 
+/* ---------- Watch Sermons ---------- */
+.nav-cta .btn { margin-left: .4rem; }
+.main-nav a.btn-gold, .main-nav a.btn-gold:hover { color: var(--green-900); background: var(--gold); }
+.main-nav a.btn-gold:hover { background: var(--gold-600); }
+.main-nav a.btn-gold.is-current { box-shadow: 0 0 0 3px rgba(242,183,5,.35); }
+.main-nav .btn svg { flex: 0 0 auto; }
+@media (max-width: 1180px) and (min-width: 981px) {
+  .main-nav a:not(.btn) { padding: .5rem .55rem; font-size: .85rem; }
+  .brand-name { font-size: .88rem; }
+}
+@media (max-width: 980px) { .nav-cta .btn { margin: .5rem 0 0; width: 100%; } }
+
+/* Banner: welcome text left, sermon card right */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3rem; align-items: center; }
+.hero-sermon { background: rgba(7, 46, 45, .72); border: 1px solid rgba(134, 211, 166, .28); border-radius: 18px; padding: 1rem; backdrop-filter: blur(6px); box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+.hero-sermon:empty { display: none; }
+.hs-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .75rem; gap: .5rem; }
+.hs-label { display: inline-flex; align-items: center; gap: .4rem; background: var(--gold); color: var(--green-900); font-family: var(--font-head); font-weight: 800; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; padding: .35rem .75rem; border-radius: 999px; }
+.hs-head a { color: var(--mint); font-weight: 700; font-size: .85rem; }
+.hs-head a:hover { color: #fff; }
+.hs-body { padding: .9rem .2rem .2rem; }
+.hs-body small { color: var(--gold); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+.hs-body h3 { color: #fff; font-size: 1.05rem; margin: .2rem 0 .8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hs-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.hs-actions .btn { padding: .55rem 1rem; }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hero .container.hero-grid { padding: 3.5rem 0 4.5rem; }
+}
+
+/* Player frame shared by the banner card and the Sermons page */
+.fs-frame { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; border: 0; padding: 0; }
+.fs-frame iframe, .fs-frame video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.fs-thumb { cursor: pointer; }
+.fs-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s, opacity .3s; opacity: .9; }
+.fs-thumb:hover img { transform: scale(1.04); opacity: 1; }
+.fs-thumb .play { position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; border-radius: 50%; background: var(--red-600); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 10px rgba(179,17,26,.3); transition: transform .2s; }
+.fs-thumb:hover .play { transform: scale(1.08); }
+.fs-thumb .noposter { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg, var(--green-700), var(--red-700)); }
+.fs-thumb .noposter img { width: 90px; height: 90px; object-fit: contain; opacity: .6; }
+.fs-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #d9efe4; background: linear-gradient(135deg, var(--green-800), var(--red-700)); padding: 1rem; }
+.fs-empty img { width: 70px; margin-bottom: .6rem; }
+
+.featured-sermon { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; }
+.featured-sermon .fs-frame { border-radius: var(--radius); box-shadow: var(--shadow); }
+.fs-info h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; }
+.fs-date { color: var(--red-600); font-weight: 700; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+.fs-note { color: var(--muted); font-size: .88rem; }
+@media (max-width: 900px) { .featured-sermon { grid-template-columns: 1fr; gap: 1.5rem; } }
+
+.yt-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: .7rem; font-weight: 700; font-size: .85rem; color: #e01e1e; }
+.yt-link:hover { color: #a50f0f; }
+/* Header fit: keep every menu item on one line */
+.main-nav .btn { white-space: nowrap; padding: .55rem .95rem; }
+.main-nav ul { flex-wrap: nowrap; }
+@media (min-width: 981px) {
+  .main-nav a:not(.btn) { padding: .5rem .6rem; white-space: nowrap; }
+  .site-header .brand-name { font-size: .92rem; }
+}
+@media (min-width: 981px) and (max-width: 1240px) {
+  .site-header .brand-text { max-width: 230px; }
+  .site-header .brand-name { font-size: .8rem; }
+  .main-nav a:not(.btn) { padding: .45rem .42rem; font-size: .82rem; }
+  .main-nav .btn { padding: .5rem .7rem; font-size: .72rem; }
+  .nav-cta .btn, .nav-live .btn { margin-left: .25rem; }
+}
+.mobile-sermons { display: none; }
+@media (max-width: 980px) {
+  .mobile-sermons { display: inline-flex; margin-left: auto; padding: .45rem .8rem; font-size: .72rem; white-space: nowrap; }
+  .site-header .container { gap: .5rem; }
+}
+@media (max-width: 380px) { .site-header .brand-tag { display: none; } }
+@media (max-width: 520px) {
+  .site-header .brand { gap: .45rem; min-width: 0; }
+  .site-header .brand img { width: 42px; height: 42px; }
+  .site-header .brand-name { font-size: .66rem; letter-spacing: 0; }
+  .site-header .brand-tag { font-size: .54rem; letter-spacing: .06em; }
+  .mobile-sermons { padding: .4rem .65rem; font-size: .68rem; }
+}
+.video-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Contact form: choose how to send */
+.send-via { border: 0; padding: 0; margin: .2rem 0 0; min-width: 0; }
+.send-via legend { font-weight: 700; font-size: .88rem; color: var(--green-800); margin-bottom: .5rem; padding: 0; }
+.send-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .5rem; }
+.send-opt { position: relative; display: flex; align-items: center; gap: .6rem; margin: 0; padding: .7rem .85rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; transition: border-color .2s, background .2s; }
+.send-opt:hover { border-color: var(--green-600); }
+.send-opt input { width: 18px; height: 18px; flex: 0 0 18px; accent-color: var(--red-600); margin: 0; }
+.send-opt span { display: flex; flex-direction: column; line-height: 1.25; }
+.send-opt b { font-size: .9rem; color: var(--green-800); }
+.send-opt small { font-size: .74rem; color: var(--muted); font-weight: 400; }
+.send-opt.on { border-color: var(--red-600); background: #fff5f5; }
+@media (max-width: 520px) { .send-options { grid-template-columns: 1fr 1fr; } .send-opt { padding: .6rem .65rem; } }
+
+/* Header slides away after 5s without scrolling */
+.site-header { transition: transform .35s ease, box-shadow .35s ease; will-change: transform; }
+.site-header.header-hidden { transform: translateY(-110%); box-shadow: none; }
+
+/* "Send with" pop-up (bottom sheet on phones, centred card on computers) */
+.send-sheet { position: fixed; inset: 0; z-index: 120; background: rgba(4, 22, 21, .55); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+.send-sheet.open { opacity: 1; pointer-events: auto; }
+.sheet-panel { background: #fff; width: 100%; max-width: 480px; border-radius: 22px 22px 0 0; padding: .6rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,.25); transform: translateY(100%); transition: transform .3s ease; max-height: 90vh; overflow-y: auto; }
+.send-sheet.open .sheet-panel { transform: none; }
+@media (min-width: 700px) {
+  .send-sheet { align-items: center; }
+  .sheet-panel { border-radius: 20px; padding-bottom: 1.2rem; transform: translateY(20px) scale(.98); }
+  .sheet-grab { display: none; }
+}
+.sheet-grab { width: 44px; height: 5px; border-radius: 99px; background: var(--line); margin: .2rem auto .8rem; }
+.sheet-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: .8rem; }
+.sheet-head h3 { margin: .2rem 0 .2rem; font-size: 1.2rem; }
+.sheet-head p { margin: 0; color: var(--muted); font-size: .86rem; word-break: break-word; }
+.sheet-close { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--bg-soft); font-size: 1.4rem; cursor: pointer; color: var(--green-800); }
+.sheet-list { display: flex; flex-direction: column; gap: .5rem; }
+.sheet-opt { display: flex; align-items: center; gap: .9rem; width: 100%; text-align: left; padding: .75rem .9rem; border: 1.5px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; font: inherit; transition: border-color .2s, background .2s; }
+.sheet-opt:hover, .sheet-opt:focus-visible { border-color: var(--green-600); background: var(--mint-100); outline: none; }
+.sheet-ico { flex: 0 0 42px; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #fff; }
+.sheet-txt { display: flex; flex-direction: column; line-height: 1.25; flex: 1; min-width: 0; }
+.sheet-txt b { color: var(--green-800); font-size: .98rem; }
+.sheet-txt small { color: var(--muted); font-size: .8rem; }
+.sheet-last { font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; background: var(--gold); color: var(--green-900); padding: .2rem .5rem; border-radius: 99px; flex: 0 0 auto; }
+body.sheet-open { overflow: hidden; }
+/* Let the sticky header stick to the whole page, not just its short wrapper */
+#site-header { display: contents; }
+
+/* Events: Upcoming / Past tabs */
+.event-tabs { display: flex; justify-content: center; gap: .5rem; margin: -1.5rem 0 2rem; flex-wrap: wrap; }
+.event-tabs button { border: 2px solid var(--line); background: #fff; color: var(--green-800); padding: .55rem 1.2rem; border-radius: 999px; font-family: var(--font-head); font-weight: 700; font-size: .9rem; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; }
+.event-tabs button span { background: var(--bg-soft); color: var(--muted); font-size: .75rem; padding: .05rem .5rem; border-radius: 99px; }
+.event-tabs button.active { background: var(--green-700); border-color: var(--green-700); color: #fff; }
+.event-tabs button.active span { background: rgba(255,255,255,.2); color: #fff; }
+.event-card.is-past .event-img img { filter: grayscale(.35); }
+.event-card.is-past .event-date { background: var(--green-700); }
+.past-foot { margin-top: auto; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.badge-past { display: inline-block; background: var(--bg-soft); color: var(--green-800); border: 1.5px solid var(--line); padding: .2rem .7rem; border-radius: 999px; font-weight: 800; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.past-ago { font-size: .82rem; color: var(--muted); font-weight: 600; }
+
 </style>
 <style>
   body { background: var(--bg-soft); }
@@ -788,7 +925,7 @@ textarea { min-height: 140px; resize: vertical; }
       ]));
     }
     if (current === "events") {
-      P.appendChild(listPanel("Upcoming Events", "Events show on the home page with a countdown, sorted by date. Past events hide automatically.", data.events, [
+      P.appendChild(listPanel("Events", "Upcoming events show on the home page with a countdown. When the date has passed, an event moves to the <b>Past Events</b> tab automatically (shown for at least 7 days; you can set when they disappear in Settings).", data.events, [
         ["title", "Event title"], ["subtitle", "Subtitle / theme"], ["date", "Date", "date"], ["time", "Time", "text", { help: "e.g. 9:00 PM" }],
         ["location", "Venue", "text", { full: true }], ["image", "Flyer / picture", "image"], ["description", "Description", "textarea", { rows: 3 }]
       ], { noun: "event" }));
@@ -901,6 +1038,7 @@ textarea { min-height: 140px; resize: vertical; }
         ["formEndpoint", "Custom form endpoint (optional)", "text", { full: true, help: "Leave empty to use the admin email above. If you use Formspree, paste your form URL here (e.g. https://formspree.io/f/xxxx)." }],
         ["facebookPageUrl", "Facebook page link", "text", { full: true }], ["youtubeUrl", "YouTube channel link", "text", { full: true }],
         ["youtubeChannelId", "YouTube channel ID (starts with UC)", "text", { help: "YouTube → your channel → About/Share → Copy channel ID." }],
+        ["pastEventDays", "Remove past events after (days)", "text", { help: "Leave empty to keep past events until you delete them. Past events always stay at least 7 days." }],
         ["youtubeApiKey", "YouTube Data API key (optional)", "text", { help: "Enables automatic \"LIVE\" detection and shows your latest YouTube uploads. Create a free key at console.cloud.google.com (YouTube Data API v3) and restrict it to your website address." }]
       ]));
     }

@@ -14,7 +14,7 @@ import base64, io, json, os
 from PIL import Image
 
 APP_DIR = "tiwc-admin-9k2x"
-VERSION = "2026-11-19.1"   # bump to make installed apps fetch the new version
+VERSION = "2026-11-19.2"   # bump to make installed apps fetch the new version
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 here = os.path.join(root, "_admin")

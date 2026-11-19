@@ -493,3 +493,15 @@ textarea { min-height: 140px; resize: vertical; }
 body.sheet-open { overflow: hidden; }
 /* Let the sticky header stick to the whole page, not just its short wrapper */
 #site-header { display: contents; }
+
+/* Events: Upcoming / Past tabs */
+.event-tabs { display: flex; justify-content: center; gap: .5rem; margin: -1.5rem 0 2rem; flex-wrap: wrap; }
+.event-tabs button { border: 2px solid var(--line); background: #fff; color: var(--green-800); padding: .55rem 1.2rem; border-radius: 999px; font-family: var(--font-head); font-weight: 700; font-size: .9rem; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; }
+.event-tabs button span { background: var(--bg-soft); color: var(--muted); font-size: .75rem; padding: .05rem .5rem; border-radius: 99px; }
+.event-tabs button.active { background: var(--green-700); border-color: var(--green-700); color: #fff; }
+.event-tabs button.active span { background: rgba(255,255,255,.2); color: #fff; }
+.event-card.is-past .event-img img { filter: grayscale(.35); }
+.event-card.is-past .event-date { background: var(--green-700); }
+.past-foot { margin-top: auto; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.badge-past { display: inline-block; background: var(--bg-soft); color: var(--green-800); border: 1.5px solid var(--line); padding: .2rem .7rem; border-radius: 999px; font-weight: 800; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.past-ago { font-size: .82rem; color: var(--muted); font-weight: 600; }

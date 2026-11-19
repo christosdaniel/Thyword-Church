@@ -41,7 +41,7 @@ Keep the file on the administrator's computer or phone and open it in a web brow
 
 **Each day:**
 - **Live & Notice**: switch "We are LIVE on YouTube/Facebook" on when a service starts and off when it ends. You can also paste the live video link. Edit the gold announcement bar here.
-- **Events**: add the flyer, date, time and venue. Past events hide on their own.
+- **Events**: add the flyer, date, time and venue. When the date passes, the event moves to the **Past Events** tab on the home page by itself. Past events stay at least 7 days, then until you delete them (or set *Remove past events after (days)* in Settings).
 - **Pastor's Words**: add new quotes. The newest one shows first.
 - **Pictures**: choose an album name, then select many photos at once. Large photos are resized automatically.
 - **Videos**: upload short clips (up to 50 MB, MP4 is best), or add YouTube/Facebook links for full sermons.
