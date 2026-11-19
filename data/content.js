@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 14:10:53 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 17:20:52 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -66,7 +66,7 @@ window.SITE_CONTENT = {
   "pastor": {
     "name": "Bishop Dr. Fiifi Mensah Greatman",
     "role": "Founder & Head Pastor",
-    "photo": "assets/uploads/images/2026-11-19-img-3788-pbtm.jpg",
+    "photo": "assets/uploads/images/2026-11-19-3c47f7f7-3a8b-4766-87f2-309598f71bf9-1e5b.jpg",
     "bio": "Bishop Dr. Fiifi Mensah Greatman is the Head Pastor of Thyword International Worship Centre. He is a passionate teacher of the Word and a man of prayer, and he leads the ministry with a vision of raising a people who know God, walk in His power and win souls for Christ."
   },
   "serviceTimes": [
