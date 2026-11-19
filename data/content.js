@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 06:50:50 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 14:10:53 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -121,6 +121,12 @@ window.SITE_CONTENT = {
     }
   ],
   "words": [
+    {
+      "author": "Bishop Dr. Fiifi Mensah Greatman",
+      "date": "2026-11-19",
+      "text": "BELOVED, \nA Rich man Is Identified By His Wealth Not his Personality, \nBut Every Man Of God Is Identified By His Power And Personality. \nTHINK OF IT",
+      "image": ""
+    },
     {
       "author": "Bishop Dr. Fiifi Mensah Greatman",
       "date": "2026-11-19",
