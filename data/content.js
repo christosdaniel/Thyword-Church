@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 00:46:33 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 00:50:21 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -118,6 +118,91 @@ window.SITE_CONTENT = {
     }
   ],
   "photos": [
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7102-tqpn.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7107-yz7o.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7122-dl04.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7140-0pjn.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7156-93ff.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7160-o6kh.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7180-fo9e.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7183-skvr.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7187-ytqi.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7192-s3u2.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7205-zya1.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7207-t0yk.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7220-uw1l.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7222-3uj9.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7227-fj7v.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7232-ow8a.jpg",
+      "caption": "",
+      "album": "Services"
+    },
+    {
+      "src": "assets/uploads/images/2026-11-19-img-7247-o1fw.jpg",
+      "caption": "",
+      "album": "Services"
+    },
     {
       "src": "assets/images/events/night-of-breaking-the-curses.jpg",
       "caption": "A Night of Breaking the Curses: Friday All-Night Service",
