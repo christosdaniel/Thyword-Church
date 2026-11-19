@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 00:37:58 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 00:38:17 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -38,14 +38,14 @@ window.SITE_CONTENT = {
     "subheading": "Thyword International Worship Centre. A place where His Word is life and spirit, and where every believer is raised to walk in God's purpose.",
     "media": [
       {
-        "type": "image",
-        "src": "assets/uploads/images/2026-11-19-church-y21a.jpg",
-        "poster": ""
-      },
-      {
         "type": "video",
         "src": "assets/videos/church-service-highlight.mp4",
         "poster": "assets/videos/church-service-highlight.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/uploads/images/2026-11-19-church-y21a.jpg",
+        "poster": ""
       },
       {
         "type": "image",
