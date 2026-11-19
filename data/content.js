@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 00:50:21 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 00:51:34 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -118,6 +118,11 @@ window.SITE_CONTENT = {
     }
   ],
   "photos": [
+    {
+      "src": "assets/uploads/images/2026-11-19-whatsapp-image-2026-10-29-at-6-12-55-am-gehe.jpg",
+      "caption": "",
+      "album": "Words of Wisdom"
+    },
     {
       "src": "assets/uploads/images/2026-11-19-img-7102-tqpn.jpg",
       "caption": "",
