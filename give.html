@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120-1">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120-3">
 </head>
 <body data-page="give">
 <div id="site-header"></div>
@@ -49,10 +49,10 @@
       <div class="give-step">
         <h3><span>4</span> How would you like to give?</h3>
         <div class="pay-tabs" id="payTabs">
-          <button type="button" data-m="online"><span class="pay-logo online">&#128274;</span> Pay Online <small>MoMo / Telecel / card</small></button>
-          <button type="button" data-m="momo"><span class="pay-logo momo">MoMo</span> MTN Mobile Money</button>
+          <button type="button" data-m="momo" class="active"><span class="pay-logo momo">MoMo</span> MTN Mobile Money</button>
           <button type="button" data-m="telecel"><span class="pay-logo telecel">T</span> Telecel Cash</button>
           <button type="button" data-m="bank"><span class="pay-logo bank">&#127974;</span> Bank Transfer</button>
+          <button type="button" data-m="card"><span class="pay-logo online">&#128179;</span> Bank Card <small>Visa / Mastercard</small></button>
         </div>
         <div class="pay-summary">Giving: <b id="giveSummary"></b></div>
         <div class="pay-panel" id="payPanel"></div>
@@ -64,7 +64,7 @@
     <aside class="give-side">
       <form class="give-confirm" id="giveConfirm" novalidate>
         <h3>Sent by MoMo or bank? Let us know</h3>
-        <p>So we can record your gift and pray with you. (Online payments are recorded automatically.)</p>
+        <p>So we can record your gift and pray with you. (Payments made with the Pay button are recorded automatically.)</p>
         <label for="gc-name">Your name *</label><input id="gc-name" name="name">
         <label for="gc-amount">Amount (GHS) *</label><input id="gc-amount" name="amount" inputmode="decimal" placeholder="e.g. 100">
         <label for="gc-txn">Transaction ID</label><input id="gc-txn" name="txn" placeholder="From your MoMo / bank message">
@@ -80,6 +80,6 @@
 </section>
 </main>
 <div id="site-footer"></div>
-<script src="assets/js/main.js?v=20261120-1"></script>
+<script src="assets/js/main.js?v=20261120-2"></script>
 </body>
 </html>

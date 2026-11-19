@@ -114,7 +114,9 @@ The **Watch Sermons** page, the gold **Watch Sermons** button at the top right o
 
 **Direct transfers (work now):** the Give page shows the Headquarters **MTN MoMo** number (0598997207, Thyword International Worship) and the **OmniBSIC Bank** account (00101195661027). Members enter the amount, choose their own bank from the list (GCB, CBG, Ecobank, Fidelity, Stanbic and OmniBSIC first, then other banks), and get same-bank or interbank steps. Edit everything in **Admin → Giving** (Headquarters) and **Admin → Branches** (a branch's own accounts).
 
-**Secure online payments (Paystack):** members pay with MTN MoMo, Telecel Cash, AirtelTigo Money or a bank card in Paystack's secure payment window, and get a receipt. To switch it on:
+**Pay button (MTN MoMo / Telecel Cash):** the member picks MTN MoMo or Telecel Cash, enters the amount and taps **Pay GHS ... with MTN MoMo**. Once Paystack is connected, they enter their name and number, Paystack sends an **approval prompt to their phone**, and they **enter their PIN to approve**; a receipt appears on the page. Until Paystack is connected, the Pay button opens the phone's *170# / *110# menu (Android) or shows the steps (iPhone) to send to the church number.
+
+**Secure online payments (Paystack):** handles MTN MoMo, Telecel Cash, AirtelTigo Money and bank cards (Bank Card tab). To switch it on:
 1. Open a business account at <https://paystack.com> (Ghana). It needs the church's registration documents and a settlement bank account (e.g. the OmniBSIC account).
 2. In Paystack go to **Settings → API Keys** and copy the **Public key** (`pk_live_...`).
 3. Paste it in **Admin → Giving → Paystack PUBLIC key**, then Save & Publish. A **Pay Online** option appears on the Give page.

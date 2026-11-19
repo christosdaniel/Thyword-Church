@@ -347,9 +347,9 @@ window.SITE_CONTENT = {
       "paystackSubaccount": ""
     },
     {
-      "name": "Djamah Branch",
+      "name": "Djanman Branch",
       "hq": false,
-      "location": "Djamah",
+      "location": "Djanman",
       "about": "",
       "image": "",
       "pastorName": "",

@@ -692,3 +692,11 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
 .rc-tick { width: 70px; height: 70px; border-radius: 50%; background: var(--green-700); color: #fff; display: grid; place-items: center; margin: 0 auto 1rem; }
 .receipt-card .hero-actions { justify-content: center; }
 @media print { .site-header, .topbar, .announce, .site-footer, .give-side, .give-step, .give-intro, .verse, .page-hero, .whatsapp-float, .live-bar { display: none !important; } .give-receipt { display: block !important; } }
+
+/* MoMo / Telecel pay */
+.momo-pay .secure-head { margin-bottom: .2rem; }
+.manual-pay { margin-top: 1.2rem; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: .2rem 1rem .8rem; transition: box-shadow .3s; }
+.manual-pay summary { cursor: pointer; font-weight: 700; color: var(--green-800); padding: .7rem 0; }
+.manual-pay.open { padding-top: .4rem; }
+.manual-pay.flash { box-shadow: 0 0 0 4px rgba(242,183,5,.6); }
+.secure-head small b { display: inline; color: var(--green-900); }

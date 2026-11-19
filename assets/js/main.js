@@ -946,12 +946,13 @@
     $("#giveVerse").innerHTML = G.verse ? esc(G.verse) + "<cite>" + esc(G.verseRef || "") + "</cite>" : "";
     var want = (location.search.match(/[?&]to=([\w-]+)/) || [])[1] || "hq";
     var cur = recips.filter(function (r) { return r.id === want; })[0] || recips[0], offering = "";
-    var online = !!G.paystackPublicKey, method = online ? "online" : "momo", memberBank = "";
+    var online = !!G.paystackPublicKey, method = "momo", memberBank = "";
+    var payer = { name: "", phone: "", email: "" };   // kept while switching tabs or changing the amount
     try { memberBank = localStorage.getItem("tiwc-my-bank") || ""; } catch (e) {}
 
     var sel = $("#giveTo");
     sel.innerHTML = recips.map(function (r) { return '<option value="' + r.id + '"' + (r === cur ? " selected" : "") + ">" + esc(r.name) + "</option>"; }).join("");
-    if (!online) $('#payTabs [data-m="online"]').remove();
+    if (!online) $('#payTabs [data-m="card"]').remove();
     var amountInput = $("#giveAmount");
     function amount() { var v = parseFloat(String(amountInput.value).replace(/[^\d.]/g, "")); return isFinite(v) && v > 0 ? Math.round(v * 100) / 100 : 0; }
     function money(v) { return "GHS " + v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
@@ -980,21 +981,34 @@
       var missing = '<div class="pay-missing">These details are being updated. Please contact the church office' +
         (ct.whatsapp ? ' on <a href="' + waTo(ct.whatsapp, "Hello, I would like to give (" + offering + " - " + cur.name + "). Please send me the payment details.") + '" target="_blank" rel="noopener">WhatsApp</a>' : "") +
         ((ct.phones || [])[0] ? ' or call <a href="' + telLink(ct.phones[0]) + '">' + esc(ct.phones[0]) + "</a>" : "") + ".</div>";
-      if (method === "online") {
-        html = '<div class="secure-box"><div class="secure-head">' + '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>' +
-          "<div><b>Secure online payment</b><small>Pay with MTN MoMo, Telecel Cash, AirtelTigo Money or a bank card. Your payment is processed by Paystack, a licensed payment company. The church never sees your PIN or card details.</small></div></div>" +
-          '<div class="pay-fields"><div><label class="pay-label" for="payName">Your name</label><input id="payName" autocomplete="name"></div>' +
-          '<div><label class="pay-label" for="payEmail">Email (for your receipt)</label><input id="payEmail" type="email" autocomplete="email"></div>' +
-          '<div><label class="pay-label" for="payPhone">Phone (optional)</label><input id="payPhone" type="tel" autocomplete="tel"></div></div>' +
-          '<button class="btn btn-red pay-now" type="button" id="payNow">' + (amt ? "Give " + money(amt) + " securely" : "Enter an amount above") + "</button>" +
+      var PROV = {
+        momo: { name: "MTN MoMo", short: "MoMo", ussd: "*170#", tel: "*170%23", num: a.momoNumber, acct: a.momoName, menu: "<b>Transfer Money</b>, then <b>MoMo User</b>" },
+        telecel: { name: "Telecel Cash", short: "Telecel Cash", ussd: "*110#", tel: "*110%23", num: a.telecelNumber, acct: a.telecelName, menu: "<b>Send Money</b>" }
+      };
+      var lock = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+      function payerFields(phoneLabel, phoneRequired) {
+        return '<div class="pay-fields"><div><label class="pay-label" for="payName">Your name</label><input id="payName" autocomplete="name" value="' + esc(payer.name) + '"></div>' +
+          '<div><label class="pay-label" for="payPhone">' + phoneLabel + (phoneRequired ? "" : " (optional)") + '</label><input id="payPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="e.g. 024 123 4567" value="' + esc(payer.phone) + '"></div>' +
+          '<div><label class="pay-label" for="payEmail">Email for receipt (optional)</label><input id="payEmail" type="email" autocomplete="email" value="' + esc(payer.email) + '"></div></div>';
+      }
+      if (method === "momo" || method === "telecel") {
+        var pv = PROV[method], toNum = pv.num || (method === "telecel" ? a.momoNumber : ""), toName = pv.num ? pv.acct : a.momoName;
+        var manual = toNum ? row(pv.num ? pv.name + " number" : "MTN MoMo number", toNum, true) + row("Account name", toName) + '<div class="pay-row js-amt-row"' + (amt ? "" : ' style="display:none"') + '><span>Amount</span><b class="js-amt">' + (amt ? money(amt) : "") + "</b></div>" + row("Reference", ref, true) +
+          '<ol class="pay-steps"><li>Dial <b>' + pv.ussd + "</b>" + (IS_ANDROID ? ' (<a href="tel:' + pv.tel + '">tap to dial</a>)' : "") + " or open the " + pv.name + " app.</li><li>Choose " + pv.menu + (pv.num ? "" : ", then <b>Other Networks</b>") + ".</li><li>Enter <b>" + esc(toNum) + "</b> and check the name shows <b>" + esc(toName || "the church") + "</b>.</li><li>Enter <span class=\"js-amt-txt\">" + amtTxt + "</span>, use the reference above, and <b>approve with your PIN</b>.</li><li>Then tell us below so we can record your gift.</li></ol>" : missing;
+        html = '<div class="momo-pay">' +
+          '<div class="secure-head">' + lock + "<div><b>Pay with " + pv.name + "</b><small>" +
+            (online ? "Tap Pay, choose <b>" + pv.name + "</b> and confirm your number. A prompt then appears on your phone: <b>enter your " + pv.short + " PIN to approve</b>. Payments are processed securely by Paystack; the church never sees your PIN."
+                    : "Tap Pay to open your phone's " + pv.name + " menu, then follow the steps to send and <b>approve with your PIN</b>.") + "</small></div></div>" +
+          (online ? payerFields("Your " + pv.name + " number", true) : "") +
+          '<button class="btn btn-red pay-now js-pay" type="button" id="payNow" data-label="with ' + esc(pv.name) + '">' + (amt ? "Pay " + money(amt) + " with " + pv.name : "Enter an amount above to pay") + "</button>" +
+          '<p class="pay-msg" id="payMsg" role="status"></p></div>' +
+          (online ? '<details class="manual-pay"><summary>Or send it yourself to the church ' + (pv.num ? pv.name : "MoMo") + " number</summary>" + manual + "</details>"
+                  : '<div class="manual-pay open" id="manualSteps">' + manual + "</div>");
+      } else if (method === "card") {
+        html = '<div class="momo-pay"><div class="secure-head">' + lock + "<div><b>Pay with a bank card</b><small>Visa or Mastercard, processed securely by Paystack. The church never sees your card details.</small></div></div>" +
+          payerFields("Phone", false) +
+          '<button class="btn btn-red pay-now js-pay" type="button" id="payNow" data-label="by card">' + (amt ? "Pay " + money(amt) + " by card" : "Enter an amount above to pay") + "</button>" +
           '<p class="pay-msg" id="payMsg" role="status"></p></div>';
-      } else if (method === "momo") {
-        html = a.momoNumber ? row("MoMo number", a.momoNumber, true) + row("Account name", a.momoName) + row("Amount", amt ? money(amt) : "") + row("Reference", ref, true) +
-          '<ol class="pay-steps"><li>Dial <b>*170#</b>' + (IS_ANDROID ? ' (<a href="tel:*170%23">tap to dial</a>)' : "") + " or open the MoMo app.</li><li>Choose <b>Transfer Money</b>, then <b>MoMo User</b>.</li><li>Enter <b>" + esc(a.momoNumber) + "</b> and check the name shows <b>" + esc(a.momoName || "the church") + "</b>.</li><li>Enter " + amtTxt + ", use the reference above, and confirm with your PIN.</li><li>Then tell us below so we can record your gift.</li></ol>" : missing;
-      } else if (method === "telecel") {
-        html = a.telecelNumber ? row("Telecel Cash number", a.telecelNumber, true) + row("Account name", a.telecelName) + row("Amount", amt ? money(amt) : "") + row("Reference", ref, true) +
-          '<ol class="pay-steps"><li>Dial <b>*110#</b>' + (IS_ANDROID ? ' (<a href="tel:*110%23">tap to dial</a>)' : "") + " or open the Telecel Cash app.</li><li>Choose <b>Send Money</b>.</li><li>Enter <b>" + esc(a.telecelNumber) + "</b> and check the name shows <b>" + esc(a.telecelName || "the church") + "</b>.</li><li>Enter " + amtTxt + ", use the reference above, and confirm with your PIN.</li><li>Then tell us below so we can record your gift.</li></ol>" :
-          (a.momoNumber ? '<div class="pay-missing">A Telecel Cash number has not been added yet. You can send from Telecel Cash to our <b>MTN MoMo number ' + esc(a.momoNumber) + "</b> (" + esc(a.momoName || "") + '): dial <b>*110#</b>, choose <b>Send Money</b>, then <b>Other Networks</b>.</div>' : missing);
       } else {
         if (!a.banks || !a.banks.length) html = missing;
         else {
@@ -1006,46 +1020,61 @@
             (a.banks.length > 1 ? '<p class="pay-note">Other church accounts: ' + a.banks.filter(function (x) { return x !== acct; }).map(function (x) { return esc(x.bank) + " " + esc(x.accountNumber); }).join(" &middot; ") + "</p>" : "");
         }
       }
-      if (!cur.own && method !== "online") html = '<p class="pay-note">' + esc(cur.name) + " receives gifts through the Headquarters accounts. Please keep <b>" + esc(cur.short) + "</b> in your reference so it reaches the branch.</p>" + html;
+      if (!cur.own && method !== "card") html = '<p class="pay-note">' + esc(cur.name) + " receives gifts through the Headquarters accounts. Please keep <b>" + esc(cur.short) + "</b> in your reference so it reaches the branch.</p>" + html;
       $("#payPanel").innerHTML = html;
       $$("#payPanel .copy-btn").forEach(function (x) { x.onclick = function () { copyText(x.getAttribute("data-copy"), x); }; });
       var mb = $("#myBank"); if (mb) mb.onchange = function () { memberBank = mb.value; try { localStorage.setItem("tiwc-my-bank", memberBank); } catch (e) {} drawMethod(); };
-      var pn = $("#payNow"); if (pn) pn.onclick = payOnline;
+      var pn = $("#payNow"); if (pn) pn.onclick = function () { payNow(method); };
+      ["Name", "Phone", "Email"].forEach(function (k) { var el = $("#pay" + k); if (el) el.oninput = function () { payer[k.toLowerCase()] = el.value; }; });
       $("#giveSummary").textContent = (amt ? money(amt) + " · " : "") + offering + " → " + cur.name;
       if (amt && $("#gc-amount") && !$("#gc-amount").dataset.touched) $("#gc-amount").value = amt;
     }
 
-    // ----- secure online payment (Paystack) -----
-    function payOnline() {
+    // ----- Pay button -----
+    function payNow(m) {
       var amt = amount(), msg = $("#payMsg");
-      var name = $("#payName").value.trim(), email = $("#payEmail").value.trim(), phone = $("#payPhone").value.trim();
       if (!amt) { msg.className = "pay-msg err"; msg.textContent = "Please enter the amount you want to give (step 3)."; amountInput.focus(); return; }
       if (amt < 1) { msg.className = "pay-msg err"; msg.textContent = "The smallest amount is GHS 1."; return; }
-      if (!name) { msg.className = "pay-msg err"; msg.textContent = "Please enter your name."; return; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "pay-msg err"; msg.textContent = "Please enter a valid email address for your receipt."; return; }
+      if (!online) {
+        // No payment gateway yet: open the phone's MoMo / Telecel menu and show the steps
+        var box = $("#manualSteps");
+        if (box) { box.classList.add("flash"); box.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(function () { box.classList.remove("flash"); }, 1600); }
+        if (IS_ANDROID) { window.location.href = "tel:" + (m === "telecel" ? "*110%23" : "*170%23"); msg.className = "pay-msg"; msg.textContent = "Opening your phone's menu… follow the steps below and approve with your PIN."; }
+        else { msg.className = "pay-msg"; msg.innerHTML = "Open your <b>Phone</b> app and dial <b>" + (m === "telecel" ? "*110#" : "*170#") + "</b> (or open the " + (m === "telecel" ? "Telecel Cash" : "MoMo") + " app), then follow the steps below and approve with your PIN."; }
+        return;
+      }
+      var name = payer.name.trim(), phone = payer.phone.trim(), email = payer.email.trim();
+      if (!name) { msg.className = "pay-msg err"; msg.textContent = "Please enter your name."; $("#payName").focus(); return; }
+      var digitsOnly = phone.replace(/\D/g, "");
+      if (m !== "card" && !/^(0\d{9}|233\d{9})$/.test(digitsOnly)) { msg.className = "pay-msg err"; msg.textContent = "Please enter your " + (m === "telecel" ? "Telecel Cash" : "MTN MoMo") + " number, e.g. 024 123 4567."; $("#payPhone").focus(); return; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "pay-msg err"; msg.textContent = "That email address doesn't look right."; return; }
       msg.className = "pay-msg"; msg.textContent = "Opening the secure payment window…";
       loadPaystack(function (err) {
-        if (err || !window.PaystackPop) { msg.className = "pay-msg err"; msg.textContent = "The secure payment window could not load. Check your internet connection, or use MoMo / bank transfer instead."; return; }
+        if (err || !window.PaystackPop) { msg.className = "pay-msg err"; msg.textContent = "The secure payment window could not load. Check your internet connection, or send directly using the details below."; return; }
         var ref = "TIWC-" + cur.id.toUpperCase().slice(0, 12) + "-" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 5).toUpperCase();
+        var provider = m === "telecel" ? "Telecel Cash" : m === "momo" ? "MTN MoMo" : "Card";
         var opts = {
-          key: G.paystackPublicKey, email: email, amount: Math.round(amt * 100), currency: "GHS", ref: ref,
-          firstname: name.split(" ")[0], lastname: name.split(" ").slice(1).join(" "), phone: phone,
-          metadata: { given_to: cur.name, branch_id: cur.id, offering: offering, giver_name: name, giver_phone: phone,
-            custom_fields: [{ display_name: "Given to", variable_name: "given_to", value: cur.name }, { display_name: "Offering", variable_name: "offering", value: offering }, { display_name: "Name", variable_name: "giver_name", value: name }, { display_name: "Phone", variable_name: "giver_phone", value: phone || "-" }] },
-          callback: function (resp) { showReceipt(resp && resp.reference ? resp.reference : ref, amt, name); },
-          onClose: function () { if (!$("#giveReceipt").classList.contains("show")) { msg.className = "pay-msg"; msg.textContent = "Payment window closed. If you did not finish, no money was taken."; } }
+          // Paystack needs an email; without one the receipt goes to the church
+          key: G.paystackPublicKey, email: email || (C.contact || {}).email || S.adminEmail, amount: Math.round(amt * 100), currency: "GHS", ref: ref,
+          channels: [m === "card" ? "card" : "mobile_money"],
+          firstname: name.split(" ")[0], lastname: name.split(" ").slice(1).join(" "), phone: digitsOnly,
+          metadata: { given_to: cur.name, branch_id: cur.id, offering: offering, giver_name: name, giver_phone: digitsOnly, provider: provider,
+            custom_fields: [{ display_name: "Given to", variable_name: "given_to", value: cur.name }, { display_name: "Offering", variable_name: "offering", value: offering },
+              { display_name: "Name", variable_name: "giver_name", value: name }, { display_name: "Phone", variable_name: "giver_phone", value: digitsOnly || "-" }, { display_name: "Paid with", variable_name: "provider", value: provider }] },
+          callback: function (resp) { showReceipt(resp && resp.reference ? resp.reference : ref, amt, name, provider, !!email); },
+          onClose: function () { if (!$("#giveReceipt").classList.contains("show")) { msg.className = "pay-msg"; msg.textContent = "Payment window closed. If you did not approve with your PIN, no money was taken."; } }
         };
         if (cur.subaccount) opts.subaccount = cur.subaccount;
-        try { window.PaystackPop.setup(opts).openIframe(); msg.textContent = ""; }
-        catch (e) { msg.className = "pay-msg err"; msg.textContent = "Online giving is not set up correctly yet. Please use MoMo or bank transfer, or contact the church office."; }
+        try { window.PaystackPop.setup(opts).openIframe(); msg.textContent = m === "card" ? "" : "Check your phone: approve the payment with your PIN when the prompt appears."; }
+        catch (e) { msg.className = "pay-msg err"; msg.textContent = "Online giving is not set up correctly yet. Please send directly using the details below, or contact the church office."; }
       });
     }
-    function showReceipt(reference, amt, name) {
+    function showReceipt(reference, amt, name, provider, emailed) {
       var r = $("#giveReceipt");
       r.innerHTML = '<div class="receipt-card"><div class="rc-tick"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>' +
         "<h2>Thank you, " + esc(name.split(" ")[0]) + "!</h2><p>Your gift was received successfully. God bless you.</p>" +
-        row("Amount", money(amt)) + row("Given to", cur.name) + row("Offering", offering) + row("Reference", reference, true) + row("Date", new Date().toLocaleString()) +
-        '<p class="pay-note">A receipt has been sent to your email by Paystack. Keep the reference above for your records.</p>' +
+        row("Amount", money(amt)) + row("Given to", cur.name) + row("Offering", offering) + row("Paid with", provider) + row("Reference", reference, true) + row("Date", new Date().toLocaleString()) +
+        '<p class="pay-note">' + (emailed ? "A receipt has also been sent to your email. " : "") + "Keep the reference above for your records (take a screenshot or print this page).</p>" +
         '<div class="hero-actions"><button class="btn btn-green" type="button" onclick="window.print()">Print / save receipt</button><a class="btn btn-outline-dark" href="index.html">Back to home</a></div></div>';
       r.classList.add("show");
       $$("#payPanel .copy-btn, #giveReceipt .copy-btn").forEach(function (x) { x.onclick = function () { copyText(x.getAttribute("data-copy"), x); }; });
@@ -1056,8 +1085,13 @@
     $$("#payTabs button").forEach(function (x) { x.onclick = function () { method = x.getAttribute("data-m"); drawMethod(); }; });
     amountInput.addEventListener("input", function () {
       var pn = $("#payNow"), amt = amount();
-      if (pn) pn.textContent = amt ? "Give " + money(amt) + " securely" : "Enter an amount above";
-      if (method !== "online") drawMethod(); else $("#giveSummary").textContent = (amt ? money(amt) + " · " : "") + offering + " → " + cur.name;
+      if (method === "bank") { drawMethod(); return; }
+      if (pn) pn.textContent = amt ? "Pay " + money(amt) + " " + pn.getAttribute("data-label") : "Enter an amount above to pay";
+      $$(".js-amt").forEach(function (x) { x.textContent = amt ? money(amt) : ""; });
+      $$(".js-amt-row").forEach(function (x) { x.style.display = amt ? "" : "none"; });
+      $$(".js-amt-txt").forEach(function (x) { x.innerHTML = amt ? "<b>" + money(amt) + "</b>" : "the amount"; });
+      if (amt && $("#gc-amount") && !$("#gc-amount").dataset.touched) $("#gc-amount").value = amt;
+      $("#giveSummary").textContent = (amt ? money(amt) + " · " : "") + offering + " → " + cur.name;
     });
     $$(".amt-chip").forEach(function (x) { x.onclick = function () { amountInput.value = x.getAttribute("data-a"); amountInput.dispatchEvent(new Event("input")); }; });
     if (G.onlineLink && !online) { $("#giveOnline").innerHTML = '<a class="btn btn-red" href="' + esc(G.onlineLink) + '" target="_blank" rel="noopener">Pay Online (card / mobile money)</a>'; }
@@ -1067,7 +1101,7 @@
     var form = $("#giveConfirm");
     $("#gc-amount").addEventListener("input", function () { this.dataset.touched = "1"; });
     function confirmText() {
-      var methods = { online: "Online (Paystack)", momo: "MTN Mobile Money", telecel: "Telecel Cash", bank: "Bank transfer" + (memberBank ? " from " + memberBank : "") };
+      var methods = { card: "Card (Paystack)", momo: "MTN Mobile Money", telecel: "Telecel Cash", bank: "Bank transfer" + (memberBank ? " from " + memberBank : "") };
       return "Hello, I have given to Thyword International Worship Centre.\n\nGiven to: " + cur.name + "\nOffering: " + offering +
         "\nAmount: GHS " + (form.amount.value.trim() || "-") + "\nMethod: " + methods[method] + "\nTransaction ID: " + (form.txn.value.trim() || "-") +
         "\nName: " + form.name.value.trim() + (form.phone.value.trim() ? "\nPhone: " + form.phone.value.trim() : "");
