@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 01:21:26 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 01:26:50 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -95,7 +95,7 @@ window.SITE_CONTENT = {
     {
       "title": "Pink Sunday",
       "subtitle": "",
-      "date": "2026-11-01",
+      "date": "2026-11-15",
       "time": "8:00 Am",
       "location": "Church Premises",
       "image": "assets/uploads/images/2026-11-19-whatsapp-image-2026-10-30-at-10-22-27-am-wxf5.jpg",
