@@ -448,3 +448,4 @@ textarea { min-height: 140px; resize: vertical; }
   .site-header .brand-tag { font-size: .54rem; letter-spacing: .06em; }
   .mobile-sermons { padding: .4rem .65rem; font-size: .68rem; }
 }
+.video-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }

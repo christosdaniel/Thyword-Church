@@ -51,6 +51,12 @@ def channel_id_from_page(page):
     return ""
 
 
+def clean_description(text):
+    """Drop the copyright disclaimer that ends many video descriptions."""
+    text = re.split(r"\*{0,2}\s*COPYRIGHT DISCLAIMER", text or "", flags=re.I)[0]
+    return re.sub(r"\s+", " ", text).strip(" -*")[:220]
+
+
 def parse_feed(xml_text):
     ns = {"a": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015",
           "media": "http://search.yahoo.com/mrss/"}
@@ -65,7 +71,7 @@ def parse_feed(xml_text):
             "id": vid,
             "title": (e.findtext("a:title", default="", namespaces=ns) or "").strip(),
             "date": (e.findtext("a:published", default="", namespaces=ns) or "")[:10],
-            "description": re.sub(r"\s+", " ", desc).strip()[:220],
+            "description": clean_description(desc),
         })
     return videos
 
@@ -147,6 +153,8 @@ def main():
     dated = sorted([v for v in merged if v.get("date")], key=lambda v: v["date"], reverse=True)
     undated = [v for v in merged if not v.get("date")]
     videos = (dated + undated)[:MAX_VIDEOS]
+    for v in videos:
+        v["description"] = clean_description(v.get("description", ""))
 
     if not videos and not existing:
         print("No videos found.")
