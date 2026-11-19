@@ -8,6 +8,7 @@ A responsive church website (phones, tablets and computers) with these pages:
 |---|---|---|
 | Home | `index.html` | Welcome banner (slideshow/video), service times, upcoming events with countdown, words from the pastor, pictures, videos, social links and email sign-up |
 | Pictures | `pictures.html` | Photo gallery with albums and a full-screen viewer |
+| Watch Sermons | `sermons.html` | Featured sermon plus the full library of sermons from the YouTube channel; watch on the website or open on YouTube |
 | Videos | `videos.html` | Uploaded clips plus YouTube and Facebook videos (and the latest YouTube uploads, once an API key is set) |
 | Watch Live | `live.html` | YouTube and Facebook live player, live status, Facebook page feed |
 | Contact | `contact.html` | Phone, WhatsApp, email, map, message form and all branches |
@@ -83,6 +84,17 @@ Requests from the contact form (name, email, phone number and the request) and e
 
 If the form service can't be reached, or the form is not activated yet, the website opens the visitor's own email app with the request already written and addressed to the church, so the message still reaches you. To use [Formspree](https://formspree.io) instead, paste its form URL in **Admin → Settings → Custom form endpoint**.
 
+## 3b. Sermons from YouTube (automatic)
+
+The **Watch Sermons** page, the gold **Watch Sermons** button at the top right of every page, and the sermon card on the home page banner all show videos from the YouTube channel (`youtubeUrl` in Admin → Settings).
+
+- A GitHub Action (`.github/workflows/youtube-videos.yml`) runs every 4 hours. It reads the channel's latest videos (no API key needed) and saves them in `data/youtube.js`. Videos already saved are kept, so the library grows over time (up to 60).
+- To update straight away: on GitHub, open **Actions → Update YouTube sermons → Run workflow**.
+- The featured sermon changes after every 2 page loads on the same device.
+- Each sermon plays on the website and has a **Watch on YouTube** link.
+- YouTube links you add in **Admin → Videos** also appear in the sermon list.
+- If the action can't find the channel, add the **YouTube channel ID** (starts with `UC`) in **Admin → Settings**.
+
 ## 4. Live stream detection
 
 - **Facebook and YouTube (manual):** switch live on/off in **Admin → Live & Notice**. A banner then appears on every page and the Watch Live page plays the stream.
@@ -96,6 +108,8 @@ index.html, pictures.html, videos.html, live.html, contact.html
 _admin/Thyword-Admin.html  ← the private admin tool, single file (not published)
 tiwc-admin-9k2x/           ← the admin as a phone app (unlisted address)
 data/content.js          ← all website text, events, photos, videos, branches
+data/youtube.js          ← sermons collected from YouTube (updated automatically)
+scripts/fetch_youtube.py ← collects them (run by .github/workflows/youtube-videos.yml)
 assets/css/style.css     ← design (colours taken from the church logo)
 assets/js/main.js        ← builds the pages from content.js
 assets/images/           ← logo, pastor photos, gallery, event flyers

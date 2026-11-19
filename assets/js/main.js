@@ -38,13 +38,18 @@
   function big(svg, size) { return svg.replace(/width="\d+" height="\d+"/, 'width="' + size + '" height="' + size + '"'); }
 
   /* ---------- content loading ---------- */
-  function loadContent(cb) {
+  function loadScript(src, done) {
     var s = document.createElement("script");
     // A timestamp stops browsers showing yesterday's copy after an update.
-    s.src = "data/content.js?v=" + Date.now();
-    s.onload = function () { cb(window.SITE_CONTENT || {}); };
-    s.onerror = function () { cb(window.SITE_CONTENT || {}); };
+    s.src = src + "?v=" + Date.now();
+    s.onload = s.onerror = done;
     document.head.appendChild(s);
+  }
+  function loadContent(cb) {
+    // content.js = everything set in the admin; youtube.js = videos collected from the YouTube channel
+    var left = 2, done = function () { if (--left === 0) cb(window.SITE_CONTENT || {}); };
+    loadScript("data/content.js", done);
+    loadScript("data/youtube.js", done);
   }
 
   var C, S;
@@ -115,6 +120,7 @@
       '<header class="site-header"><div class="container">' +
       '<a class="brand" href="index.html" aria-label="Home"><img src="' + esc(S.logo || "assets/images/logo.png") + '" alt="' + esc(S.churchName) + ' logo">' +
       '<span class="brand-text"><span class="brand-name">' + esc(S.churchName) + '</span><span class="brand-tag">' + esc(S.tagline) + "</span></span></a>" +
+      '<a class="btn btn-gold btn-sm mobile-sermons" href="sermons.html">' + big(ICON.play, 12) + ' Sermons</a>' +
       '<button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>' +
       '<nav class="main-nav" aria-label="Main"><ul>' +
       navLink("index.html", "Home", "home") +
@@ -123,6 +129,7 @@
       navLink("pictures.html", "Pictures", "pictures") +
       navLink("videos.html", "Videos", "videos") +
       navLink("contact.html", "Contact", "contact") +
+      '<li class="nav-cta"><a class="btn btn-gold btn-sm' + (document.body.getAttribute("data-page") === "sermons" ? " is-current" : "") + '" href="sermons.html">' + big(ICON.play, 14) + ' Watch Sermons</a></li>' +
       '<li class="nav-live"><a class="btn btn-red btn-sm" href="live.html">' + big(ICON.tv, 16) + ' Watch Live</a><span class="live-badge">LIVE</span></li>' +
       "</ul></nav></div></header>";
 
@@ -157,7 +164,7 @@
       (waLink() ? '<a href="' + waLink() + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + ICON.wa + "</a>" : "") +
       "</div></div>" +
       "<div><h4>Our Branches</h4><ul class=\"footer-branches\">" + branches + "</ul></div>" +
-      '<div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="index.html#about">About Us</a></li><li><a href="index.html#events">Upcoming Events</a></li><li><a href="pictures.html">Pictures</a></li><li><a href="videos.html">Videos</a></li><li><a href="live.html">Watch Live</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>' +
+      '<div><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="index.html#about">About Us</a></li><li><a href="index.html#events">Upcoming Events</a></li><li><a href="pictures.html">Pictures</a></li><li><a href="sermons.html">Watch Sermons</a></li><li><a href="videos.html">Videos</a></li><li><a href="live.html">Watch Live</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>' +
       "<div><h4>Contact</h4><ul>" + phones +
       (waLink() ? '<li><a href="' + waLink() + '" target="_blank" rel="noopener">Chat on WhatsApp</a></li>' : "") +
       (ct.email ? '<li><a href="mailto:' + esc(ct.email) + '">' + esc(ct.email) + "</a></li>" : "") +
@@ -257,6 +264,73 @@
     });
   }
 
+  /* ---------- sermons (YouTube) ---------- */
+  function ytFeed() { return window.YOUTUBE_FEED || {}; }
+  function ytWatch(id) { return "https://www.youtube.com/watch?v=" + id; }
+  function channelId() { return S.youtubeChannelId || ytFeed().channelId || ""; }
+  function channelUrl() { return S.youtubeUrl || ytFeed().channelUrl || ""; }
+  // All sermons: videos collected from the YouTube channel, plus YouTube links added in the admin
+  function sermonPool() {
+    var list = [], seen = {};
+    (ytFeed().videos || []).forEach(function (v) {
+      if (seen[v.id]) return; seen[v.id] = 1;
+      list.push({ title: v.title, type: "youtube", src: ytWatch(v.id), date: v.date, description: v.description, category: "Sermons" });
+    });
+    (C.videos || []).forEach(function (v) {
+      var id = v.type === "youtube" ? youtubeId(v.src) : "";
+      if (!id || seen[id]) return; seen[id] = 1;
+      list.push(v);
+    });
+    return list;
+  }
+  // The featured sermon changes after every 2 page loads
+  function featuredIndex(n) {
+    if (!n) return 0;
+    var loads = 1;
+    try { loads = +localStorage.getItem("tiwc-page-loads") || 1; } catch (e) { loads = Math.floor(Math.random() * 2 * n) + 1; }
+    return Math.floor((loads - 1) / 2) % n;
+  }
+  function countPageLoad() {
+    try { localStorage.setItem("tiwc-page-loads", (+localStorage.getItem("tiwc-page-loads") || 0) + 1); } catch (e) {}
+  }
+  function featuredSermon() {
+    var pool = sermonPool();
+    if (pool.length) return { video: pool[featuredIndex(pool.length)], pool: pool };
+    var local = (C.videos || []).filter(function (v) { return v.type === "file"; });
+    if (local.length) return { video: local[featuredIndex(local.length)], pool: local };
+    return { video: null, pool: [] };
+  }
+  // A player card: shows the thumbnail first and plays on the page when tapped
+  function featuredPlayer(v) {
+    var cid = channelId();
+    if (!v && cid) {
+      return '<div class="fs-frame"><iframe src="https://www.youtube.com/embed/videoseries?list=UU' + esc(cid.slice(2)) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Sermons"></iframe></div>';
+    }
+    if (!v) return '<div class="fs-frame fs-empty"><img src="' + esc(S.logo) + '" alt=""><p>Sermons coming soon on our YouTube channel.</p></div>';
+    var thumb = videoThumb(v);
+    return '<button class="fs-frame fs-thumb" type="button" data-play-featured aria-label="Play ' + esc(v.title) + '">' +
+      (thumb ? '<img src="' + esc(thumb) + '" alt="">' : '<span class="noposter"><img src="' + esc(S.logo) + '" alt=""></span>') +
+      '<span class="play">' + ICON.play + "</span></button>";
+  }
+  function featuredEmbed(v) {
+    var id = v.type === "youtube" ? youtubeId(v.src) : "";
+    if (id) return '<iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="' + esc(v.title) + '"></iframe>';
+    if (v.type === "facebook") return '<iframe src="https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(v.src) + '&show_text=false&autoplay=true" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    return '<video src="' + esc(v.src) + '" controls autoplay playsinline' + (v.poster ? ' poster="' + esc(v.poster) + '"' : "") + "></video>";
+  }
+  function bindFeatured(root, v) {
+    var b = $("[data-play-featured]", root);
+    if (!b || !v) return;
+    b.addEventListener("click", function () {
+      var d = document.createElement("div"); d.className = "fs-frame"; d.innerHTML = featuredEmbed(v);
+      b.parentNode.replaceChild(d, b);
+    });
+  }
+  function ytLinkFor(v) {
+    var id = v && v.type === "youtube" ? youtubeId(v.src) : "";
+    return id ? ytWatch(id) : channelUrl();
+  }
+
   function videoThumb(v) {
     if (v.poster) return v.poster;
     var id = v.type === "youtube" ? youtubeId(v.src) : "";
@@ -269,7 +343,9 @@
       (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '<span class="noposter"><img src="' + esc(S.logo) + '" alt=""></span>') +
       '<span class="vtag">' + esc(tag) + '</span><span class="play">' + ICON.play + "</span></button>" +
       '<div class="video-body">' + (v.date ? "<small>" + fmtDate(v.date) + "</small>" : "") + "<h3>" + esc(v.title) + "</h3>" +
-      (v.description ? "<p>" + esc(v.description) + "</p>" : "") + "</div></article>";
+      (v.description ? "<p>" + esc(v.description) + "</p>" : "") +
+      (v.type === "youtube" && youtubeId(v.src) ? '<a class="yt-link" href="' + esc(ytWatch(youtubeId(v.src))) + '" target="_blank" rel="noopener">' + ICON.yt + " Watch on YouTube</a>" : "") +
+      "</div></article>";
   }
 
   function photoItem(p, i) {
@@ -430,6 +506,18 @@
 
   pages.home = function () {
     var H = C.hero || {}, A = C.about || {}, P = C.pastor || {};
+    // Watch Sermons card (top right of the banner)
+    var fs = featuredSermon(), hs = $("#heroSermon");
+    if (hs) {
+      var fv = fs.video;
+      hs.innerHTML = '<div class="hs-head"><span class="hs-label">' + big(ICON.play, 14) + ' Watch Sermons</span><a href="sermons.html">All sermons &rarr;</a></div>' +
+        featuredPlayer(fv) +
+        '<div class="hs-body">' + (fv ? (fv.date ? "<small>" + fmtDate(fv.date) + "</small>" : "") + "<h3>" + esc(fv.title) + "</h3>" : "<h3>Sermons from " + esc(S.churchName) + "</h3>") +
+        '<div class="hs-actions"><a class="btn btn-gold btn-sm" href="sermons.html">More Sermons</a>' +
+        (ytLinkFor(fv) ? '<a class="btn btn-outline btn-sm" href="' + esc(ytLinkFor(fv)) + '" target="_blank" rel="noopener">' + ICON.yt + " YouTube</a>" : "") +
+        "</div></div>";
+      bindFeatured(hs, fv);
+    }
     // hero media slideshow
     var media = H.media || [];
     $("#heroMedia").innerHTML = media.map(function (m, i) {
@@ -536,6 +624,39 @@
         }).catch(function () {});
     }
     $("#socialCards").innerHTML = socialCards();
+  };
+
+  pages.sermons = function () {
+    var fs = featuredSermon(), fv = fs.video, pool = sermonPool();
+    var box = $("#featuredSermon");
+    box.innerHTML = '<div class="fs-player">' + featuredPlayer(fv) + "</div>" +
+      '<div class="fs-info"><span class="eyebrow">Featured Sermon</span>' +
+      (fv ? "<h2>" + esc(fv.title) + "</h2>" + (fv.date ? '<p class="fs-date">' + fmtDate(fv.date) + "</p>" : "") + (fv.description ? "<p>" + esc(fv.description) + "</p>" : "")
+          : "<h2>Watch our sermons</h2><p>Messages from " + esc((C.pastor || {}).name || S.churchName) + " and the ministers of " + esc(S.churchName) + ".</p>") +
+      '<p class="fs-note">A new featured sermon appears every couple of visits. Browse them all below.</p>' +
+      '<div class="hero-actions" style="margin-top:1rem">' +
+      (ytLinkFor(fv) ? '<a class="btn btn-red" href="' + esc(ytLinkFor(fv)) + '" target="_blank" rel="noopener">' + ICON.yt + (fv && fv.type === "youtube" ? " Watch on YouTube" : " Visit our YouTube channel") + "</a>" : "") +
+      (channelUrl() ? '<a class="btn btn-outline-dark" href="' + esc(channelUrl()) + '?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a>' : "") +
+      "</div></div>";
+    bindFeatured(box, fv);
+
+    var grid = $("#sermonGrid");
+    if (pool.length) {
+      grid.innerHTML = pool.map(videoCard).join("");
+      bindVideos(grid, pool);
+      $("#sermonCount").textContent = pool.length + " sermon" + (pool.length === 1 ? "" : "s");
+    } else {
+      grid.innerHTML = '<div class="empty">Our latest sermons from YouTube will appear here automatically. In the meantime, <a href="' + esc(channelUrl()) + '" target="_blank" rel="noopener">visit our YouTube channel</a>.</div>';
+    }
+    // Admin-added clips and other videos
+    var others = (C.videos || []).filter(function (v) { return v.type !== "youtube"; });
+    if (others.length) {
+      $("#otherVideos").classList.remove("hidden");
+      $("#otherGrid").innerHTML = others.map(videoCard).join("");
+      bindVideos($("#otherGrid"), others);
+    }
+    $("#socialCards").innerHTML = socialCards();
+    $("#subscribeBox").innerHTML = subscribeBlock();
   };
 
   pages.live = function () {
@@ -657,6 +778,7 @@
   /* ---------- boot ---------- */
   loadContent(function (content) {
     C = content; S = C.settings || {};
+    countPageLoad();
     renderHeader();
     renderFooter();
     var page = document.body.getAttribute("data-page");
