@@ -883,10 +883,16 @@
   function autoHideHeader() {
     var header = $(".site-header");
     if (!header) return;
-    var timer, hovering = false;
+    var timer;
     var stuck = function () { return header.getBoundingClientRect().top <= 0 && window.scrollY > 0; };
+    // Only hold the header open while the phone menu is open or someone is using the keyboard in it.
+    // (A mouse pointer simply resting on the header no longer keeps it showing; that is what
+    // stopped it hiding on laptops, where the pointer often sits at the top after clicking a link.)
     var busy = function () {
-      return hovering || header.contains(document.activeElement) || ($(".main-nav") || {}).classList && $(".main-nav").classList.contains("open");
+      var nav = $(".main-nav");
+      if (nav && nav.classList.contains("open")) return true;
+      var f = document.activeElement;
+      return !!(f && header.contains(f) && f.matches && f.matches(":focus-visible"));
     };
     var show = function () { header.classList.remove("header-hidden"); };
     var schedule = function () {
@@ -901,11 +907,13 @@
     window.addEventListener("touchmove", wake, { passive: true });
     window.addEventListener("wheel", wake, { passive: true });
     document.addEventListener("keydown", function (e) { if (/^(Arrow|Page|Home|End| )/.test(e.key)) wake(); });
-    header.addEventListener("mouseenter", function () { hovering = true; show(); });
-    header.addEventListener("mouseleave", function () { hovering = false; schedule(); });
-    header.addEventListener("focusin", show);
-    // A thin strip at the top of the screen brings it back on computers
-    document.addEventListener("mousemove", function (e) { if (e.clientY < 12) wake(); });
+    header.addEventListener("focusin", function () { if (busy()) show(); });
+    document.addEventListener("mousemove", function (e) {
+      // Pointer at the very top edge brings it back; moving the pointer over the visible header
+      // (e.g. heading for a menu link) gives a fresh 5 seconds so it doesn't vanish under the cursor
+      if (e.clientY < 12) return wake();
+      if (!header.classList.contains("header-hidden") && e.clientY < header.getBoundingClientRect().bottom) schedule();
+    });
     schedule();
   }
 
