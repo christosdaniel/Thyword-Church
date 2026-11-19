@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 00:42:07 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 00:43:46 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -29,7 +29,7 @@ window.SITE_CONTENT = {
     "facebookLiveUrl": ""
   },
   "announcement": {
-    "show": false,
+    "show": true,
     "text": "Friday All-Night Service: A Night of Breaking the Curses, 20th November 2026, 9:00 PM at the church premises, Kasoa Old Barrier.",
     "link": "index.html#events"
   },
