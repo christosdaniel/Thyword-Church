@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#072e2d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TIWC Admin">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="robots" content="noindex, nofollow">
+<title>Website Admin | Thyword International Worship Centre</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Thyword International Worship Centre: main stylesheet
+   Colours come from the church logo: deep globe green, crest red, mint, white, plus gold. */
+:root {
+  --green-900: #072e2d;
+  --green-800: #0a3b3a;
+  --green-700: #0e4c4b;
+  --green-600: #146362;
+  --mint: #86d3a6;
+  --mint-100: #e6f6ed;
+  --red-700: #8f0d15;
+  --red-600: #b3111a;
+  --red-500: #d0202a;
+  --gold: #f2b705;
+  --gold-600: #d49d00;
+  --ink: #142423;
+  --muted: #5b6b6a;
+  --line: #dfe7e4;
+  --bg: #ffffff;
+  --bg-soft: #f5f8f6;
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(7, 46, 45, .12);
+  --header-h: 76px;
+  --font-head: "Montserrat", system-ui, sans-serif;
+  --font-body: "Open Sans", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 12px); }
+body {
+  margin: 0; font-family: var(--font-body); color: var(--ink); background: var(--bg);
+  line-height: 1.65; font-size: 16px; -webkit-font-smoothing: antialiased;
+}
+img, video, iframe { max-width: 100%; display: block; }
+a { color: var(--red-600); text-decoration: none; }
+a:hover { color: var(--red-700); }
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.2; margin: 0 0 .5em; color: var(--green-800); }
+p { margin: 0 0 1em; }
+.container { width: min(1200px, 100% - 32px); margin-inline: auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hidden { display: none !important; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .8rem 1.5rem; border-radius: 999px; border: 2px solid transparent;
+  font-family: var(--font-head); font-weight: 700; font-size: .9rem; letter-spacing: .03em;
+  text-transform: uppercase; cursor: pointer; transition: .2s ease; text-align: center;
+}
+.btn-red { background: var(--red-600); color: #fff; }
+.btn-red:hover { background: var(--red-700); color: #fff; }
+.btn-gold { background: var(--gold); color: var(--green-900); }
+.btn-gold:hover { background: var(--gold-600); color: var(--green-900); }
+.btn-green { background: var(--green-700); color: #fff; }
+.btn-green:hover { background: var(--green-800); color: #fff; }
+.btn-outline { border-color: currentColor; color: #fff; background: transparent; }
+.btn-outline:hover { background: #fff; color: var(--green-800); border-color: #fff; }
+.btn-outline-dark { border-color: var(--green-700); color: var(--green-700); background: transparent; }
+.btn-outline-dark:hover { background: var(--green-700); color: #fff; }
+.btn-sm { padding: .5rem 1rem; font-size: .78rem; }
+
+/* Announcement / live bars */
+.topbar { background: var(--green-900); color: #d9efe4; font-size: .85rem; }
+.topbar .container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 38px; }
+.topbar a { color: #fff; }
+.topbar-social { display: flex; gap: .9rem; align-items: center; }
+.topbar-social a { display: inline-flex; opacity: .85; }
+.topbar-social a:hover { opacity: 1; }
+.topbar-contact { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.topbar-contact span { display: inline-flex; align-items: center; gap: .35rem; }
+
+.announce { background: var(--gold); color: var(--green-900); font-weight: 600; font-size: .9rem; text-align: center; padding: .55rem 2.5rem; position: relative; }
+.announce a { color: var(--green-900); text-decoration: underline; }
+.announce-close { position: absolute; right: .6rem; top: 50%; transform: translateY(-50%); background: none; border: 0; font-size: 1.3rem; cursor: pointer; color: var(--green-900); }
+
+.live-bar { background: var(--red-600); color: #fff; text-align: center; padding: .65rem 1rem; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.live-bar a { color: #fff; text-decoration: underline; }
+.live-dot { width: 10px; height: 10px; background: #fff; border-radius: 50%; display: inline-block; animation: pulse 1.2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,.8); } 70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+
+/* Header */
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.97); backdrop-filter: blur(8px); box-shadow: 0 2px 14px rgba(7,46,45,.08); }
+.site-header .container { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); gap: 1rem; }
+.brand { display: flex; align-items: center; gap: .7rem; color: var(--green-800); }
+.brand img { width: 58px; height: 58px; object-fit: contain; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name { font-family: var(--font-head); font-weight: 800; font-size: 1rem; letter-spacing: .02em; color: var(--green-800); text-transform: uppercase; }
+.brand-tag { font-size: .72rem; font-weight: 700; color: var(--red-600); letter-spacing: .12em; text-transform: uppercase; }
+.main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: .25rem; }
+.main-nav a { display: block; padding: .55rem .8rem; color: var(--green-800); font-family: var(--font-head); font-weight: 600; font-size: .9rem; border-radius: 8px; }
+.main-nav a:hover, .main-nav a.active { color: var(--red-600); background: var(--mint-100); }
+.nav-live { position: relative; }
+.nav-live .btn { margin-left: .4rem; }
+.live-badge { display: none; position: absolute; top: -4px; right: -4px; background: var(--gold); color: var(--green-900); font-size: .62rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; }
+body.is-live .live-badge { display: inline-block; }
+.nav-toggle { display: none; background: none; border: 0; padding: .5rem; cursor: pointer; color: var(--green-800); }
+.nav-toggle svg { width: 30px; height: 30px; }
+
+@media (max-width: 980px) {
+  .nav-toggle { display: inline-flex; }
+  .main-nav { position: fixed; inset: var(--header-h) 0 auto 0; background: #fff; box-shadow: var(--shadow); max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+  .main-nav.open { max-height: 80vh; overflow-y: auto; }
+  .main-nav ul { flex-direction: column; align-items: stretch; padding: .75rem 16px 1.25rem; gap: .15rem; }
+  .main-nav a { padding: .8rem 1rem; }
+  .nav-live .btn { margin: .5rem 0 0; width: 100%; }
+  .topbar-contact .hide-sm { display: none; }
+}
+@media (max-width: 520px) {
+  .brand img { width: 46px; height: 46px; }
+  .brand-name { font-size: .8rem; }
+  .brand-tag { font-size: .62rem; }
+  .topbar-contact span:not(:first-child) { display: none; }
+}
+
+/* Hero */
+.hero { position: relative; min-height: min(88vh, 760px); display: flex; align-items: center; color: #fff; overflow: hidden; background: var(--green-900); }
+.hero-media { position: absolute; inset: 0; }
+.hero-media > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.4s ease; }
+.hero-media > .active { opacity: 1; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(7,46,45,.95) 0%, rgba(7,46,45,.78) 45%, rgba(143,13,21,.55) 100%); }
+.hero .container { position: relative; z-index: 2; padding: 5rem 0; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-head); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; color: var(--mint); margin-bottom: 1rem; }
+.hero-eyebrow::before { content: ""; width: 34px; height: 2px; background: var(--gold); }
+.hero h1 { color: #fff; font-size: clamp(2.1rem, 5.5vw, 4rem); font-weight: 800; max-width: 760px; text-transform: uppercase; }
+.hero h1 span { color: var(--gold); }
+.hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 620px; color: #e3f1ea; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; }
+.hero-dots { position: absolute; z-index: 3; bottom: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; gap: .5rem; }
+.hero-dots button { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; background: transparent; cursor: pointer; padding: 0; }
+.hero-dots button.active { background: var(--gold); border-color: var(--gold); }
+
+/* Page header (inner pages) */
+.page-hero { position: relative; background: linear-gradient(110deg, var(--green-900), var(--green-700) 55%, var(--red-700)); color: #fff; padding: 4.5rem 0 3.5rem; overflow: hidden; }
+.page-hero::before { content: ""; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; border-radius: 50%; border: 50px solid rgba(134,211,166,.12); }
+.page-hero h1 { color: #fff; font-size: clamp(2rem, 5vw, 3rem); text-transform: uppercase; font-weight: 800; position: relative; }
+.page-hero p { color: #d9efe4; max-width: 640px; position: relative; margin: 0; }
+.crumbs { font-size: .85rem; color: var(--mint); margin-bottom: .6rem; position: relative; }
+.crumbs a { color: #fff; }
+
+/* Quick links strip (like ICGC) */
+.quick-links { position: relative; z-index: 5; margin-top: -60px; }
+.quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.quick-item { padding: 1.6rem 1.4rem; display: flex; gap: 1rem; align-items: flex-start; color: var(--ink); border-right: 1px solid var(--line); transition: .2s; }
+.quick-item:last-child { border-right: 0; }
+.quick-item:hover { background: var(--mint-100); color: var(--ink); }
+.quick-icon { flex: 0 0 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--green-700); color: #fff; }
+.quick-item:nth-child(2) .quick-icon { background: var(--red-600); }
+.quick-item:nth-child(3) .quick-icon { background: var(--gold); color: var(--green-900); }
+.quick-item:nth-child(4) .quick-icon { background: var(--green-600); }
+.quick-item h3 { font-size: 1rem; margin-bottom: .2rem; }
+.quick-item p { font-size: .87rem; color: var(--muted); margin: 0; }
+@media (max-width: 900px) { .quick-grid { grid-template-columns: repeat(2, 1fr); } .quick-item:nth-child(2) { border-right: 0; } .quick-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+@media (max-width: 520px) { .quick-links { margin-top: -40px; } .quick-grid { grid-template-columns: 1fr; } .quick-item { border-right: 0; border-bottom: 1px solid var(--line); } }
+
+/* Sections */
+.section { padding: 5rem 0; }
+.section-soft { background: var(--bg-soft); }
+.section-dark { background: var(--green-800); color: #e3f1ea; }
+.section-dark h2, .section-dark h3 { color: #fff; }
+.section-head { text-align: center; max-width: 720px; margin: 0 auto 3rem; }
+.section-head.left { text-align: left; margin-left: 0; }
+.eyebrow { display: inline-block; font-family: var(--font-head); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; font-size: .78rem; color: var(--red-600); margin-bottom: .6rem; }
+.section-dark .eyebrow { color: var(--gold); }
+.section-head h2 { font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 800; }
+.section-head p { color: var(--muted); }
+.section-dark .section-head p { color: #c4ddd2; }
+.section-foot { text-align: center; margin-top: 2.5rem; }
+
+/* About / pastor */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 2rem; } }
+.pastor-photo { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 1 / 1; max-width: 520px; background: var(--green-900); }
+.pastor-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.pastor-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.2rem 1.4rem; background: linear-gradient(transparent, rgba(7,46,45,.95)); color: #fff; }
+.pastor-photo figcaption strong { display: block; font-family: var(--font-head); font-size: 1.1rem; }
+.pastor-photo figcaption span { color: var(--gold); font-size: .85rem; font-weight: 600; }
+.verse { border-left: 4px solid var(--gold); padding: .6rem 0 .6rem 1.2rem; margin: 1.5rem 0; font-style: italic; color: var(--green-700); font-size: 1.05rem; }
+.verse cite { display: block; font-style: normal; font-weight: 700; color: var(--red-600); margin-top: .4rem; font-size: .9rem; }
+
+/* Service times */
+.times-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.2rem; }
+.time-card { background: rgba(255,255,255,.06); border: 1px solid rgba(134,211,166,.25); border-radius: var(--radius); padding: 1.6rem; text-align: center; }
+.time-card .day { font-family: var(--font-head); color: var(--gold); text-transform: uppercase; letter-spacing: .14em; font-weight: 700; font-size: .8rem; }
+.time-card h3 { font-size: 1.15rem; margin: .4rem 0; }
+.time-card .time { font-size: 1.6rem; font-weight: 800; font-family: var(--font-head); color: #fff; }
+
+/* Events */
+.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.6rem; }
+.event-card { background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+.event-img { position: relative; aspect-ratio: 1 / 1; background: var(--green-900); overflow: hidden; }
+.event-img img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform .4s; }
+.event-card:hover .event-img img { transform: scale(1.04); }
+.event-date { position: absolute; top: 1rem; left: 1rem; background: var(--red-600); color: #fff; border-radius: 10px; text-align: center; padding: .45rem .8rem; font-family: var(--font-head); line-height: 1.05; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.event-date b { display: block; font-size: 1.6rem; }
+.event-date small { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.event-body { padding: 1.4rem; flex: 1; display: flex; flex-direction: column; }
+.event-body h3 { font-size: 1.2rem; margin-bottom: .25rem; }
+.event-sub { color: var(--red-600); font-weight: 600; font-size: .9rem; margin-bottom: .7rem; }
+.event-meta { list-style: none; padding: 0; margin: 0 0 1rem; color: var(--muted); font-size: .9rem; }
+.event-meta li { display: flex; gap: .5rem; align-items: flex-start; margin-bottom: .3rem; }
+.event-meta svg { flex: 0 0 16px; margin-top: 4px; color: var(--green-600); }
+.countdown { display: flex; gap: .5rem; margin-top: auto; }
+.countdown div { flex: 1; background: var(--mint-100); border-radius: 8px; text-align: center; padding: .4rem 0; }
+.countdown b { display: block; font-family: var(--font-head); font-size: 1.2rem; color: var(--green-800); }
+.countdown small { font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.badge-today { display: inline-block; background: var(--gold); color: var(--green-900); padding: .2rem .7rem; border-radius: 999px; font-weight: 800; font-size: .75rem; text-transform: uppercase; margin-top: auto; align-self: flex-start; }
+
+/* Words / quotes */
+.words-slider { position: relative; max-width: 900px; margin: 0 auto; }
+.word { display: none; text-align: center; padding: 0 1rem; }
+.word.active { display: block; animation: fade .6s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.word-mark { font-family: Georgia, serif; font-size: 5rem; line-height: .6; color: var(--gold); }
+.word blockquote { margin: 1rem 0 1.4rem; font-size: clamp(1.2rem, 2.6vw, 1.75rem); font-family: var(--font-head); font-weight: 600; color: #fff; line-height: 1.45; }
+.word cite { font-style: normal; color: var(--mint); font-weight: 700; letter-spacing: .05em; }
+.word-nav { display: flex; justify-content: center; gap: .6rem; margin-top: 2rem; }
+.word-nav button { width: 44px; height: 44px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); background: transparent; color: #fff; cursor: pointer; font-size: 1.1rem; }
+.word-nav button:hover { background: var(--gold); border-color: var(--gold); color: var(--green-900); }
+
+/* Gallery */
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 2rem; }
+.filters button { border: 2px solid var(--line); background: #fff; color: var(--green-800); padding: .45rem 1.1rem; border-radius: 999px; font-weight: 700; font-size: .85rem; cursor: pointer; font-family: var(--font-head); }
+.filters button.active, .filters button:hover { background: var(--green-700); border-color: var(--green-700); color: #fff; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+.gallery-item { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 1 / 1; background: var(--green-900); cursor: zoom-in; border: 0; padding: 0; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.gallery-item:hover img { transform: scale(1.06); }
+.gallery-item span { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem .9rem .7rem; color: #fff; font-size: .85rem; text-align: left; background: linear-gradient(transparent, rgba(7,46,45,.92)); opacity: 0; transition: .3s; }
+.gallery-item:hover span, .gallery-item:focus span { opacity: 1; }
+@media (hover: none) { .gallery-item span { opacity: 1; } }
+@media (max-width: 520px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem; } }
+
+/* Videos */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.6rem; }
+.video-card { background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+.video-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--green-900); cursor: pointer; border: 0; padding: 0; width: 100%; overflow: hidden; }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: .85; transition: .3s; }
+.video-thumb:hover img { opacity: 1; transform: scale(1.04); }
+.video-thumb .play { position: absolute; inset: 0; margin: auto; width: 66px; height: 66px; border-radius: 50%; background: var(--red-600); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 8px rgba(179,17,26,.3); transition: .2s; }
+.video-thumb:hover .play { transform: scale(1.08); }
+.video-thumb .vtag { position: absolute; top: .8rem; left: .8rem; background: rgba(7,46,45,.85); color: #fff; font-size: .72rem; font-weight: 700; padding: .2rem .6rem; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em; }
+.video-thumb .noposter { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg, var(--green-700), var(--red-700)); }
+.video-thumb .noposter img { width: 70px; height: 70px; opacity: .5; object-fit: contain; }
+.video-body { padding: 1.2rem 1.4rem 1.4rem; }
+.video-body h3 { font-size: 1.05rem; margin-bottom: .3rem; }
+.video-body p { color: var(--muted); font-size: .9rem; margin: 0; }
+.video-body small { color: var(--red-600); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+
+/* Live section */
+.live-wrap { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.6rem; align-items: start; }
+@media (max-width: 900px) { .live-wrap { grid-template-columns: 1fr; } }
+.player { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: #000; box-shadow: var(--shadow); }
+.player iframe, .player video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.player-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; color: #fff; background: linear-gradient(135deg, var(--green-800), var(--green-900) 60%, var(--red-700)); }
+.player-empty img { width: 90px; opacity: .9; margin-bottom: 1rem; }
+.player-empty h3 { color: #fff; }
+.player-empty p { color: #c4ddd2; max-width: 440px; }
+.status-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.4rem; margin-bottom: 1.2rem; }
+.status-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.status-row:last-child { border-bottom: 0; }
+.status-row .plat { display: flex; align-items: center; gap: .7rem; font-weight: 700; }
+.pill { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: .25rem .7rem; border-radius: 999px; background: var(--bg-soft); color: var(--muted); }
+.pill.on { background: var(--red-600); color: #fff; }
+.platform-tabs { display: flex; gap: .5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.platform-tabs button { border: 2px solid var(--line); background: #fff; padding: .5rem 1rem; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; gap: .4rem; align-items: center; font-family: var(--font-head); font-size: .85rem; color: var(--green-800); }
+.platform-tabs button.active { border-color: var(--red-600); background: var(--red-600); color: #fff; }
+.fb-embed { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.fb-embed iframe { width: 100%; border: 0; }
+
+/* Social follow cards */
+.social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+@media (max-width: 700px) { .social-grid { grid-template-columns: 1fr; } }
+.social-card { display: flex; align-items: center; gap: 1.2rem; padding: 1.6rem; border-radius: var(--radius); color: #fff; transition: transform .2s; }
+.social-card:hover { color: #fff; transform: translateY(-3px); }
+.social-card.fb { background: #1877f2; }
+.social-card.yt { background: #e01e1e; }
+.social-card svg { flex: 0 0 48px; width: 48px; height: 48px; }
+.social-card h3 { color: #fff; margin: 0 0 .2rem; font-size: 1.15rem; }
+.social-card p { margin: 0; opacity: .9; font-size: .9rem; }
+
+/* Subscribe */
+.subscribe { background: linear-gradient(110deg, var(--red-700), var(--red-600) 50%, var(--green-700)); color: #fff; border-radius: 20px; padding: 3rem; display: grid; grid-template-columns: 1.1fr 1fr; gap: 2rem; align-items: center; box-shadow: var(--shadow); }
+.subscribe h2 { color: #fff; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+.subscribe p { color: #ffe9ea; margin: 0; }
+@media (max-width: 860px) { .subscribe { grid-template-columns: 1fr; padding: 2rem 1.4rem; } }
+.sub-form { display: flex; flex-direction: column; gap: .7rem; }
+.sub-row { display: flex; gap: .6rem; }
+.sub-form input { flex: 1; min-width: 0; padding: .9rem 1.1rem; border-radius: 999px; border: 0; font-size: 1rem; font-family: inherit; }
+.sub-form .note { font-size: .82rem; color: #ffe9ea; min-height: 1.2em; }
+@media (max-width: 520px) { .sub-row { flex-direction: column; } }
+
+/* Forms */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-grid .full { grid-column: 1 / -1; }
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+label { display: block; font-weight: 600; font-size: .88rem; margin-bottom: .35rem; color: var(--green-800); }
+input, textarea, select { width: 100%; padding: .8rem 1rem; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; color: var(--ink); background: #fff; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--green-600); box-shadow: 0 0 0 3px rgba(20,99,98,.15); }
+textarea { min-height: 140px; resize: vertical; }
+.form-status { margin-top: .8rem; font-weight: 600; }
+.form-status.ok { color: var(--green-600); }
+.form-status.err { color: var(--red-600); }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+.contact-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.6rem; display: flex; flex-direction: column; gap: .4rem; border-top: 4px solid var(--green-700); }
+.contact-card:nth-child(2) { border-top-color: #25d366; }
+.contact-card:nth-child(3) { border-top-color: var(--red-600); }
+.contact-card:nth-child(4) { border-top-color: var(--gold); }
+.contact-card .ci { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--mint-100); color: var(--green-700); margin-bottom: .5rem; }
+.contact-card h3 { font-size: 1.05rem; margin: 0; }
+.contact-card a, .contact-card p { color: var(--ink); margin: 0; word-break: break-word; }
+.contact-card a:hover { color: var(--red-600); }
+.map { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); min-height: 340px; }
+.map iframe { width: 100%; height: 100%; min-height: 380px; border: 0; }
+.branch-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.branch-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.2rem; display: flex; gap: .8rem; align-items: flex-start; }
+.branch-card svg { color: var(--red-600); flex: 0 0 22px; margin-top: 2px; }
+.branch-card h4 { margin: 0 0 .15rem; font-size: 1rem; }
+.branch-card p { margin: 0; font-size: .87rem; color: var(--muted); }
+
+.whatsapp-float { position: fixed; right: 18px; bottom: 18px; z-index: 60; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; display: grid; place-items: center; box-shadow: 0 8px 22px rgba(0,0,0,.25); transition: transform .2s; }
+.whatsapp-float:hover { transform: scale(1.08); color: #fff; }
+
+/* Footer */
+.site-footer { background: var(--green-900); color: #b9d3c8; padding-top: 4rem; font-size: .92rem; }
+.site-footer h4 { color: #fff; font-size: 1rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1.2rem; position: relative; padding-bottom: .6rem; }
+.site-footer h4::after { content: ""; position: absolute; left: 0; bottom: 0; width: 36px; height: 3px; background: var(--gold); }
+.footer-grid { display: grid; grid-template-columns: 1.3fr 1.4fr 1fr 1.1fr; gap: 2.5rem; }
+@media (max-width: 960px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+.footer-brand img { width: 84px; margin-bottom: 1rem; }
+.footer-brand strong { color: #fff; font-family: var(--font-head); display: block; text-transform: uppercase; letter-spacing: .03em; }
+.footer-brand em { color: var(--gold); font-style: normal; font-weight: 700; font-size: .85rem; display: block; margin-bottom: .8rem; }
+.site-footer ul { list-style: none; padding: 0; margin: 0; }
+.site-footer li { margin-bottom: .55rem; }
+.site-footer a { color: #b9d3c8; }
+.site-footer a:hover { color: var(--gold); }
+.footer-branches { columns: 2; column-gap: 1.2rem; }
+.footer-branches li { break-inside: avoid; display: flex; gap: .4rem; align-items: flex-start; }
+.footer-branches svg { color: var(--mint); flex: 0 0 14px; margin-top: 5px; }
+.footer-social { display: flex; gap: .6rem; margin-top: 1rem; }
+.footer-social a { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.08); color: #fff; }
+.footer-social a:hover { background: var(--red-600); color: #fff; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.08); margin-top: 3rem; padding: 1.3rem 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem; font-size: .82rem; }
+.footer-bottom a { color: #7fa597; }
+
+/* Lightbox / modal */
+.modal { position: fixed; inset: 0; z-index: 100; background: rgba(4, 22, 21, .94); display: none; align-items: center; justify-content: center; padding: 60px 16px; }
+.modal.open { display: flex; }
+.modal-inner { max-width: min(1100px, 100%); max-height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.modal-inner img { max-height: calc(100vh - 160px); width: auto; border-radius: 8px; }
+.modal-inner .vframe { width: 100%; aspect-ratio: 16 / 9; max-height: calc(100vh - 160px); background: #000; border-radius: 8px; overflow: hidden; }
+.modal-inner .vframe.portrait { aspect-ratio: 9 / 16; width: auto; height: calc(100vh - 160px); }
+.modal-inner .vframe iframe, .modal-inner .vframe video { width: 100%; height: 100%; border: 0; }
+.modal-caption { color: #e3f1ea; margin-top: 1rem; text-align: center; }
+.modal-close, .modal-prev, .modal-next { position: absolute; background: rgba(255,255,255,.1); border: 0; color: #fff; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; display: grid; place-items: center; }
+.modal-close { top: 12px; right: 12px; }
+.modal-prev { left: 12px; top: 50%; transform: translateY(-50%); }
+.modal-next { right: 12px; top: 50%; transform: translateY(-50%); }
+.modal-close:hover, .modal-prev:hover, .modal-next:hover { background: var(--red-600); }
+
+.empty { text-align: center; color: var(--muted); padding: 2rem; background: var(--bg-soft); border-radius: var(--radius); grid-column: 1 / -1; }
+
+/* Reveal animation */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } html { scroll-behavior: auto; } }
+.main-nav a.btn-red, .main-nav a.btn-red:hover { color: #fff; background: var(--red-600); }
+.main-nav a.btn-red:hover { background: var(--red-700); }
+.live-wrap .social-grid { grid-template-columns: 1fr; }
+
+/* ---------- Watch Sermons ---------- */
+.nav-cta .btn { margin-left: .4rem; }
+.main-nav a.btn-gold, .main-nav a.btn-gold:hover { color: var(--green-900); background: var(--gold); }
+.main-nav a.btn-gold:hover { background: var(--gold-600); }
+.main-nav a.btn-gold.is-current { box-shadow: 0 0 0 3px rgba(242,183,5,.35); }
+.main-nav .btn svg { flex: 0 0 auto; }
+@media (max-width: 1180px) and (min-width: 981px) {
+  .main-nav a:not(.btn) { padding: .5rem .55rem; font-size: .85rem; }
+  .brand-name { font-size: .88rem; }
+}
+@media (max-width: 980px) { .nav-cta .btn { margin: .5rem 0 0; width: 100%; } }
+
+/* Banner: welcome text left, sermon card right */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3rem; align-items: center; }
+.hero-sermon { background: rgba(7, 46, 45, .72); border: 1px solid rgba(134, 211, 166, .28); border-radius: 18px; padding: 1rem; backdrop-filter: blur(6px); box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+.hero-sermon:empty { display: none; }
+.hs-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .75rem; gap: .5rem; }
+.hs-label { display: inline-flex; align-items: center; gap: .4rem; background: var(--gold); color: var(--green-900); font-family: var(--font-head); font-weight: 800; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; padding: .35rem .75rem; border-radius: 999px; }
+.hs-head a { color: var(--mint); font-weight: 700; font-size: .85rem; }
+.hs-head a:hover { color: #fff; }
+.hs-body { padding: .9rem .2rem .2rem; }
+.hs-body small { color: var(--gold); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+.hs-body h3 { color: #fff; font-size: 1.05rem; margin: .2rem 0 .8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hs-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.hs-actions .btn { padding: .55rem 1rem; }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hero .container.hero-grid { padding: 3.5rem 0 4.5rem; }
+}
+
+/* Player frame shared by the banner card and the Sermons page */
+.fs-frame { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; border: 0; padding: 0; }
+.fs-frame iframe, .fs-frame video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.fs-thumb { cursor: pointer; }
+.fs-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s, opacity .3s; opacity: .9; }
+.fs-thumb:hover img { transform: scale(1.04); opacity: 1; }
+.fs-thumb .play { position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; border-radius: 50%; background: var(--red-600); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 10px rgba(179,17,26,.3); transition: transform .2s; }
+.fs-thumb:hover .play { transform: scale(1.08); }
+.fs-thumb .noposter { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg, var(--green-700), var(--red-700)); }
+.fs-thumb .noposter img { width: 90px; height: 90px; object-fit: contain; opacity: .6; }
+.fs-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #d9efe4; background: linear-gradient(135deg, var(--green-800), var(--red-700)); padding: 1rem; }
+.fs-empty img { width: 70px; margin-bottom: .6rem; }
+
+.featured-sermon { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; }
+.featured-sermon .fs-frame { border-radius: var(--radius); box-shadow: var(--shadow); }
+.fs-info h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; }
+.fs-date { color: var(--red-600); font-weight: 700; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+.fs-note { color: var(--muted); font-size: .88rem; }
+@media (max-width: 900px) { .featured-sermon { grid-template-columns: 1fr; gap: 1.5rem; } }
+
+.yt-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: .7rem; font-weight: 700; font-size: .85rem; color: #e01e1e; }
+.yt-link:hover { color: #a50f0f; }
+/* Header fit: keep every menu item on one line */
+.main-nav .btn { white-space: nowrap; padding: .55rem .95rem; }
+.main-nav ul { flex-wrap: nowrap; }
+@media (min-width: 981px) {
+  .main-nav a:not(.btn) { padding: .5rem .6rem; white-space: nowrap; }
+  .site-header .brand-name { font-size: .92rem; }
+}
+@media (min-width: 981px) and (max-width: 1240px) {
+  .site-header .brand-text { max-width: 230px; }
+  .site-header .brand-name { font-size: .8rem; }
+  .main-nav a:not(.btn) { padding: .45rem .42rem; font-size: .82rem; }
+  .main-nav .btn { padding: .5rem .7rem; font-size: .72rem; }
+  .nav-cta .btn, .nav-live .btn { margin-left: .25rem; }
+}
+.mobile-sermons { display: none; }
+@media (max-width: 980px) {
+  .mobile-sermons { display: inline-flex; margin-left: auto; padding: .45rem .8rem; font-size: .72rem; white-space: nowrap; }
+  .site-header .container { gap: .5rem; }
+}
+@media (max-width: 380px) { .site-header .brand-tag { display: none; } }
+@media (max-width: 520px) {
+  .site-header .brand { gap: .45rem; min-width: 0; }
+  .site-header .brand img { width: 42px; height: 42px; }
+  .site-header .brand-name { font-size: .66rem; letter-spacing: 0; }
+  .site-header .brand-tag { font-size: .54rem; letter-spacing: .06em; }
+  .mobile-sermons { padding: .4rem .65rem; font-size: .68rem; }
+}
+.video-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Contact form: choose how to send */
+.send-via { border: 0; padding: 0; margin: .2rem 0 0; min-width: 0; }
+.send-via legend { font-weight: 700; font-size: .88rem; color: var(--green-800); margin-bottom: .5rem; padding: 0; }
+.send-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .5rem; }
+.send-opt { position: relative; display: flex; align-items: center; gap: .6rem; margin: 0; padding: .7rem .85rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; transition: border-color .2s, background .2s; }
+.send-opt:hover { border-color: var(--green-600); }
+.send-opt input { width: 18px; height: 18px; flex: 0 0 18px; accent-color: var(--red-600); margin: 0; }
+.send-opt span { display: flex; flex-direction: column; line-height: 1.25; }
+.send-opt b { font-size: .9rem; color: var(--green-800); }
+.send-opt small { font-size: .74rem; color: var(--muted); font-weight: 400; }
+.send-opt.on { border-color: var(--red-600); background: #fff5f5; }
+@media (max-width: 520px) { .send-options { grid-template-columns: 1fr 1fr; } .send-opt { padding: .6rem .65rem; } }
+
+/* Header slides away after 5s without scrolling */
+.site-header { transition: transform .35s ease, box-shadow .35s ease; will-change: transform; }
+.site-header.header-hidden { transform: translateY(-110%); box-shadow: none; }
+
+/* "Send with" pop-up (bottom sheet on phones, centred card on computers) */
+.send-sheet { position: fixed; inset: 0; z-index: 120; background: rgba(4, 22, 21, .55); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+.send-sheet.open { opacity: 1; pointer-events: auto; }
+.sheet-panel { background: #fff; width: 100%; max-width: 480px; border-radius: 22px 22px 0 0; padding: .6rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,.25); transform: translateY(100%); transition: transform .3s ease; max-height: 90vh; overflow-y: auto; }
+.send-sheet.open .sheet-panel { transform: none; }
+@media (min-width: 700px) {
+  .send-sheet { align-items: center; }
+  .sheet-panel { border-radius: 20px; padding-bottom: 1.2rem; transform: translateY(20px) scale(.98); }
+  .sheet-grab { display: none; }
+}
+.sheet-grab { width: 44px; height: 5px; border-radius: 99px; background: var(--line); margin: .2rem auto .8rem; }
+.sheet-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: .8rem; }
+.sheet-head h3 { margin: .2rem 0 .2rem; font-size: 1.2rem; }
+.sheet-head p { margin: 0; color: var(--muted); font-size: .86rem; word-break: break-word; }
+.sheet-close { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--bg-soft); font-size: 1.4rem; cursor: pointer; color: var(--green-800); }
+.sheet-list { display: flex; flex-direction: column; gap: .5rem; }
+.sheet-opt { display: flex; align-items: center; gap: .9rem; width: 100%; text-align: left; padding: .75rem .9rem; border: 1.5px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; font: inherit; transition: border-color .2s, background .2s; }
+.sheet-opt:hover, .sheet-opt:focus-visible { border-color: var(--green-600); background: var(--mint-100); outline: none; }
+.sheet-ico { flex: 0 0 42px; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #fff; }
+.sheet-txt { display: flex; flex-direction: column; line-height: 1.25; flex: 1; min-width: 0; }
+.sheet-txt b { color: var(--green-800); font-size: .98rem; }
+.sheet-txt small { color: var(--muted); font-size: .8rem; }
+.sheet-last { font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; background: var(--gold); color: var(--green-900); padding: .2rem .5rem; border-radius: 99px; flex: 0 0 auto; }
+body.sheet-open { overflow: hidden; }
+/* Let the sticky header stick to the whole page, not just its short wrapper */
+#site-header { display: contents; }
+
+/* Events: Upcoming / Past tabs */
+.event-tabs { display: flex; justify-content: center; gap: .5rem; margin: -1.5rem 0 2rem; flex-wrap: wrap; }
+.event-tabs button { border: 2px solid var(--line); background: #fff; color: var(--green-800); padding: .55rem 1.2rem; border-radius: 999px; font-family: var(--font-head); font-weight: 700; font-size: .9rem; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; }
+.event-tabs button span { background: var(--bg-soft); color: var(--muted); font-size: .75rem; padding: .05rem .5rem; border-radius: 99px; }
+.event-tabs button.active { background: var(--green-700); border-color: var(--green-700); color: #fff; }
+.event-tabs button.active span { background: rgba(255,255,255,.2); color: #fff; }
+.event-card.is-past .event-img img { filter: grayscale(.35); }
+.event-card.is-past .event-date { background: var(--green-700); }
+.past-foot { margin-top: auto; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.badge-past { display: inline-block; background: var(--bg-soft); color: var(--green-800); border: 1.5px solid var(--line); padding: .2rem .7rem; border-radius: 999px; font-weight: 800; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.past-ago { font-size: .82rem; color: var(--muted); font-weight: 600; }
+
+/* ---------- Header drop-down menus ---------- */
+.has-drop { position: relative; }
+.drop-btn { display: inline-flex; align-items: center; gap: .3rem; background: none; border: 0; cursor: pointer; padding: .5rem .6rem; color: var(--green-800); font-family: var(--font-head); font-weight: 600; font-size: .9rem; border-radius: 8px; white-space: nowrap; }
+.drop-btn:hover, .drop-btn.active, .has-drop.open > .drop-btn { color: var(--red-600); background: var(--mint-100); }
+.drop-btn svg { transition: transform .2s; }
+.has-drop.open > .drop-btn svg { transform: rotate(180deg); }
+.drop { list-style: none; margin: 0; padding: .4rem; position: absolute; top: calc(100% + 6px); left: 0; min-width: 210px; background: #fff; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--line); display: none; flex-direction: column !important; align-items: stretch !important; gap: .1rem !important; z-index: 60; }
+.drop::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; }
+.has-drop.open > .drop { display: flex; }
+@media (hover: hover) and (min-width: 981px) { .has-drop:hover > .drop { display: flex; } }
+.main-nav .drop a { padding: .55rem .8rem; font-size: .88rem; white-space: nowrap; }
+@media (min-width: 981px) and (max-width: 1240px) { .drop-btn { padding: .45rem .42rem; font-size: .82rem; } }
+@media (max-width: 980px) {
+  .drop-btn { width: 100%; justify-content: space-between; padding: .8rem 1rem; font-size: .95rem; }
+  .drop { position: static; box-shadow: none; border: 0; border-left: 3px solid var(--mint); border-radius: 0; margin: 0 0 .3rem 1rem; padding: 0 0 0 .3rem; min-width: 0; }
+}
+
+/* ---------- Get involved (home) ---------- */
+.involve-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+@media (max-width: 860px) { .involve-grid { grid-template-columns: 1fr; } }
+.involve-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; box-shadow: var(--shadow); color: var(--ink); display: flex; flex-direction: column; transition: transform .2s; }
+.involve-card:hover { transform: translateY(-4px); color: var(--ink); }
+.ic-ico { width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center; color: #fff; margin-bottom: 1rem; }
+.involve-card h3 { font-size: 1.2rem; }
+.involve-card p { color: var(--muted); flex: 1; }
+.ic-more { color: var(--red-600); font-weight: 700; font-family: var(--font-head); font-size: .9rem; }
+
+/* ---------- Branches page ---------- */
+.branch-jump { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin-bottom: 2.5rem; }
+.branch-jump a { border: 2px solid var(--line); border-radius: 999px; padding: .45rem 1rem; font-weight: 700; font-size: .85rem; color: var(--green-800); font-family: var(--font-head); background: #fff; }
+.branch-jump a:hover { border-color: var(--green-700); background: var(--mint-100); }
+.branch-jump a.hq { background: var(--gold); border-color: var(--gold); color: var(--green-900); }
+.branch-stack { display: flex; flex-direction: column; gap: 2rem; }
+.branch-full { background: #fff; border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 16px); }
+.branch-full.is-hq { border: 2px solid var(--gold); }
+.bf-head { background: linear-gradient(100deg, var(--green-900), var(--green-700) 65%, var(--red-700)); background-size: cover; background-position: center; color: #fff; padding: 1.6rem 1.8rem; }
+.bf-head h2 { color: #fff; margin: .35rem 0 .2rem; font-size: clamp(1.4rem, 3vw, 1.9rem); }
+.bf-tag { display: inline-block; background: rgba(255,255,255,.15); color: var(--mint); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: .25rem .7rem; border-radius: 999px; }
+.is-hq .bf-tag { background: var(--gold); color: var(--green-900); }
+.bf-loc { margin: 0; color: #d9efe4; display: flex; align-items: center; gap: .4rem; }
+.bf-grid { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; padding: 1.8rem; }
+@media (max-width: 860px) { .bf-grid { grid-template-columns: 1fr; padding: 1.3rem; gap: 1.4rem; } }
+.bf-pastor { text-align: center; }
+.bf-pphoto { width: 180px; height: 180px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; border: 5px solid var(--mint-100); box-shadow: 0 8px 24px rgba(7,46,45,.15); background: var(--bg-soft); display: grid; place-items: center; }
+.bf-pphoto img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.bf-pphoto img.ph, .tr-photo img.ph { width: 60%; height: 60%; object-fit: contain; opacity: .55; }
+.bf-pastor small { color: var(--red-600); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .74rem; }
+.bf-pastor h3 { margin: .2rem 0 .6rem; font-size: 1.15rem; }
+.bf-pastor p { color: var(--muted); font-size: .9rem; text-align: left; }
+.bf-info h4 { font-size: .82rem; text-transform: uppercase; letter-spacing: .1em; color: var(--red-600); margin: 1.3rem 0 .6rem; }
+.bf-info h4:first-child { margin-top: 0; }
+.bf-about { color: var(--ink); }
+.bf-list { list-style: none; padding: 0; margin: 0; }
+.bf-list li { display: flex; gap: .5rem; align-items: center; padding: .35rem 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+.bf-list svg { color: var(--green-600); flex: 0 0 16px; }
+.bf-chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+.bf-chips span { background: var(--mint-100); color: var(--green-800); padding: .35rem .8rem; border-radius: 999px; font-size: .85rem; font-weight: 600; }
+.bf-progs { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .6rem; }
+.bf-progs li { display: flex; gap: .9rem; align-items: center; background: var(--bg-soft); border-radius: 12px; padding: .6rem .8rem; }
+.bf-progs .pd { flex: 0 0 52px; height: 52px; border-radius: 10px; background: var(--red-600); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; font-family: var(--font-head); }
+.bf-progs .pd b { font-size: 1.25rem; }
+.bf-progs .pd small { font-size: .65rem; text-transform: uppercase; font-weight: 700; letter-spacing: .06em; }
+.bf-progs strong { display: block; color: var(--green-800); }
+.bf-progs div small { color: var(--muted); font-size: .84rem; }
+.muted { color: var(--muted); font-size: .9rem; }
+.bf-contact { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; }
+.bf-contact .btn svg { flex: 0 0 auto; }
+.bf-contact-line { color: var(--muted); font-size: .85rem; margin: .7rem 0 0; word-break: break-word; }
+.btn.bf-wa { background: #25d366; color: #fff; }
+.btn.bf-wa:hover { background: #1ebe5a; color: #fff; }
+.trustee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.4rem; }
+.trustee { background: #fff; border-radius: var(--radius); padding: 1.6rem 1.2rem; text-align: center; box-shadow: var(--shadow); border-top: 4px solid var(--gold); }
+.tr-photo { width: 140px; height: 140px; border-radius: 50%; overflow: hidden; margin: 0 auto 1rem; background: var(--bg-soft); display: grid; place-items: center; border: 4px solid var(--mint-100); }
+.tr-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.trustee h3 { font-size: 1.05rem; margin-bottom: .2rem; }
+.tr-pos { color: var(--red-600); font-weight: 700; font-size: .88rem; margin: 0 0 .5rem; }
+.tr-bio { color: var(--muted); font-size: .88rem; margin: 0; }
+a.branch-card { color: var(--ink); transition: border-color .2s, transform .2s; }
+a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px); color: var(--ink); }
+.branch-card.is-hq { border: 2px solid var(--gold); }
+.hq-badge { background: var(--gold); color: var(--green-900); font-size: .65rem; padding: .1rem .45rem; border-radius: 99px; vertical-align: middle; }
+.branch-more { color: var(--red-600) !important; font-weight: 700; font-size: .8rem !important; margin-top: .3rem !important; }
+.footer-branches a { color: #b9d3c8; }
+
+/* ---------- Bible School ---------- */
+.bs-about { align-items: center; }
+.bs-text h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 800; }
+.bs-details { list-style: none; padding: 0; margin: 1rem 0; }
+.bs-details li { padding: .45rem 0; border-bottom: 1px dashed var(--line); }
+.bs-details b { color: var(--green-800); margin-right: .3rem; }
+.bs-image img { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); aspect-ratio: 4 / 3; object-fit: cover; }
+.bs-ph { aspect-ratio: 4 / 3; border-radius: var(--radius); background: linear-gradient(135deg, var(--green-800), var(--green-600) 60%, var(--red-700)); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-family: var(--font-head); font-weight: 800; font-size: 1.3rem; }
+.bs-ph img { width: 110px; margin-bottom: .8rem; }
+.bs-steps { list-style: none; padding: 0; margin: 0 auto; max-width: 760px; counter-reset: s; display: flex; flex-direction: column; gap: .8rem; }
+.bs-steps li { display: flex; gap: 1rem; align-items: center; background: #fff; border-radius: 14px; padding: 1rem 1.2rem; box-shadow: 0 4px 14px rgba(7,46,45,.06); }
+.bs-steps li span { flex: 0 0 40px; height: 40px; border-radius: 50%; background: var(--green-700); color: #fff; display: grid; place-items: center; font-weight: 800; font-family: var(--font-head); }
+.bs-steps li p { margin: 0; }
+.bs-enroll { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; margin-top: 2rem; }
+.form-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.form-card { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem; color: var(--ink); transition: border-color .2s, transform .2s; }
+.form-card:hover { border-color: var(--red-600); transform: translateY(-2px); color: var(--ink); }
+.fc-ico { flex: 0 0 52px; height: 52px; border-radius: 12px; background: var(--red-600); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: .78rem; font-family: var(--font-head); }
+.form-card > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.form-card b { color: var(--green-800); }
+.form-card small { color: var(--muted); }
+.fc-dl { color: var(--green-700); }
+
+/* ---------- Give ---------- */
+.give-wrap { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+@media (max-width: 920px) { .give-wrap { grid-template-columns: 1fr; } }
+.give-intro { font-size: 1.08rem; }
+.give-step { margin-top: 2rem; }
+.give-step h3 { display: flex; align-items: center; gap: .6rem; font-size: 1.15rem; margin-bottom: .9rem; }
+.give-step h3 span { width: 32px; height: 32px; border-radius: 50%; background: var(--red-600); color: #fff; display: grid; place-items: center; font-size: .95rem; flex: 0 0 32px; }
+#giveTo { font-size: 1rem; font-weight: 600; padding: .9rem 1rem; }
+.offer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .6rem; }
+.offer { text-align: left; border: 2px solid var(--line); background: #fff; border-radius: 12px; padding: .85rem 1rem; cursor: pointer; font: inherit; display: flex; flex-direction: column; gap: .2rem; transition: border-color .2s, background .2s; }
+.offer:hover { border-color: var(--green-600); }
+.offer b { color: var(--green-800); }
+.offer small { color: var(--muted); font-size: .8rem; }
+.offer.on { border-color: var(--red-600); background: #fff5f5; }
+.pay-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+@media (max-width: 560px) { .pay-tabs { grid-template-columns: 1fr; } }
+.pay-tabs button { border: 2px solid var(--line); background: #fff; border-radius: 12px; padding: .8rem; cursor: pointer; font: inherit; font-weight: 700; color: var(--green-800); display: flex; align-items: center; gap: .6rem; }
+.pay-tabs button.active { border-color: var(--green-700); background: var(--mint-100); }
+.pay-logo { flex: 0 0 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-size: .7rem; font-weight: 800; }
+.pay-logo.momo { background: #ffcc00; color: #003a5d; }
+.pay-logo.telecel { background: #e30613; color: #fff; font-size: 1.1rem; }
+.pay-logo.bank { background: var(--green-700); color: #fff; font-size: 1.1rem; }
+.pay-summary { margin: 1rem 0 .6rem; color: var(--muted); font-size: .92rem; }
+.pay-summary b { color: var(--green-800); }
+.pay-panel { background: var(--bg-soft); border-radius: 14px; padding: 1.2rem; }
+.pay-row { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; border-bottom: 1px dashed var(--line); flex-wrap: wrap; }
+.pay-row span { color: var(--muted); font-size: .85rem; min-width: 130px; }
+.pay-row b { flex: 1; color: var(--green-900); font-size: 1.05rem; word-break: break-word; }
+.copy-btn { border: 1.5px solid var(--green-700); background: #fff; color: var(--green-700); border-radius: 999px; padding: .3rem .9rem; font-weight: 700; font-size: .8rem; cursor: pointer; }
+.copy-btn.copied { background: var(--green-700); color: #fff; }
+.pay-steps { margin: 1rem 0 0; padding-left: 1.2rem; font-size: .92rem; }
+.pay-steps li { margin-bottom: .35rem; }
+.pay-note { font-size: .9rem; color: var(--muted); margin: .4rem 0 .6rem; }
+.pay-missing { background: #fff8e1; border: 1px solid #f2d27a; border-radius: 10px; padding: 1rem; font-size: .92rem; }
+.give-online { margin-top: 1rem; }
+.give-confirm { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.6rem; position: sticky; top: calc(var(--header-h) + 16px); border-top: 4px solid var(--red-600); }
+.give-confirm h3 { font-size: 1.15rem; margin-bottom: .2rem; }
+.give-confirm p { color: var(--muted); font-size: .88rem; }
+.give-confirm input { margin-bottom: .8rem; }
+.gc-actions { display: flex; flex-direction: column; gap: .5rem; margin-top: .4rem; }
+/* Drop-downs: stronger rules so the general ".main-nav ul" menu style can't force them open */
+.main-nav .drop { display: none; flex-direction: column; align-items: stretch; gap: .1rem; padding: .4rem; }
+.main-nav .has-drop.open > .drop { display: flex; }
+@media (hover: hover) and (min-width: 981px) { .main-nav .has-drop:hover > .drop { display: flex; } }
+@media (max-width: 980px) { .main-nav .drop { padding: 0 0 0 .3rem; margin: 0 0 .3rem 1rem; } }
+@media (min-width: 981px) { .site-header .brand-tag { white-space: nowrap; font-size: .62rem; letter-spacing: .08em; } .site-header .brand-text { max-width: 250px; } }
+
+/* ---------- Give: amount, online payment, receipt ---------- */
+.amount-box { display: flex; align-items: center; border: 2px solid var(--line); border-radius: 14px; background: #fff; padding: .2rem .4rem .2rem 1rem; max-width: 360px; }
+.amount-box:focus-within { border-color: var(--green-600); box-shadow: 0 0 0 3px rgba(20,99,98,.15); }
+.amount-box span { font-weight: 800; color: var(--green-800); font-family: var(--font-head); }
+.amount-box input { border: 0; box-shadow: none !important; font-size: 1.6rem; font-weight: 800; color: var(--green-900); padding: .5rem .6rem; }
+.amt-chips { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: .7rem; }
+.amt-chip { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: .35rem .95rem; font-weight: 700; color: var(--green-800); cursor: pointer; }
+.amt-chip:hover { border-color: var(--green-600); background: var(--mint-100); }
+.pay-tabs { grid-template-columns: repeat(2, 1fr) !important; }
+@media (max-width: 480px) { .pay-tabs { grid-template-columns: 1fr !important; } }
+.pay-tabs button small { display: block; font-weight: 600; color: var(--muted); font-size: .72rem; }
+.pay-tabs button { text-align: left; }
+.pay-logo.online { background: var(--red-600); color: #fff; font-size: 1.05rem; }
+.secure-head { display: flex; gap: .8rem; align-items: flex-start; background: #fff; border: 1px solid var(--mint); border-radius: 12px; padding: .9rem 1rem; color: var(--green-700); }
+.secure-head b { display: block; color: var(--green-900); }
+.secure-head small { color: var(--muted); font-size: .83rem; }
+.pay-fields { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin: 1rem 0; }
+.pay-fields > div:first-child { grid-column: 1 / -1; }
+@media (max-width: 560px) { .pay-fields { grid-template-columns: 1fr; } }
+.pay-label { font-size: .84rem; margin-bottom: .3rem; }
+.pay-now { width: 100%; font-size: 1rem; padding: 1rem; }
+.pay-msg { margin: .7rem 0 0; font-weight: 600; font-size: .9rem; color: var(--green-700); }
+.pay-msg.err { color: var(--red-600); }
+#myBank { margin-bottom: .8rem; }
+.bank-card { background: #fff; border-radius: 12px; padding: 0 1rem; border: 1px solid var(--line); }
+.give-receipt { display: none; margin-top: 2rem; }
+.give-receipt.show { display: block; }
+.receipt-card { background: #fff; border: 2px solid var(--mint); border-radius: 18px; padding: 2rem; box-shadow: var(--shadow); text-align: center; scroll-margin-top: calc(var(--header-h) + 20px); }
+.receipt-card .pay-row { text-align: left; }
+.rc-tick { width: 70px; height: 70px; border-radius: 50%; background: var(--green-700); color: #fff; display: grid; place-items: center; margin: 0 auto 1rem; }
+.receipt-card .hero-actions { justify-content: center; }
+@media print { .site-header, .topbar, .announce, .site-footer, .give-side, .give-step, .give-intro, .verse, .page-hero, .whatsapp-float, .live-bar { display: none !important; } .give-receipt { display: block !important; } }
+
+</style>
+<style>
+  body { background: var(--bg-soft); }
+  .adm-top { background: var(--green-900); color: #fff; position: sticky; top: 0; z-index: 40; }
+  .adm-top .container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; flex-wrap: wrap; padding: .5rem 0; }
+  .adm-top .brand-name { color: #fff; }
+  .adm-top .brand img { width: 46px; height: 46px; }
+  .adm-actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+  .conn { font-size: .8rem; padding: .3rem .7rem; border-radius: 999px; background: rgba(255,255,255,.12); }
+  .conn.ok { background: var(--mint); color: var(--green-900); font-weight: 700; }
+  .adm-wrap { display: grid; grid-template-columns: 230px 1fr; gap: 1.5rem; padding: 1.5rem 0 4rem; }
+  @media (max-width: 860px) { .adm-wrap { grid-template-columns: 1fr; } }
+  .adm-tabs { display: flex; flex-direction: column; gap: .3rem; position: sticky; top: 90px; align-self: start; }
+  @media (max-width: 860px) { .adm-tabs { flex-direction: row; overflow-x: auto; position: static; padding-bottom: .3rem; } }
+  .adm-tabs button { text-align: left; border: 0; background: #fff; padding: .75rem 1rem; border-radius: 10px; font-family: var(--font-head); font-weight: 600; color: var(--green-800); cursor: pointer; white-space: nowrap; }
+  .adm-tabs button.active { background: var(--green-700); color: #fff; }
+  .panel { background: #fff; border-radius: var(--radius); box-shadow: 0 4px 16px rgba(7,46,45,.06); padding: 1.6rem; margin-bottom: 1.2rem; }
+  .panel h2 { font-size: 1.35rem; }
+  .panel > p.help, .help { color: var(--muted); font-size: .88rem; }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; }
+  .fields .full { grid-column: 1 / -1; }
+  @media (max-width: 640px) { .fields { grid-template-columns: 1fr; } }
+  .item { border: 1.5px solid var(--line); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; background: #fcfdfc; }
+  .item-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .8rem; }
+  .item-head strong { font-family: var(--font-head); color: var(--green-800); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-tools { display: flex; gap: .3rem; flex: 0 0 auto; }
+  .icon-btn { border: 1.5px solid var(--line); background: #fff; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: .95rem; color: var(--green-800); }
+  .icon-btn:hover { border-color: var(--green-600); }
+  .icon-btn.del:hover { background: var(--red-600); color: #fff; border-color: var(--red-600); }
+  .media-field { display: flex; gap: .5rem; align-items: center; }
+  .media-field input[type=text] { flex: 1; }
+  .thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; background: var(--bg-soft); flex: 0 0 64px; }
+  .switch { display: flex; align-items: center; gap: .8rem; padding: 1rem; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; font-weight: 700; }
+  .switch input { width: 22px; height: 22px; accent-color: var(--red-600); }
+  .switch.on { border-color: var(--red-600); background: #fff1f1; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--green-900); color: #fff; padding: .9rem 1.4rem; border-radius: 12px; box-shadow: var(--shadow); z-index: 200; max-width: calc(100% - 32px); display: none; }
+  .toast.show { display: block; }
+  .toast.err { background: var(--red-600); }
+  .steps { padding-left: 1.2rem; font-size: .9rem; }
+  .steps li { margin-bottom: .4rem; }
+  .dropzone { border: 2px dashed var(--mint); background: var(--mint-100); border-radius: 12px; padding: 1.4rem; text-align: center; margin-bottom: 1rem; }
+  .progress { font-size: .85rem; color: var(--green-700); font-weight: 600; margin-top: .5rem; min-height: 1.2em; }
+  .unsaved { background: var(--gold); color: var(--green-900); font-weight: 800; font-size: .75rem; padding: .25rem .6rem; border-radius: 999px; }
+  /* iPhone app: room for the notch / status bar, compact top bar */
+  .adm-top { padding-top: env(safe-area-inset-top); }
+  #gate { padding-top: calc(16px + env(safe-area-inset-top)) !important; }
+  .adm-wrap { padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+  @media (max-width: 640px) {
+    #downloadBtn, .adm-top .brand-tag { display: none; }
+    .adm-top .brand-name { font-size: .85rem; }
+    .adm-top .container { gap: .5rem; }
+    .adm-actions { width: 100%; justify-content: space-between; }
+    .conn { font-size: .72rem; }
+  }
+  .sub-heading { font-family: var(--font-head); font-weight: 800; color: var(--red-600); text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; border-top: 1px solid var(--line); padding-top: .9rem; margin-top: .3rem; }
+  .sub-list { display: flex; flex-direction: column; gap: .6rem; }
+  .sub-item { position: relative; border: 1px dashed var(--line); border-radius: 10px; padding: .8rem 3rem .8rem .8rem; background: #fff; }
+  .sub-del { position: absolute; top: .6rem; right: .6rem; }
+  .sub-list > .btn { align-self: flex-start; }
+  .upd-banner { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 250; width: min(620px, calc(100% - 24px)); background: var(--green-900); color: #fff; border-radius: 14px; padding: .9rem 1rem; display: flex; gap: .8rem; align-items: center; justify-content: space-between; box-shadow: var(--shadow); font-size: .9rem; }
+  .upd-banner .btn { flex: 0 0 auto; }
+  .tx-wrap { overflow-x: auto; margin-top: 1rem; }
+  .tx-table { width: 100%; border-collapse: collapse; font-size: .85rem; min-width: 760px; }
+  .tx-table th { text-align: left; background: var(--bg-soft); padding: .55rem; color: var(--green-800); font-family: var(--font-head); font-size: .78rem; }
+  .tx-table td { padding: .55rem; border-bottom: 1px solid var(--line); }
+  .tx-st { padding: .1rem .5rem; border-radius: 99px; font-size: .74rem; font-weight: 700; background: var(--bg-soft); }
+  .tx-st.success { background: var(--mint-100); color: var(--green-700); }
+  .tx-st.failed, .tx-st.abandoned { background: #fff1f1; color: var(--red-600); }
+  .tx-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .6rem; margin-top: 1rem; }
+  .tx-card { background: var(--bg-soft); border-radius: 12px; padding: .8rem 1rem; }
+  .tx-card small { display: block; color: var(--muted); font-size: .78rem; }
+  .tx-card b { font-size: 1.1rem; color: var(--green-900); }
+  .tx-card.total { background: var(--green-700); } .tx-card.total small, .tx-card.total b { color: #fff; }
+  code { background: var(--bg-soft); padding: .1rem .35rem; border-radius: 5px; font-size: .85em; }
+</style>
+</head>
+<body>
+<div id="gate" style="position:fixed;inset:0;z-index:300;background:linear-gradient(120deg,var(--green-900),var(--green-700) 60%,var(--red-700));display:flex;align-items:center;justify-content:center;padding:16px">
+  <form id="gateForm" style="background:#fff;border-radius:18px;padding:2rem;width:100%;max-width:380px;text-align:center;box-shadow:var(--shadow)">
+    <img src="logo.png" alt="Logo" style="width:90px;margin:0 auto 1rem">
+    <h2 style="font-size:1.3rem">Admin Login</h2>
+    <p class="help" style="color:var(--muted);font-size:.9rem">This area is for church administrators only.</p>
+    <div style="display:flex;gap:.4rem;margin-bottom:.8rem"><input type="password" id="gatePass" placeholder="Admin password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus><button type="button" id="gateShow" class="btn btn-outline-dark btn-sm" style="flex:0 0 auto">Show</button></div>
+    <label style="display:flex;align-items:center;gap:.5rem;justify-content:center;font-weight:600;font-size:.88rem;margin:0 0 .8rem;color:var(--green-800)"><input type="checkbox" id="gateRemember" checked style="width:18px;height:18px;accent-color:var(--green-700)"> Keep me logged in on this device</label>
+    <button class="btn btn-red" type="submit" style="width:100%">Log in</button>
+    <p id="gateMsg" style="color:var(--red-600);font-weight:600;min-height:1.4em;margin:.8rem 0 0;font-size:.9rem"></p>
+    
+  </form>
+</div>
+<div class="adm-top">
+  <div class="container">
+    <a class="brand" href="#"><img src="logo.png" alt="Logo"><span class="brand-text"><span class="brand-name">Website Admin</span><span class="brand-tag" style="color:var(--gold)">Thyword International Worship Centre</span></span></a>
+    <div class="adm-actions">
+      <span class="unsaved hidden" id="unsaved">Unsaved changes</span>
+      <span class="conn" id="connState">Not connected</span>
+      <button class="btn btn-outline btn-sm" id="logoutBtn" type="button">Log out</button>
+      <button class="btn btn-outline btn-sm" id="downloadBtn" type="button">Download file</button>
+      <button class="btn btn-gold btn-sm" id="publishBtn" type="button">Save &amp; Publish</button>
+    </div>
+  </div>
+</div>
+
+<div class="container adm-wrap">
+  <nav class="adm-tabs" id="tabs"></nav>
+  <div id="panels"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>window.ADMIN_VERSION = "2026-11-20.2"; window.ADMIN_APP_URL = "https://christosdaniel.github.io/Thyword-Church/tiwc-admin-p7q3x/";</script>
+<script>
+/* Thyword website admin (standalone)
+ * This admin tool is a single file kept OFF the public website. Open it from your
+ * own computer or phone. It loads data/content.js from the GitHub repository,
+ * lets you edit it, uploads pictures/videos and publishes everything back to
+ * GitHub with an access token that is kept only on this device. */
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function today() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+
+  var CONTENT_PATH = "data/content.js";
+  var data = clone(window.SITE_CONTENT || {});
+  var loaded = !!window.SITE_CONTENT;
+  var fileSha = null;
+  var dirty = false;
+
+  /* ---------- connection settings (kept in this browser only) ---------- */
+  var conn = {};
+  try { conn = JSON.parse(localStorage.getItem("tiwc-admin-conn") || "{}"); } catch (e) {}
+  function saveConn() { try { localStorage.setItem("tiwc-admin-conn", JSON.stringify(conn)); } catch (e) {} }
+  function connected() { return !!(conn.owner && conn.repo && conn.token); }
+  // Guess owner/repo when hosted on GitHub Pages (owner.github.io/repo)
+  conn.owner = conn.owner || "christosdaniel";
+  conn.repo = conn.repo || "Thyword-Church";
+  if (!conn.owner && /\.github\.io$/.test(location.hostname)) {
+    conn.owner = location.hostname.split(".")[0];
+    conn.repo = location.pathname.split("/").filter(Boolean)[0] || (conn.owner + ".github.io");
+  }
+  conn.branch = conn.branch || "";
+
+  /* ---------- UI helpers ---------- */
+  var toastTimer;
+  function toast(msg, err) {
+    var t = $("#toast"); t.textContent = msg; t.className = "toast show" + (err ? " err" : "");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.className = "toast"; }, err ? 7000 : 4000);
+  }
+  function markDirty() { dirty = true; $("#unsaved").classList.remove("hidden"); }
+  window.addEventListener("beforeunload", function (e) { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+  function setConnState() {
+    var s = $("#connState");
+    s.textContent = connected() ? "Connected: " + conn.owner + "/" + conn.repo : "Not connected";
+    s.className = "conn" + (connected() ? " ok" : "");
+  }
+
+  /* ---------- GitHub API ---------- */
+  function gh(path, opts) {
+    opts = opts || {};
+    return fetch("https://api.github.com/repos/" + conn.owner + "/" + conn.repo + path, {
+      method: opts.method || "GET",
+      headers: { Authorization: "Bearer " + conn.token, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+      cache: "no-store"
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.message || ("GitHub error " + r.status)); e.status = r.status; throw e; }
+        return j;
+      });
+    });
+  }
+  function b64Text(str) { var bytes = new TextEncoder().encode(str), bin = ""; for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+  function textFromB64(b64) { var bin = atob(b64.replace(/\s/g, "")), bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+  // Picture previews: relative paths are shown from the repository on GitHub
+  function mediaUrl(p) {
+    if (!p || /^(https?:|data:|blob:)/.test(p)) return p || "";
+    if (!conn.owner || !conn.repo || !conn.branch) return p;
+    return "https://raw.githubusercontent.com/" + conn.owner + "/" + conn.repo + "/" + encodeURIComponent(conn.branch) + "/" + p.replace(/^\.?\//, "");
+  }
+  function enc(p) { return p.split("/").map(encodeURIComponent).join("/"); }
+
+  function parseContentFile(text) {
+    var start = text.indexOf("{", text.indexOf("SITE_CONTENT")), end = text.lastIndexOf("}");
+    return JSON.parse(text.slice(start, end + 1));
+  }
+  function buildContentFile() {
+    return "/*\n * THYWORD INTERNATIONAL WORSHIP CENTRE — WEBSITE CONTENT\n * -------------------------------------------------------\n" +
+      " * Everything shown on the website comes from this one file.\n * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits\n" +
+      " * and saves this file for you. You can also edit it by hand. Keep the\n * structure, and put text inside \"quotes\" followed by a comma.\n" +
+      " * Last updated: " + new Date().toString() + "\n */\nwindow.SITE_CONTENT = " + JSON.stringify(data, null, 2) + ";\n";
+  }
+
+  function detectBranch() {
+    if (conn.branch) return Promise.resolve();
+    return gh("").then(function (r) { conn.branch = r.default_branch || "main"; saveConn(); });
+  }
+  function loadFromGitHub() {
+    return detectBranch().then(function () { return gh("/contents/" + CONTENT_PATH + "?ref=" + encodeURIComponent(conn.branch)).then(function (f) {
+      fileSha = f.sha;
+      data = parseContentFile(textFromB64(f.content));
+      loaded = true;
+      rememberHash();
+      dirty = false; $("#unsaved").classList.add("hidden");
+      render();
+    }); });
+  }
+
+  function putFile(path, base64, message) {
+    return gh("/contents/" + enc(path) + "?ref=" + encodeURIComponent(conn.branch)).then(function (f) { return f.sha; }, function () { return undefined; })
+      .then(function (sha) {
+        return gh("/contents/" + enc(path), { method: "PUT", body: { message: message, content: base64, branch: conn.branch, sha: sha } });
+      });
+  }
+
+  function publish() {
+    if (!connected()) { toast("Connect to GitHub first (Settings tab), or use 'Download file'.", true); showTab("connect"); return; }
+    if (!loaded) { toast("Load the website content first: Settings tab, Connect & load content.", true); showTab("connect"); return; }
+    var btn = $("#publishBtn"); btn.disabled = true; btn.textContent = "Publishing...";
+    var doPut = function () {
+      return gh("/contents/" + CONTENT_PATH, { method: "PUT", body: { message: "Update website content (" + today() + ")", content: b64Text(buildContentFile()), branch: conn.branch, sha: fileSha || undefined } });
+    };
+    var before = fileSha ? Promise.resolve() : gh("/contents/" + CONTENT_PATH + "?ref=" + encodeURIComponent(conn.branch)).then(function (f) { fileSha = f.sha; }, function () {});
+    before.then(doPut).then(function (r) {
+      fileSha = r.content.sha; dirty = false; $("#unsaved").classList.add("hidden");
+      toast("Published! Changes appear on the website within 1–2 minutes.");
+    }).catch(function (e) {
+      if (e.status === 409) toast("Someone else saved changes. Reload from GitHub (Settings tab), then try again.", true);
+      else toast("Could not publish: " + e.message, true);
+    }).then(function () { btn.disabled = false; btn.innerHTML = "Save &amp; Publish"; });
+  }
+
+  function download() {
+    if (!loaded) { toast("Load the website content first (Settings tab).", true); return; }
+    var blob = new Blob([buildContentFile()], { type: "text/javascript" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "content.js"; a.click();
+    toast("Downloaded content.js. Replace data/content.js in the website folder with it.");
+  }
+
+  /* ---------- media upload ---------- */
+  function slug(name) { return name.toLowerCase().replace(/\.[^.]+$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "file"; }
+  function readDataUrl(blob) { return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); }); }
+  function shrinkImage(file, maxW) {
+    // Resizes large photos so the website stays fast (and the repository small)
+    return new Promise(function (res) {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return res(file);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.naturalWidth, h = img.naturalHeight, s = Math.min(1, maxW / w);
+        if (s === 1 && file.size < 600 * 1024) return res(file);
+        var c = document.createElement("canvas"); c.width = Math.round(w * s); c.height = Math.round(h * s);
+        var ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { res(b || file); }, "image/jpeg", 0.85);
+      };
+      img.onerror = function () { res(file); };
+      img.src = URL.createObjectURL(file);
+    });
+  }
+  function videoPoster(file) {
+    // Grabs a frame from the video to use as its thumbnail
+    return new Promise(function (res) {
+      var v = document.createElement("video"); v.muted = true; v.preload = "auto"; v.playsInline = true;
+      var done = false, finish = function (b) { if (!done) { done = true; res(b); } };
+      v.onloadeddata = function () { v.currentTime = Math.min(2, (v.duration || 4) / 3); };
+      v.onseeked = function () {
+        var s = Math.min(1, 1280 / v.videoWidth), c = document.createElement("canvas");
+        c.width = Math.round(v.videoWidth * s); c.height = Math.round(v.videoHeight * s);
+        c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { finish(b); }, "image/jpeg", 0.82);
+      };
+      v.onerror = function () { finish(null); };
+      setTimeout(function () { finish(null); }, 15000);
+      v.src = URL.createObjectURL(file);
+    });
+  }
+  function uploadBlob(blob, folder, name, ext) {
+    if (!connected()) return Promise.reject(new Error("Connect to GitHub first (Settings tab) to upload files."));
+    var path = "assets/uploads/" + folder + "/" + today() + "-" + slug(name) + "-" + Math.random().toString(36).slice(2, 6) + "." + ext;
+    return readDataUrl(blob).then(function (url) {
+      return putFile(path, url.split(",")[1], "Upload " + folder.replace(/s$/, "") + ": " + name);
+    }).then(function () { return path; });
+  }
+  function uploadImage(file, folder) {
+    return shrinkImage(file, 1600).then(function (b) {
+      var ext = b.type === "image/png" ? "png" : b.type === "image/webp" ? "webp" : b.type === "image/gif" ? "gif" : "jpg";
+      return uploadBlob(b, folder, file.name, ext);
+    });
+  }
+  var MAX_DOC_MB = 25;
+  function uploadDoc(file) {
+    if (file.size > MAX_DOC_MB * 1024 * 1024) return Promise.reject(new Error("This file is larger than " + MAX_DOC_MB + " MB. Please make it smaller (e.g. save as PDF) and try again."));
+    if (/^image\//.test(file.type)) return uploadImage(file, "forms");
+    var ext = (file.name.split(".").pop() || "pdf").toLowerCase();
+    return uploadBlob(file, "forms", file.name, ext);
+  }
+  var MAX_VIDEO_MB = 50;
+  function uploadVideo(file) {
+    if (file.size > MAX_VIDEO_MB * 1024 * 1024) return Promise.reject(new Error("This video is larger than " + MAX_VIDEO_MB + " MB. Upload long sermons to YouTube or Facebook and add the link instead."));
+    var ext = (file.name.split(".").pop() || "mp4").toLowerCase();
+    return Promise.all([uploadBlob(file, "videos", file.name, ext), videoPoster(file).then(function (p) { return p ? uploadBlob(p, "videos", file.name + "-poster", "jpg") : ""; })])
+      .then(function (r) { return { src: r[0], poster: r[1] }; });
+  }
+
+  /* ---------- form building ---------- */
+  // Field definition: [key, label, type, options]
+  // types: text, textarea, date, bool, image, video, select, list (comma separated)
+  function fieldHtml(obj, f, idPrefix) {
+    var key = f[0], label = f[1], type = f[2] || "text", opt = f[3] || {}, val = obj[key], id = idPrefix + "-" + key;
+    var cls = opt.full || type === "textarea" || type === "image" || type === "video" || type === "lines" || type === "file" || type === "sublist" ? "full" : "";
+    if (type === "heading") return '<div class="full sub-heading">' + label + (opt.help ? '<span class="help"> ' + opt.help + "</span>" : "") + "</div>";
+    if (type === "sublist") return '<div class="full"><label>' + label + "</label>" + (opt.help ? '<div class="help" style="margin-bottom:.5rem">' + opt.help + "</div>" : "") + '<div class="sub-list" data-sub="' + key + '"></div></div>';
+    var help = opt.help ? '<div class="help">' + opt.help + "</div>" : "";
+    var html;
+    if (type === "textarea") html = '<textarea id="' + id + '" data-key="' + key + '" rows="' + (opt.rows || 4) + '">' + esc(val) + "</textarea>";
+    else if (type === "bool") return '<div class="' + (opt.full ? "full" : "") + '"><label class="switch' + (val ? " on" : "") + '"><input type="checkbox" data-key="' + key + '" data-type="bool"' + (val ? " checked" : "") + "> " + label + "</label>" + help + "</div>";
+    else if (type === "select") {
+      var ch = opt.choices.slice(); if (val && ch.indexOf(val) < 0) ch.push(val);
+      html = '<select id="' + id + '" data-key="' + key + '">' + ch.map(function (c) { return '<option value="' + esc(c) + '"' + (c === (val || "") ? " selected" : "") + ">" + (c ? esc(c) : "(choose)") + "</option>"; }).join("") + "</select>";
+    }
+    else if (type === "image" || type === "video") {
+      var isImg = type === "image";
+      html = '<div class="media-field">' + (isImg ? '<img class="thumb" src="' + esc(mediaUrl(val)) + '" alt="" onerror="this.style.visibility=\'hidden\'" onload="this.style.visibility=\'visible\'">' : "") +
+        '<input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="' + (isImg ? "assets/uploads/... or https://..." : "Video file path, or YouTube/Facebook link") + '">' +
+        '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept="' + (isImg ? "image/*" : "video/*") + '" data-upload="' + key + '" data-kind="' + type + '"></label></div>';
+    } else if (type === "lines") html = '<textarea id="' + id + '" data-key="' + key + '" data-type="lines" rows="' + (opt.rows || 3) + '" placeholder="One per line">' + esc((Array.isArray(val) ? val : String(val || "").split("\n")).join("\n")) + "</textarea>";
+    else if (type === "file") html = '<div class="media-field"><input type="text" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '" placeholder="Upload a PDF / Word file, or paste a link">' +
+        '<label class="btn btn-green btn-sm" style="margin:0;color:#fff">Upload<input type="file" hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,image/*" data-upload="' + key + '" data-kind="file"></label></div>' +
+        (val ? '<a class="help" href="' + esc(mediaUrl(val)) + '" target="_blank" rel="noopener">Open current file</a>' : "");
+    else if (type === "list") html = '<input type="text" id="' + id + '" data-key="' + key + '" data-type="list" value="' + esc((val || []).join(", ")) + '">';
+    else html = '<input type="' + (type === "date" ? "date" : "text") + '" id="' + id + '" data-key="' + key + '" value="' + esc(val) + '">';
+    return '<div class="' + cls + '"><label for="' + id + '">' + label + "</label>" + html + help + "</div>";
+  }
+
+  function bindFields(root, obj, onChange) {
+    $$("[data-key]", root).forEach(function (el) {
+      var key = el.getAttribute("data-key"), t = el.getAttribute("data-type");
+      el.addEventListener(el.type === "checkbox" || el.tagName === "SELECT" ? "change" : "input", function () {
+        if (t === "bool") { obj[key] = el.checked; el.closest(".switch").classList.toggle("on", el.checked); }
+        else if (t === "list") obj[key] = el.value.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+        else if (t === "lines") obj[key] = el.value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+        else obj[key] = el.value;
+        var th = el.parentNode.querySelector(".thumb"); if (th) th.src = mediaUrl(el.value);
+        markDirty(); if (onChange) onChange(key);
+      });
+    });
+    $$("[data-upload]", root).forEach(function (inp) {
+      inp.addEventListener("change", function () {
+        var file = inp.files[0]; if (!file) return;
+        var key = inp.getAttribute("data-upload"), kind = inp.getAttribute("data-kind");
+        var label = inp.parentNode; label.firstChild.textContent = "Uploading...";
+        var p = kind === "file" ? uploadDoc(file).then(function (path) { obj[key] = path; if ("title" in obj && !obj.title) obj.title = file.name.replace(/\.[^.]+$/, ""); return path; })
+          : kind === "video" ? uploadVideo(file).then(function (r) { obj[key] = r.src; if (r.poster && "poster" in obj) obj.poster = r.poster; if ("type" in obj) obj.type = "file"; return r.src; })
+          : uploadImage(file, "images").then(function (path) { obj[key] = path; return path; });
+        p.then(function () { markDirty(); render(); toast("Uploaded. Remember to click Save & Publish."); })
+          .catch(function (e) { toast(e.message, true); label.firstChild.textContent = "Upload"; });
+      });
+    });
+  }
+
+  function objectPanel(title, help, obj, fields, extra) {
+    var div = document.createElement("div"); div.className = "panel";
+    div.innerHTML = "<h2>" + title + "</h2>" + (help ? '<p class="help">' + help + "</p>" : "") +
+      '<div class="fields">' + fields.map(function (f) { return fieldHtml(obj, f, title.replace(/\W/g, "")); }).join("") + "</div>" + (extra || "");
+    bindFields(div, obj);
+    return div;
+  }
+
+  function subList(box, arr, fields, noun) {
+    function draw() {
+      box.innerHTML = "";
+      arr.forEach(function (x, i) {
+        var el = document.createElement("div"); el.className = "sub-item";
+        el.innerHTML = '<button class="icon-btn del sub-del" type="button" title="Delete">&times;</button><div class="fields">' +
+          fields.map(function (f) { return fieldHtml(x, f, "s" + i + Math.random().toString(36).slice(2, 6)); }).join("") + "</div>";
+        bindFields(el, x);
+        $(".sub-del", el).onclick = function () { if (!confirm("Delete this " + noun + "?")) return; arr.splice(i, 1); markDirty(); draw(); };
+        box.appendChild(el);
+      });
+      var add = document.createElement("button"); add.type = "button"; add.className = "btn btn-outline-dark btn-sm"; add.textContent = "+ Add " + noun;
+      add.onclick = function () { var n = {}; fields.forEach(function (f) { n[f[0]] = ""; }); arr.push(n); markDirty(); draw(); };
+      box.appendChild(add);
+    }
+    draw();
+  }
+
+  function listPanel(title, help, arr, fields, opts) {
+    opts = opts || {};
+    var div = document.createElement("div"); div.className = "panel";
+    var head = "<h2>" + title + "</h2>" + (help ? '<p class="help">' + help + "</p>" : "") + (opts.top || "") +
+      '<button class="btn btn-red btn-sm add-btn" type="button" style="margin-bottom:1rem">+ Add ' + (opts.noun || "item") + "</button>";
+    div.innerHTML = head + '<div class="items"></div>';
+    var box = $(".items", div);
+    function draw() {
+      box.innerHTML = arr.length ? "" : '<p class="help">Nothing here yet. Click "Add ' + (opts.noun || "item") + '".</p>';
+      arr.forEach(function (it, i) {
+        var el = document.createElement("div"); el.className = "item";
+        el.innerHTML = '<div class="item-head"><strong>' + esc(it[opts.titleKey || fields[0][0]] || "(untitled)") + '</strong><span class="item-tools">' +
+          '<button class="icon-btn" data-act="up" title="Move up" type="button">&uarr;</button><button class="icon-btn" data-act="down" title="Move down" type="button">&darr;</button>' +
+          '<button class="icon-btn del" data-act="del" title="Delete" type="button">&times;</button></span></div>' +
+          '<div class="fields">' + fields.map(function (f) { return fieldHtml(it, f, "i" + i + title.replace(/\W/g, "")); }).join("") + "</div>";
+        bindFields(el, it, function (k) { if (k === (opts.titleKey || fields[0][0])) $("strong", el).textContent = it[k] || "(untitled)"; });
+        fields.forEach(function (f) {
+          if (f[2] !== "sublist") return;
+          if (!Array.isArray(it[f[0]])) it[f[0]] = [];
+          subList($('[data-sub="' + f[0] + '"]', el), it[f[0]], f[3].fields, f[3].noun || "item");
+        });
+        $$("[data-act]", el).forEach(function (b) {
+          b.onclick = function () {
+            var act = b.getAttribute("data-act");
+            if (act === "del") { if (!confirm("Delete this " + (opts.noun || "item") + "?")) return; arr.splice(i, 1); }
+            if (act === "up" && i > 0) arr.splice(i - 1, 0, arr.splice(i, 1)[0]);
+            if (act === "down" && i < arr.length - 1) arr.splice(i + 1, 0, arr.splice(i, 1)[0]);
+            markDirty(); draw();
+          };
+        });
+        box.appendChild(el);
+      });
+    }
+    $(".add-btn", div).onclick = function () {
+      var n = opts.blank ? opts.blank() : {}; fields.forEach(function (f) { if (!(f[0] in n)) n[f[0]] = f[2] === "bool" ? false : ""; });
+      arr.unshift(n); markDirty(); draw(); box.querySelector("input,textarea").focus();
+    };
+    draw();
+    div.redraw = draw;
+    return div;
+  }
+
+  function ensure() {
+    ["settings", "live", "announcement", "hero", "about", "pastor", "contact"].forEach(function (k) { data[k] = data[k] || {}; });
+    ["serviceTimes", "events", "words", "photos", "videos", "branches"].forEach(function (k) { data[k] = data[k] || []; });
+    data.hero.media = data.hero.media || [];
+    data.contact.phones = data.contact.phones || [];
+    data.trustees = data.trustees || [];
+    data.bibleSchool = data.bibleSchool || {};
+    ["forms", "photos", "details", "howToEnroll"].forEach(function (k) { data.bibleSchool[k] = data.bibleSchool[k] || []; });
+    data.giving = data.giving || {};
+    data.giving.offerings = data.giving.offerings || [];
+    data.giving.branchOfferings = data.giving.branchOfferings || [];
+    data.giving.bankAccounts = data.giving.bankAccounts || [];
+  }
+
+  /* ---------- Paystack transactions (read with the secret key kept on this device) ---------- */
+  function branchesForFilter() {
+    return ['<option value="hq">Headquarters</option>'].concat((data.branches || []).filter(function (b) { return !b.hq; }).map(function (b) {
+      var id = String(b.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      return '<option value="' + esc(id) + '">' + esc(b.name) + "</option>";
+    })).join("");
+  }
+  function filterTx(rows) { var b = ($("#txBranch") || {}).value; return rows.filter(function (t) { return !b || t.branchId === b; }); }
+  function loadTransactions() {
+    var key = $("#skKey").value.trim(), prog = $("#txProgress");
+    if (!/^sk_(live|test)_/.test(key)) { toast("Paste your Paystack secret key (starts with sk_live_ or sk_test_).", true); return Promise.resolve([]); }
+    try { localStorage.setItem("tiwc-paystack-sk", key); } catch (e) {}
+    var q = "perPage=100", st = $("#txStatus").value, from = $("#txFrom").value, to = $("#txTo").value;
+    if (st) q += "&status=" + st; if (from) q += "&from=" + from + "T00:00:00Z"; if (to) q += "&to=" + to + "T23:59:59Z";
+    var all = [], page = 1;
+    prog.textContent = "Loading...";
+    function next() {
+      return fetch("https://api.paystack.co/transaction?" + q + "&page=" + page, { headers: { Authorization: "Bearer " + key } })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.status) throw new Error(j.message || ("Paystack error " + r.status)); return j; }); })
+        .then(function (j) {
+          (j.data || []).forEach(function (t) {
+            var m = t.metadata || {}; if (typeof m === "string") { try { m = JSON.parse(m); } catch (e) { m = {}; } }
+            var cf = {}; (m.custom_fields || []).forEach(function (f) { cf[f.variable_name] = f.value; });
+            all.push({ date: (t.paid_at || t.created_at || "").replace("T", " ").slice(0, 16), amount: (t.amount || 0) / 100, status: t.status, channel: t.channel || "",
+              givenTo: m.given_to || cf.given_to || "", branchId: m.branch_id || "", offering: m.offering || cf.offering || "", name: m.giver_name || cf.giver_name || "",
+              email: (t.customer || {}).email || "", phone: m.giver_phone || cf.giver_phone || "", reference: t.reference });
+          });
+          var meta = j.meta || {};
+          if (meta.pageCount && page < meta.pageCount && page < 20) { page++; prog.textContent = "Loading page " + page + "..."; return next(); }
+        });
+    }
+    return next().then(function () { prog.textContent = all.length + " transaction(s) loaded."; drawTransactions(all); return all; })
+      .catch(function (e) { prog.textContent = ""; toast("Could not load transactions: " + e.message + ". You can always view them on the Paystack dashboard.", true); return []; });
+  }
+  function drawTransactions(rows) {
+    var list = filterTx(rows), total = 0, by = {};
+    list.forEach(function (t) { if (t.status === "success") { total += t.amount; var k = t.givenTo || "Other"; by[k] = (by[k] || 0) + t.amount; } });
+    var fmt = function (v) { return "GHS " + v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); };
+    $("#txSummary").innerHTML = list.length ? '<div class="tx-cards"><div class="tx-card total"><small>Total received</small><b>' + fmt(total) + "</b></div>" +
+      Object.keys(by).sort(function (a, b) { return by[b] - by[a]; }).map(function (k) { return '<div class="tx-card"><small>' + esc(k) + "</small><b>" + fmt(by[k]) + "</b></div>"; }).join("") + "</div>" : "";
+    $("#txTable").innerHTML = list.length ? '<table class="tx-table"><thead><tr><th>Date</th><th>Amount</th><th>Given to</th><th>Offering</th><th>Name</th><th>Channel</th><th>Status</th><th>Reference</th></tr></thead><tbody>' +
+      list.map(function (t) { return "<tr><td>" + esc(t.date) + "</td><td><b>" + fmt(t.amount) + "</b></td><td>" + esc(t.givenTo) + "</td><td>" + esc(t.offering) + "</td><td>" + esc(t.name || t.email) + "</td><td>" + esc(t.channel) + '</td><td><span class="tx-st ' + esc(t.status) + '">' + esc(t.status) + "</span></td><td>" + esc(t.reference) + "</td></tr>"; }).join("") +
+      "</tbody></table>" : '<p class="help">No transactions found.</p>';
+  }
+
+  /* ---------- tabs ---------- */
+  var BANK_CHOICES = ["", "GCB Bank (Ghana Commercial Bank)", "Consolidated Bank Ghana (CBG)", "Ecobank Ghana", "Fidelity Bank Ghana", "Stanbic Bank Ghana", "OmniBSIC Bank",
+    "Absa Bank Ghana", "Access Bank Ghana", "Agricultural Development Bank (ADB)", "CalBank", "First Atlantic Bank", "First National Bank Ghana", "GTBank Ghana",
+    "National Investment Bank (NIB)", "Prudential Bank", "Republic Bank Ghana", "Societe Generale Ghana", "Standard Chartered Ghana", "United Bank for Africa (UBA)",
+    "Universal Merchant Bank (UMB)", "Zenith Bank Ghana", "Rural / community bank", "Savings & loans / other"];
+  var TABS = [
+    ["today", "Live & Notice"], ["events", "Events"], ["words", "Pastor's Words"], ["photos", "Pictures"], ["videos", "Videos"],
+    ["home", "Home & About"], ["times", "Service Times"], ["branches", "Branches"], ["trustees", "Board of Trustees"], ["bible", "Bible School"],
+    ["giving", "Giving"], ["transactions", "Transactions"], ["contact", "Contact"], ["connect", "Settings"]
+  ];
+  var current = "today";
+  function showTab(t) { current = t; render(); window.scrollTo(0, 0); }
+
+  function render() {
+    ensure();
+    $("#tabs").innerHTML = TABS.map(function (t) { return '<button type="button" data-tab="' + t[0] + '"' + (t[0] === current ? ' class="active"' : "") + ">" + t[1] + "</button>"; }).join("");
+    $$("#tabs button").forEach(function (b) { b.onclick = function () { showTab(b.getAttribute("data-tab")); }; });
+    var P = $("#panels"); P.innerHTML = "";
+    setConnState();
+
+    if (!connected() && current !== "connect") {
+      var w = document.createElement("div"); w.className = "panel"; w.style.borderLeft = "5px solid var(--gold)";
+      w.innerHTML = '<strong>Not connected to GitHub.</strong> <span class="help">Open the <a href="#" id="goConnect">Settings tab</a> and connect with your GitHub token to load the website content, publish changes and upload pictures/videos.</span>';
+      P.appendChild(w); $("#goConnect").onclick = function (e) { e.preventDefault(); showTab("connect"); };
+    }
+
+    if (current === "today") {
+      P.appendChild(objectPanel("Live Stream Status", "Switch these ON when a service is streaming, then click <b>Save &amp; Publish</b>. A red \"We are LIVE\" banner appears on every page and the Watch Live page plays the stream. Switch OFF when the service ends. (YouTube can also be detected automatically if you add an API key in Settings.)", data.live, [
+        ["youtube", "We are LIVE on YouTube now", "bool"], ["facebook", "We are LIVE on Facebook now", "bool"],
+        ["title", "Name of the live service", "text", { full: true }],
+        ["youtubeLiveUrl", "YouTube live video link (optional)", "text", { full: true, help: "Paste the link of today's YouTube live video so it plays on the website." }],
+        ["facebookLiveUrl", "Facebook live video link (optional)", "text", { full: true, help: "Paste the link of the Facebook live video so it plays on the website." }]
+      ]));
+      P.appendChild(objectPanel("Announcement Bar", "A gold strip at the top of every page for short notices.", data.announcement, [
+        ["show", "Show the announcement", "bool", { full: true }], ["text", "Announcement text", "textarea", { rows: 2 }], ["link", "Link (optional)", "text", { full: true, help: "e.g. index.html#events or contact.html" }]
+      ]));
+    }
+    if (current === "events") {
+      P.appendChild(listPanel("Events", "Upcoming events show on the home page with a countdown. When the date has passed, an event moves to the <b>Past Events</b> tab automatically (shown for at least 7 days; you can set when they disappear in Settings).", data.events, [
+        ["title", "Event title"], ["subtitle", "Subtitle / theme"], ["date", "Date", "date"], ["time", "Time", "text", { help: "e.g. 9:00 PM" }],
+        ["location", "Venue", "text", { full: true }], ["image", "Flyer / picture", "image"], ["description", "Description", "textarea", { rows: 3 }]
+      ], { noun: "event" }));
+    }
+    if (current === "words") {
+      P.appendChild(listPanel("Words from the Pastor", "Short messages and quotes. The newest (by date) shows first on the home page.", data.words, [
+        ["text", "Word / quote", "textarea", { rows: 3 }], ["author", "By"], ["date", "Date", "date"], ["image", "Quote graphic (optional)", "image"]
+      ], { noun: "word", titleKey: "text", blank: function () { return { author: (data.pastor || {}).name || "", date: today() }; } }));
+    }
+    if (current === "photos") {
+      var albums = []; data.photos.forEach(function (p) { if (p.album && albums.indexOf(p.album) < 0) albums.push(p.album); });
+      var top = '<div class="dropzone"><strong>Add many pictures at once</strong><p class="help" style="margin:.3rem 0 .8rem">Choose an album name, then select pictures from your phone or computer. Large photos are resized automatically.</p>' +
+        '<div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center"><input type="text" id="bulkAlbum" list="albumList" placeholder="Album, e.g. Sunday Service" style="max-width:260px"><datalist id="albumList">' + albums.map(function (a) { return "<option>" + esc(a) + "</option>"; }).join("") + "</datalist>" +
+        '<label class="btn btn-red btn-sm" style="margin:0;color:#fff">Select pictures<input type="file" id="bulkPhotos" multiple accept="image/*" hidden></label></div><div class="progress" id="bulkProgress"></div></div>';
+      var lp = listPanel("Pictures", "Pictures appear on the Pictures page (and the first 8 on the home page). Use albums to group them.", data.photos, [
+        ["src", "Picture", "image"], ["caption", "Caption"], ["album", "Album"]
+      ], { noun: "picture", titleKey: "caption", top: top });
+      P.appendChild(lp);
+      $("#bulkPhotos").onchange = function () {
+        var files = Array.prototype.slice.call(this.files), album = $("#bulkAlbum").value.trim() || "Gallery", prog = $("#bulkProgress"), done = 0, added = [];
+        if (!connected()) { toast("Connect to GitHub first (Settings tab) to upload.", true); return; }
+        var next = function () {
+          if (!files.length) {
+            prog.textContent = "Uploaded " + done + " picture(s). Click Save & Publish to show them on the website.";
+            Array.prototype.unshift.apply(data.photos, added); markDirty(); lp.redraw(); return;
+          }
+          var f = files.shift(); prog.textContent = "Uploading " + f.name + " (" + (done + 1) + ")...";
+          uploadImage(f, "images").then(function (path) { added.push({ src: path, caption: "", album: album }); done++; next(); })
+            .catch(function (e) { toast(f.name + ": " + e.message, true); next(); });
+        };
+        next();
+      };
+    }
+    if (current === "videos") {
+      var top2 = '<div class="dropzone"><strong>Upload a video or short clip</strong><p class="help" style="margin:.3rem 0 .8rem">Short clips up to ' + MAX_VIDEO_MB + ' MB can be uploaded here (MP4 works best). For full sermons, upload to YouTube or Facebook and add the link with "Add video".</p>' +
+        '<label class="btn btn-red btn-sm" style="margin:0;color:#fff">Select video<input type="file" id="bulkVideo" accept="video/*" hidden></label><div class="progress" id="vidProgress"></div></div>';
+      var vp = listPanel("Videos", "Type: <b>file</b> = uploaded video, <b>youtube</b> = YouTube link, <b>facebook</b> = Facebook video link.", data.videos, [
+        ["title", "Title"], ["type", "Type", "select", { choices: ["file", "youtube", "facebook"] }], ["src", "Video (upload, or paste a link)", "video"],
+        ["poster", "Thumbnail picture (optional for YouTube)", "image"], ["category", "Category", "text", { help: "e.g. Sermons, Short Clips, Worship" }], ["date", "Date", "date"],
+        ["description", "Description", "textarea", { rows: 2 }]
+      ], { noun: "video", blank: function () { return { type: "youtube", category: "Sermons", date: today() }; } , top: top2 });
+      P.appendChild(vp);
+      $("#bulkVideo").onchange = function () {
+        var f = this.files[0], prog = $("#vidProgress"); if (!f) return;
+        prog.textContent = "Uploading " + f.name + "... please keep this page open.";
+        uploadVideo(f).then(function (r) {
+          data.videos.unshift({ title: f.name.replace(/\.[^.]+$/, ""), type: "file", src: r.src, poster: r.poster, category: "Short Clips", date: today(), description: "" });
+          markDirty(); vp.redraw(); prog.textContent = "Uploaded! Edit the title below, then click Save & Publish.";
+        }).catch(function (e) { prog.textContent = ""; toast(e.message, true); });
+      };
+    }
+    if (current === "home") {
+      P.appendChild(objectPanel("Home Page Banner", "The big welcome section at the top of the home page.", data.hero, [["heading", "Heading", "text", { full: true }], ["subheading", "Text", "textarea", { rows: 3 }]]));
+      P.appendChild(listPanel("Banner Slideshow", "Pictures or short videos that fade behind the welcome text.", data.hero.media, [
+        ["type", "Type", "select", { choices: ["image", "video"] }], ["src", "Picture or video file", "image", { help: "For videos, upload the video under the Videos tab and paste its path here." }], ["poster", "Video thumbnail (videos only)", "image"]
+      ], { noun: "slide", titleKey: "src", blank: function () { return { type: "image" }; } }));
+      P.appendChild(objectPanel("About the Church", "", data.about, [["title", "Heading", "text", { full: true }], ["text", "About text", "textarea", { rows: 5 }], ["verse", "Bible verse", "textarea", { rows: 2 }], ["verseRef", "Verse reference"]]));
+      P.appendChild(objectPanel("Head Pastor", "", data.pastor, [["name", "Name"], ["role", "Title / role"], ["photo", "Photo", "image"], ["bio", "Short biography", "textarea", { rows: 4 }]]));
+    }
+    if (current === "times") {
+      P.appendChild(listPanel("Service Times", "Weekly services shown on the home, live and contact pages.", data.serviceTimes, [["name", "Service name"], ["day", "Day"], ["time", "Time"]], { noun: "service" }));
+    }
+    if (current === "contact") {
+      P.appendChild(objectPanel("Contact Details", "Branches are now edited in the <b>Branches</b> tab.", data.contact, [
+        ["phones", "Phone numbers (separate with commas)", "list", { full: true }], ["whatsapp", "WhatsApp number (country code, digits only)", "text", { help: "e.g. 233244783760" }],
+        ["email", "Church email"], ["officeHours", "Office hours"], ["address", "Address", "text", { full: true }], ["mapQuery", "Map search (what to show on Google Maps)", "text", { full: true }]
+      ]));
+    }
+    if (current === "branches") {
+      P.appendChild(listPanel("Branches", "Each branch gets its own section on the <b>Branches &amp; Pastors</b> page, and appears in the footer and on the Contact page. Tick <b>Headquarters</b> for the HQ: it is always shown first. Use the arrows to change the order.", data.branches, [
+        ["name", "Branch name"], ["location", "Location / address"], ["hq", "This is the Headquarters", "bool", { full: true }],
+        ["about", "About this branch", "textarea", { rows: 3 }], ["image", "Branch photo (optional, shown behind the branch name)", "image"],
+        ["h1", "Pastor", "heading"],
+        ["pastorName", "Pastor's name"], ["pastorTitle", "Title", "text", { help: "e.g. Resident Pastor, Branch Pastor" }],
+        ["pastorPhoto", "Pastor's photo", "image"], ["pastorBio", "About the pastor", "textarea", { rows: 3 }],
+        ["h2", "Contact", "heading"],
+        ["phone", "Telephone"], ["whatsapp", "WhatsApp number", "text", { help: "e.g. 0244783760 or 233244783760" }], ["email", "Email"],
+        ["mapQuery", "Google Maps search (optional)", "text", { help: "e.g. Thyword International Worship Centre, Potsin" }],
+        ["h3", "Services, activities &amp; programmes", "heading"],
+        ["serviceTimes", "Service times (one per line)", "lines", { help: "e.g. Sunday: Worship Service - 8:30 AM" }],
+        ["activities", "Activities (one per line)", "lines", { help: "e.g. Bible studies, Prayer meeting, Youth fellowship" }],
+        ["programs", "Upcoming programmes", "sublist", { noun: "programme", help: "Past programmes hide automatically.", fields: [["title", "Programme"], ["date", "Date", "date"], ["time", "Time"], ["details", "Details (optional)"]] }],
+        ["h4", "Giving to this branch", "heading", { help: "(optional, leave empty to use the Headquarters accounts)" }],
+        ["momoNumber", "MTN MoMo number"], ["momoName", "MoMo account name"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
+        ["bankName", "Bank", "select", { choices: BANK_CHOICES }], ["bankAccountName", "Bank account name"], ["bankAccountNumber", "Bank account number", "text", { full: true }],
+        ["paystackSubaccount", "Paystack subaccount code (optional)", "text", { full: true, help: "e.g. ACCT_xxxxxxxx. Online gifts to this branch are then paid straight into the branch's own account. Create it in Paystack: Settings > Subaccounts." }]
+      ], { noun: "branch", blank: function () { return { pastorTitle: "Branch Pastor", serviceTimes: [], activities: [], programs: [] }; } }));
+    }
+    if (current === "trustees") {
+      P.appendChild(listPanel("Board of Trustees", "Shown on the Branches &amp; Pastors page. Use the arrows to set the order (e.g. Chairman first).", data.trustees, [
+        ["name", "Name"], ["position", "Position", "text", { help: "e.g. Chairman, Secretary, Treasurer, Member" }], ["photo", "Photo", "image"], ["bio", "Short note (optional)", "textarea", { rows: 2 }]
+      ], { noun: "trustee" }));
+    }
+    if (current === "bible") {
+      var B = data.bibleSchool;
+      P.appendChild(objectPanel("Bible School", "Shown on the Bible School page.", B, [
+        ["title", "Name of the school"], ["image", "Main picture", "image"], ["intro", "About the school", "textarea", { rows: 4 }],
+        ["details", "Key details (one per line)", "lines", { help: "e.g. Duration: 6 months / Classes: Tuesdays 6:00 PM / Venue: Headquarters / Fee: GHS 100" }],
+        ["howToEnroll", "How to enroll (one step per line)", "lines", { rows: 5 }],
+        ["contactPhone", "Enrollment phone (optional)"], ["contactWhatsapp", "Enrollment WhatsApp (optional)"],
+        ["enrollLink", "Online enrollment link (optional)", "text", { full: true, help: "e.g. a Google Form link. Leave empty if not used." }]
+      ]));
+      P.appendChild(listPanel("Enrollment Forms", "Upload the forms people can download (PDF works best for everyone).", B.forms, [
+        ["title", "Form name"], ["file", "Form file", "file"], ["description", "Short note (optional)", "text", { full: true }]
+      ], { noun: "form" }));
+      var topB = '<div class="dropzone"><strong>Add Bible School pictures</strong><p class="help" style="margin:.3rem 0 .8rem">Select several pictures at once. Large photos are resized automatically.</p>' +
+        '<label class="btn btn-red btn-sm" style="margin:0;color:#fff">Select pictures<input type="file" id="bulkBible" multiple accept="image/*" hidden></label><div class="progress" id="bibleProgress"></div></div>';
+      var bp = listPanel("Bible School Pictures", "", B.photos, [["src", "Picture", "image"], ["caption", "Caption"]], { noun: "picture", titleKey: "caption", top: topB });
+      P.appendChild(bp);
+      $("#bulkBible").onchange = function () {
+        var files = Array.prototype.slice.call(this.files), prog = $("#bibleProgress"), done = 0, added = [];
+        if (!connected()) { toast("Connect to GitHub first (Settings tab) to upload.", true); return; }
+        var next = function () {
+          if (!files.length) { prog.textContent = "Uploaded " + done + " picture(s). Click Save & Publish to show them."; Array.prototype.unshift.apply(B.photos, added); markDirty(); bp.redraw(); return; }
+          var f = files.shift(); prog.textContent = "Uploading " + f.name + " (" + (done + 1) + ")...";
+          uploadImage(f, "images").then(function (path) { added.push({ src: path, caption: "" }); done++; next(); }).catch(function (e) { toast(f.name + ": " + e.message, true); next(); });
+        };
+        next();
+      };
+    }
+    if (current === "transactions") {
+      var tx = document.createElement("div"); tx.className = "panel";
+      var sk = ""; try { sk = localStorage.getItem("tiwc-paystack-sk") || ""; } catch (e) {}
+      tx.innerHTML = "<h2>Transactions</h2>" +
+        '<p class="help">See every <b>online</b> gift made through the website (Paystack), for all branches. Your Paystack <b>secret key</b> is kept only on this device and is never published to the website. MoMo and bank transfers made directly to the church numbers appear on your MoMo / bank statements, and members can confirm them to you by WhatsApp or email from the Give page.</p>' +
+        '<div class="fields"><div class="full"><label for="skKey">Paystack SECRET key (stays on this device)</label><input id="skKey" type="password" value="' + esc(sk) + '" placeholder="sk_live_..." autocomplete="off"></div>' +
+        '<div><label for="txBranch">Branch</label><select id="txBranch"><option value="">All branches</option>' + branchesForFilter() + "</select></div>" +
+        '<div><label for="txStatus">Status</label><select id="txStatus"><option value="success">Successful</option><option value="">All</option><option value="failed">Failed</option><option value="abandoned">Abandoned</option></select></div>' +
+        '<div><label for="txFrom">From</label><input id="txFrom" type="date"></div><div><label for="txTo">To</label><input id="txTo" type="date"></div></div>' +
+        '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem"><button class="btn btn-green btn-sm" id="txLoad" type="button">Load transactions</button><button class="btn btn-outline-dark btn-sm" id="txCsv" type="button">Download (CSV)</button>' +
+        '<a class="btn btn-outline-dark btn-sm" href="https://dashboard.paystack.com/#/transactions" target="_blank" rel="noopener">Open Paystack dashboard</a><button class="btn btn-outline-dark btn-sm" id="txForget" type="button">Remove key from this device</button></div>' +
+        '<div class="progress" id="txProgress"></div><div id="txSummary"></div><div id="txTable" class="tx-wrap"></div>';
+      P.appendChild(tx);
+      var rows = [];
+      $("#txLoad").onclick = function () { loadTransactions().then(function (r) { rows = r; }); };
+      $("#txForget").onclick = function () { try { localStorage.removeItem("tiwc-paystack-sk"); } catch (e) {} $("#skKey").value = ""; toast("Secret key removed from this device."); };
+      $("#txBranch").onchange = function () { drawTransactions(rows); };
+      $("#txCsv").onclick = function () {
+        var list = filterTx(rows); if (!list.length) { toast("Load transactions first.", true); return; }
+        var csv = [["Date", "Amount (GHS)", "Status", "Channel", "Given to", "Offering", "Name", "Email", "Phone", "Reference"]].concat(list.map(function (t) {
+          return [t.date, t.amount.toFixed(2), t.status, t.channel, t.givenTo, t.offering, t.name, t.email, t.phone, t.reference];
+        })).map(function (r) { return r.map(function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+        var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "tiwc-transactions.csv"; a.click();
+      };
+    }
+    if (current === "giving") {
+      var G = data.giving;
+      P.appendChild(objectPanel("Giving: Headquarters accounts", "Shown on the <b>Give</b> page. Branches without their own accounts (set in the Branches tab) use these.", G, [
+        ["intro", "Introduction", "textarea", { rows: 2 }], ["verse", "Bible verse", "textarea", { rows: 2 }], ["verseRef", "Verse reference"],
+        ["h1", "MTN Mobile Money", "heading"], ["momoNumber", "MoMo number"], ["momoName", "MoMo account name"],
+        ["h2", "Telecel Cash", "heading"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
+        ["h3", "Secure online payments (Paystack)", "heading"],
+        ["paystackPublicKey", "Paystack PUBLIC key", "text", { full: true, help: "Starts with <b>pk_live_</b> (or pk_test_ for testing). Adds a 'Pay Online' option on the Give page for MTN MoMo, Telecel Cash, AirtelTigo Money and cards. Find it in Paystack: Settings > API Keys. <b>Never put the SECRET key (sk_) here</b>: this page is public." }],
+        ["h4", "Other", "heading"],
+        ["branchOfferings", "Giving types for branches (one per line)", "lines", { help: "e.g. Offering / Tithe / Donation" }],
+        ["confirmWhatsapp", "WhatsApp number for giving confirmations (optional)", "text", { help: "Leave empty to use the main church WhatsApp." }],
+        ["onlineLink", "Other online payment link (optional)", "text", { full: true, help: "Only if you use another provider's payment page (e.g. Hubtel). Not needed with the Paystack key above." }]
+      ]));
+      G.bankAccounts = G.bankAccounts || [];
+      P.appendChild(listPanel("Headquarters bank accounts", "Members choose their bank on the Give page. If the church has an account at the same bank, that one is shown; otherwise they see the first account here with interbank transfer steps.", G.bankAccounts, [
+        ["bank", "Bank", "select", { choices: BANK_CHOICES }], ["accountName", "Account name"], ["accountNumber", "Account number"], ["branch", "Bank branch (optional)"]
+      ], { noun: "bank account", titleKey: "bank" }));
+      P.appendChild(listPanel("Headquarters offerings", "The offering types people can choose when giving to the Headquarters.", G.offerings, [
+        ["name", "Offering name"], ["description", "Short description (optional)"]
+      ], { noun: "offering" }));
+    }
+    if (current === "connect") {
+      var vp = document.createElement("div"); vp.className = "panel";
+      vp.innerHTML = "<h2>Admin version</h2><p class=\"help\">You are using version <b>" + esc(window.ADMIN_VERSION || "?") + "</b>. If something new is missing (a tab or a field), check for updates.</p>" +
+        '<button class="btn btn-green btn-sm" type="button" id="updCheck">Check for updates</button>';
+      P.appendChild(vp);
+      $("#updCheck").onclick = function () { checkAdminUpdate(true); };
+      var c = document.createElement("div"); c.className = "panel";
+      c.innerHTML = "<h2>Connect to GitHub</h2><p class=\"help\">The website lives in a GitHub repository. Connecting lets this page publish your changes and upload pictures and videos. Your token is saved only in this browser. Never share it.</p>" +
+        '<ol class="steps"><li>Sign in to GitHub and open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained token</a>.</li><li>Give it a name (e.g. "Church website"), choose an expiry, and under <b>Repository access</b> select only the website repository.</li><li>Under <b>Permissions → Repository permissions</b>, set <b>Contents</b> to <b>Read and write</b>.</li><li>Click <b>Generate token</b>, copy it, and paste it below.</li></ol>' +
+        '<div class="fields"><div><label>GitHub username / organisation</label><input id="c-owner" value="' + esc(conn.owner) + '" placeholder="e.g. christosdaniel"></div>' +
+        '<div><label>Repository name</label><input id="c-repo" value="' + esc(conn.repo) + '" placeholder="e.g. Thyword-Church"></div>' +
+        '<div><label>Branch the website is published from</label><input id="c-branch" value="' + esc(conn.branch) + '" placeholder="Leave empty to detect automatically"></div>' +
+        '<div><label>Access token</label><input id="c-token" type="password" value="' + esc(conn.token) + '" placeholder="github_pat_..."></div></div>' +
+        '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem"><button class="btn btn-green btn-sm" id="c-save" type="button">Connect &amp; load content</button><button class="btn btn-outline-dark btn-sm" id="c-out" type="button">Disconnect this browser</button></div>';
+      P.appendChild(c);
+      $("#c-save").onclick = function () {
+        conn = { owner: $("#c-owner").value.trim(), repo: $("#c-repo").value.trim(), branch: $("#c-branch").value.trim(), token: $("#c-token").value.trim() };
+        if (!connected()) { toast("Please fill in all the fields.", true); return; }
+        if (dirty && !confirm("Loading from GitHub will replace your unsaved changes on this page. Continue?")) return;
+        saveConn();
+        loadFromGitHub().then(function () { toast("Connected. Latest content loaded."); }).catch(function (e) { toast(e.status === 401 ? "GitHub did not accept the token. Check it was copied fully and has not expired." : e.status === 404 ? "Repository or file not found. Check the username, repository name and branch, and that the token has access to this repository." : "Could not connect: " + e.message, true); setConnState(); });
+      };
+      $("#c-out").onclick = function () { conn = { branch: "main" }; saveConn(); fileSha = null; toast("Disconnected. The token was removed from this browser."); render(); };
+
+      var pw = document.createElement("div"); pw.className = "panel";
+      pw.innerHTML = '<h2>Admin Password</h2><p class="help">Change the password used to open this admin page. After changing it, click <b>Save &amp; Publish</b>. The new password works on all devices a few minutes later.</p>' +
+        '<div class="fields"><div><label>New password</label><input type="password" id="pw1" autocomplete="new-password"></div><div><label>Repeat new password</label><input type="password" id="pw2" autocomplete="new-password"></div></div>' +
+        '<button class="btn btn-green btn-sm" id="pwSave" type="button" style="margin-top:1rem">Change password</button>';
+      P.appendChild(pw);
+      $("#pwSave").onclick = function () {
+        var a = $("#pw1").value, b = $("#pw2").value;
+        if (a.length < 8) { toast("Use at least 8 characters.", true); return; }
+        if (a !== b) { toast("The two passwords do not match.", true); return; }
+        window.__setAdminPassword(a).then(function () {
+          try {
+            sessionStorage.setItem("tiwc-admin-ok", data.settings.adminPasswordHash);
+            if (localStorage.getItem("tiwc-admin-remember")) localStorage.setItem("tiwc-admin-remember", data.settings.adminPasswordHash);
+          } catch (e) {}
+          $("#pw1").value = $("#pw2").value = ""; toast("Password changed. Now click Save & Publish.");
+        });
+      };
+
+      P.appendChild(objectPanel("Website Settings", "", data.settings, [
+        ["churchName", "Church name"], ["tagline", "Tagline"], ["motto", "Motto"], ["logo", "Logo", "image"],
+        ["adminEmail", "Admin email (receives subscriptions & messages)", "text", { full: true, help: "Subscribe and contact forms are delivered to this address by the free FormSubmit.co service. The first time someone submits, FormSubmit sends a one-time activation email to this address. Click the link in it." }],
+        ["formEndpoint", "Custom form endpoint (optional)", "text", { full: true, help: "Leave empty to use the admin email above. If you use Formspree, paste your form URL here (e.g. https://formspree.io/f/xxxx)." }],
+        ["facebookPageUrl", "Facebook page link", "text", { full: true }], ["youtubeUrl", "YouTube channel link", "text", { full: true }],
+        ["youtubeChannelId", "YouTube channel ID (starts with UC)", "text", { help: "YouTube → your channel → About/Share → Copy channel ID." }],
+        ["pastEventDays", "Remove past events after (days)", "text", { help: "Leave empty to keep past events until you delete them. Past events always stay at least 7 days." }],
+        ["youtubeApiKey", "YouTube Data API key (optional)", "text", { help: "Enables automatic \"LIVE\" detection and shows your latest YouTube uploads. Create a free key at console.cloud.google.com (YouTube Data API v3) and restrict it to your website address." }]
+      ]));
+    }
+  }
+
+  $("#publishBtn").onclick = publish;
+  $("#downloadBtn").onclick = download;
+
+  /* ---------- admin login ----------
+   * The admin page is hidden from the public website and protected by a password.
+   * Only a SHA-256 fingerprint of the password is stored in content.js. Publishing
+   * also needs the GitHub token, which only administrators have. */
+  // Pure-JavaScript SHA-256, so the login works anywhere, even when the file is opened from a phone or computer.
+  function sha256hex(str) {
+    var K = [], H = [], i, j, isP = function (n) { for (var f = 2; f * f <= n; f++) if (n % f === 0) return false; return true; }, frac = function (x) { return ((x - Math.floor(x)) * 4294967296) | 0; };
+    for (var n = 2, c = 0; c < 64; n++) if (isP(n)) { if (c < 8) H[c] = frac(Math.pow(n, 1 / 2)); K[c++] = frac(Math.pow(n, 1 / 3)); }
+    var bytes = Array.prototype.slice.call(new TextEncoder().encode(str)), bitLen = bytes.length * 8;
+    bytes.push(0x80); while (bytes.length % 64 !== 56) bytes.push(0);
+    for (i = 7; i >= 0; i--) bytes.push(i > 3 ? 0 : (bitLen >>> (i * 8)) & 255);
+    var rotr = function (x, r) { return (x >>> r) | (x << (32 - r)); };
+    for (i = 0; i < bytes.length; i += 64) {
+      var W = [], a = H[0], b = H[1], c2 = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (j = 0; j < 64; j++) {
+        if (j < 16) W[j] = (bytes[i + j * 4] << 24) | (bytes[i + j * 4 + 1] << 16) | (bytes[i + j * 4 + 2] << 8) | bytes[i + j * 4 + 3];
+        else { var s0 = rotr(W[j - 15], 7) ^ rotr(W[j - 15], 18) ^ (W[j - 15] >>> 3), s1 = rotr(W[j - 2], 17) ^ rotr(W[j - 2], 19) ^ (W[j - 2] >>> 10); W[j] = (W[j - 16] + s0 + W[j - 7] + s1) | 0; }
+        var t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[j] + W[j]) | 0;
+        var t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c2) ^ (b & c2))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c2; c2 = b; b = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c2) | 0; H[3] = (H[3] + d) | 0; H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    return H.map(function (x) { return ("00000000" + (x >>> 0).toString(16)).slice(-8); }).join("");
+  }
+  function sha256(text) { return Promise.resolve(sha256hex(text)); }
+  // Starting password: Thyword@2026 (change it in Settings > Admin Password).
+  var DEFAULT_HASH = "0ee99b61774bb1a7df638ca707ce5ac95518978bd7fcadc903b8baba90cab0ed";
+  function rememberHash() { var h = (data.settings || {}).adminPasswordHash; if (h) try { localStorage.setItem("tiwc-admin-hash", h); } catch (e) {} }
+
+  function expectedHash() {
+    var h = (data.settings || {}).adminPasswordHash;
+    if (!h) try { h = localStorage.getItem("tiwc-admin-hash"); } catch (e) {}
+    return h || DEFAULT_HASH;
+  }
+  // "Keep me logged in" stores the login on this device (used by the iPhone app)
+  function unlocked() {
+    var h = expectedHash();
+    try { return sessionStorage.getItem("tiwc-admin-ok") === h || localStorage.getItem("tiwc-admin-remember") === h; } catch (e) { return false; }
+  }
+  function adminVersionUrl() {
+    var inApp = /^https?:/.test(location.protocol) && /tiwc-admin/.test(location.pathname);
+    return (inApp ? "version.json" : (window.ADMIN_APP_URL || "") + "version.json") + "?t=" + Date.now();
+  }
+  function checkAdminUpdate(manual) {
+    fetch(adminVersionUrl(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.version && j.version !== window.ADMIN_VERSION) showUpdateBanner(j.version);
+      else if (manual) toast("You have the latest version (" + window.ADMIN_VERSION + ").");
+    }).catch(function () { if (manual) toast("Could not check for updates. Check your internet connection.", true); });
+  }
+  function updateNow() {
+    if (dirty && !confirm("You have unsaved changes. Update anyway? (Save & Publish first to keep them.)")) return;
+    dirty = false;
+    var inApp = /tiwc-admin/.test(location.pathname) && /^https?:/.test(location.protocol);
+    if (!inApp) { window.open((window.ADMIN_APP_URL || ""), "_blank"); return; }
+    var jobs = [];
+    if (window.caches) jobs.push(caches.keys().then(function (k) { return Promise.all(k.map(function (n) { return caches.delete(n); })); }));
+    if (navigator.serviceWorker) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.map(function (r) { return r.update().catch(function () {}); })); }));
+    Promise.all(jobs).then(function () { location.replace(location.pathname + "?v=" + Date.now()); }, function () { location.reload(); });
+  }
+  function showUpdateBanner(v) {
+    if ($("#updBanner")) return;
+    var inApp = /tiwc-admin/.test(location.pathname) && /^https?:/.test(location.protocol);
+    var d = document.createElement("div"); d.id = "updBanner"; d.className = "upd-banner";
+    d.innerHTML = "<span><b>A new version of the admin is available</b> (" + esc(v) + "). " + (inApp ? "Tap Update to get the latest features." : "Open the admin app to get the latest features, or download the new admin file.") + "</span>" +
+      '<button class="btn btn-gold btn-sm" type="button">' + (inApp ? "Update now" : "Open admin app") + "</button>";
+    document.body.appendChild(d);
+    $("button", d).onclick = updateNow;
+  }
+  window.__checkAdminUpdate = checkAdminUpdate;
+  // On phones, switching back to the app often resumes the old screen without reloading,
+  // so check again whenever the admin comes back into view
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible" && !$("#gate")) checkAdminUpdate(false); });
+  function start() {
+    $("#gate").remove();
+    if (!connected()) current = "connect";
+    render();
+    checkAdminUpdate(false);
+    if (connected()) loadFromGitHub().catch(function (e) { toast("Could not load from GitHub: " + e.message, true); });
+  }
+  $("#logoutBtn").onclick = function () {
+    if (dirty && !confirm("You have unsaved changes. Log out anyway?")) return;
+    dirty = false;
+    try { sessionStorage.removeItem("tiwc-admin-ok"); localStorage.removeItem("tiwc-admin-remember"); } catch (e) {}
+    location.reload();
+  };
+  window.__setAdminPassword = function (pw) { return sha256(pw).then(function (h) { data.settings.adminPasswordHash = h; rememberHash(); markDirty(); }); };
+  if (unlocked()) start();
+  else {
+    $("#gateForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var pw = $("#gatePass").value.trim();
+      sha256(pw).then(function (h) {
+        if (h === expectedHash() || (!loaded && h === DEFAULT_HASH)) {
+          try {
+            sessionStorage.setItem("tiwc-admin-ok", expectedHash());
+            if ($("#gateRemember").checked) localStorage.setItem("tiwc-admin-remember", expectedHash());
+          } catch (er) {}
+          start();
+        }
+        else { $("#gateMsg").textContent = "Incorrect password. Check capital letters (the first letter T is a capital)."; $("#gatePass").select(); }
+      });
+    });
+    $("#gateShow").addEventListener("click", function () { var i = $("#gatePass"); i.type = i.type === "password" ? "text" : "password"; });
+  }
+})();
+
+</script>
+<script>
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+</script>
+</body>
+</html>

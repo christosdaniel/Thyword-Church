@@ -66,7 +66,7 @@ All content lives in **`data/content.js`**, so you can also edit that file by ha
 The admin is also available as an app you add to your phone's Home Screen. It opens full-screen with the church logo as its icon, stays logged in, and stays connected to GitHub after you add the token once.
 
 App address (unlisted; nothing on the website links to it):
-**https://christosdaniel.github.io/Thyword-Church/tiwc-admin-9k2x/**
+**https://christosdaniel.github.io/Thyword-Church/tiwc-admin-p7q3x/**
 
 **Install on iPhone (one time):**
 1. Open the address above in **Safari** (it must be Safari).
@@ -139,7 +139,7 @@ The admin checks for a newer version when it opens and whenever you switch back 
 ```
 index.html, pictures.html, videos.html, live.html, contact.html
 _admin/Thyword-Admin.html  ← the private admin tool, single file (not published)
-tiwc-admin-9k2x/           ← the admin as a phone app (unlisted address)
+tiwc-admin-p7q3x/           ← the admin as a phone app (unlisted address)
 data/content.js          ← all website text, events, photos, videos, branches
 data/youtube.js          ← sermons collected from YouTube (updated automatically)
 scripts/fetch_youtube.py ← collects them (run by .github/workflows/youtube-videos.yml)

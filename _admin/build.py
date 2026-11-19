@@ -4,7 +4,7 @@
 
 1. _admin/Thyword-Admin.html: a single file kept on a computer. It is NOT
    published (GitHub Pages skips folders whose names start with an underscore).
-2. tiwc-admin-9k2x/: the same admin as an installable phone app (web app).
+2. tiwc-admin-p7q3x/: the same admin as an installable phone app (web app).
    It is published at an unlisted address so it can be added to an iPhone or
    Android Home Screen. Nothing on the website links to it, search engines are
    told not to index it, and it needs the admin password. Changing the website
@@ -13,8 +13,8 @@
 import base64, io, json, os
 from PIL import Image
 
-APP_DIR = "tiwc-admin-9k2x"
-VERSION = "2026-11-20.1"   # bump to make installed apps fetch the new version
+APP_DIR = "tiwc-admin-p7q3x"
+VERSION = "2026-11-20.2"   # bump to make installed apps fetch the new version
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 here = os.path.join(root, "_admin")
