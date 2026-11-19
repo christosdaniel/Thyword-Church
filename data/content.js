@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 17:21:15 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 22:19:05 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -285,7 +285,7 @@ window.SITE_CONTENT = {
     "whatsapp": "233244783760",
     "email": "thywordintlworshipcentre@gmail.com",
     "address": "Church Premises, Kasoa Old Barrier, Ashbread Road, Kasoa, Ghana",
-    "mapQuery": "Thyword International Worship Centre, Kasoa",
+    "mapQuery": "Thyword International Worship Centre",
     "officeHours": "Monday to Friday, 9:00 AM to 5:00 PM"
   },
   "branches": [
