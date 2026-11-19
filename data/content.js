@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 22:19:05 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 23:00:17 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -503,7 +503,26 @@ window.SITE_CONTENT = {
       "paystackSubaccount": ""
     }
   ],
-  "trustees": [],
+  "trustees": [
+    {
+      "name": "CHARITY NSAIDOO",
+      "position": "SECETARY",
+      "photo": "assets/uploads/images/2026-11-19-img-7180-wirg.jpg",
+      "bio": ""
+    },
+    {
+      "name": "PAUL MENSAH ",
+      "position": "PRESISDENT",
+      "photo": "assets/uploads/images/2026-11-19-166-8clu.jpg",
+      "bio": ""
+    },
+    {
+      "name": "ISAAC MENSAH",
+      "position": "CHAIRMAN",
+      "photo": "assets/uploads/images/2026-11-19-img-5757-apdm.jpg",
+      "bio": ""
+    }
+  ],
   "bibleSchool": {
     "title": "Thyword Bible School",
     "intro": "Grow deeper in the Word of God. The Thyword Bible School equips believers with sound biblical teaching, prayer and practical training for ministry and daily Christian living.",
