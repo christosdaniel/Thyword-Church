@@ -679,6 +679,39 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
 @media (max-width: 980px) { .main-nav .drop { padding: 0 0 0 .3rem; margin: 0 0 .3rem 1rem; } }
 @media (min-width: 981px) { .site-header .brand-tag { white-space: nowrap; font-size: .62rem; letter-spacing: .08em; } .site-header .brand-text { max-width: 250px; } }
 
+/* ---------- Give: amount, online payment, receipt ---------- */
+.amount-box { display: flex; align-items: center; border: 2px solid var(--line); border-radius: 14px; background: #fff; padding: .2rem .4rem .2rem 1rem; max-width: 360px; }
+.amount-box:focus-within { border-color: var(--green-600); box-shadow: 0 0 0 3px rgba(20,99,98,.15); }
+.amount-box span { font-weight: 800; color: var(--green-800); font-family: var(--font-head); }
+.amount-box input { border: 0; box-shadow: none !important; font-size: 1.6rem; font-weight: 800; color: var(--green-900); padding: .5rem .6rem; }
+.amt-chips { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: .7rem; }
+.amt-chip { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: .35rem .95rem; font-weight: 700; color: var(--green-800); cursor: pointer; }
+.amt-chip:hover { border-color: var(--green-600); background: var(--mint-100); }
+.pay-tabs { grid-template-columns: repeat(2, 1fr) !important; }
+@media (max-width: 480px) { .pay-tabs { grid-template-columns: 1fr !important; } }
+.pay-tabs button small { display: block; font-weight: 600; color: var(--muted); font-size: .72rem; }
+.pay-tabs button { text-align: left; }
+.pay-logo.online { background: var(--red-600); color: #fff; font-size: 1.05rem; }
+.secure-head { display: flex; gap: .8rem; align-items: flex-start; background: #fff; border: 1px solid var(--mint); border-radius: 12px; padding: .9rem 1rem; color: var(--green-700); }
+.secure-head b { display: block; color: var(--green-900); }
+.secure-head small { color: var(--muted); font-size: .83rem; }
+.pay-fields { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin: 1rem 0; }
+.pay-fields > div:first-child { grid-column: 1 / -1; }
+@media (max-width: 560px) { .pay-fields { grid-template-columns: 1fr; } }
+.pay-label { font-size: .84rem; margin-bottom: .3rem; }
+.pay-now { width: 100%; font-size: 1rem; padding: 1rem; }
+.pay-msg { margin: .7rem 0 0; font-weight: 600; font-size: .9rem; color: var(--green-700); }
+.pay-msg.err { color: var(--red-600); }
+#myBank { margin-bottom: .8rem; }
+.bank-card { background: #fff; border-radius: 12px; padding: 0 1rem; border: 1px solid var(--line); }
+.give-receipt { display: none; margin-top: 2rem; }
+.give-receipt.show { display: block; }
+.receipt-card { background: #fff; border: 2px solid var(--mint); border-radius: 18px; padding: 2rem; box-shadow: var(--shadow); text-align: center; scroll-margin-top: calc(var(--header-h) + 20px); }
+.receipt-card .pay-row { text-align: left; }
+.rc-tick { width: 70px; height: 70px; border-radius: 50%; background: var(--green-700); color: #fff; display: grid; place-items: center; margin: 0 auto 1rem; }
+.receipt-card .hero-actions { justify-content: center; }
+@media print { .site-header, .topbar, .announce, .site-footer, .give-side, .give-step, .give-intro, .verse, .page-hero, .whatsapp-float, .live-bar { display: none !important; } .give-receipt { display: block !important; } }
+
 </style>
 <style>
   body { background: var(--bg-soft); }
@@ -738,6 +771,20 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
   .sub-item { position: relative; border: 1px dashed var(--line); border-radius: 10px; padding: .8rem 3rem .8rem .8rem; background: #fff; }
   .sub-del { position: absolute; top: .6rem; right: .6rem; }
   .sub-list > .btn { align-self: flex-start; }
+  .upd-banner { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 250; width: min(620px, calc(100% - 24px)); background: var(--green-900); color: #fff; border-radius: 14px; padding: .9rem 1rem; display: flex; gap: .8rem; align-items: center; justify-content: space-between; box-shadow: var(--shadow); font-size: .9rem; }
+  .upd-banner .btn { flex: 0 0 auto; }
+  .tx-wrap { overflow-x: auto; margin-top: 1rem; }
+  .tx-table { width: 100%; border-collapse: collapse; font-size: .85rem; min-width: 760px; }
+  .tx-table th { text-align: left; background: var(--bg-soft); padding: .55rem; color: var(--green-800); font-family: var(--font-head); font-size: .78rem; }
+  .tx-table td { padding: .55rem; border-bottom: 1px solid var(--line); }
+  .tx-st { padding: .1rem .5rem; border-radius: 99px; font-size: .74rem; font-weight: 700; background: var(--bg-soft); }
+  .tx-st.success { background: var(--mint-100); color: var(--green-700); }
+  .tx-st.failed, .tx-st.abandoned { background: #fff1f1; color: var(--red-600); }
+  .tx-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .6rem; margin-top: 1rem; }
+  .tx-card { background: var(--bg-soft); border-radius: 12px; padding: .8rem 1rem; }
+  .tx-card small { display: block; color: var(--muted); font-size: .78rem; }
+  .tx-card b { font-size: 1.1rem; color: var(--green-900); }
+  .tx-card.total { background: var(--green-700); } .tx-card.total small, .tx-card.total b { color: #fff; }
   code { background: var(--bg-soft); padding: .1rem .35rem; border-radius: 5px; font-size: .85em; }
 </style>
 </head>
@@ -773,6 +820,7 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
 </div>
 
 <div class="toast" id="toast"></div>
+<script>window.ADMIN_VERSION = "2026-11-20.1"; window.ADMIN_APP_URL = "https://christosdaniel.github.io/Thyword-Church/tiwc-admin-9k2x/";</script>
 <script>
 /* Thyword website admin (standalone)
  * This admin tool is a single file kept OFF the public website. Open it from your
@@ -979,7 +1027,10 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
     var html;
     if (type === "textarea") html = '<textarea id="' + id + '" data-key="' + key + '" rows="' + (opt.rows || 4) + '">' + esc(val) + "</textarea>";
     else if (type === "bool") return '<div class="' + (opt.full ? "full" : "") + '"><label class="switch' + (val ? " on" : "") + '"><input type="checkbox" data-key="' + key + '" data-type="bool"' + (val ? " checked" : "") + "> " + label + "</label>" + help + "</div>";
-    else if (type === "select") html = '<select id="' + id + '" data-key="' + key + '">' + opt.choices.map(function (c) { return "<option" + (c === val ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") + "</select>";
+    else if (type === "select") {
+      var ch = opt.choices.slice(); if (val && ch.indexOf(val) < 0) ch.push(val);
+      html = '<select id="' + id + '" data-key="' + key + '">' + ch.map(function (c) { return '<option value="' + esc(c) + '"' + (c === (val || "") ? " selected" : "") + ">" + (c ? esc(c) : "(choose)") + "</option>"; }).join("") + "</select>";
+    }
     else if (type === "image" || type === "video") {
       var isImg = type === "image";
       html = '<div class="media-field">' + (isImg ? '<img class="thumb" src="' + esc(mediaUrl(val)) + '" alt="" onerror="this.style.visibility=\'hidden\'" onload="this.style.visibility=\'visible\'">' : "") +
@@ -1099,13 +1150,63 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
     data.giving = data.giving || {};
     data.giving.offerings = data.giving.offerings || [];
     data.giving.branchOfferings = data.giving.branchOfferings || [];
+    data.giving.bankAccounts = data.giving.bankAccounts || [];
+  }
+
+  /* ---------- Paystack transactions (read with the secret key kept on this device) ---------- */
+  function branchesForFilter() {
+    return ['<option value="hq">Headquarters</option>'].concat((data.branches || []).filter(function (b) { return !b.hq; }).map(function (b) {
+      var id = String(b.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      return '<option value="' + esc(id) + '">' + esc(b.name) + "</option>";
+    })).join("");
+  }
+  function filterTx(rows) { var b = ($("#txBranch") || {}).value; return rows.filter(function (t) { return !b || t.branchId === b; }); }
+  function loadTransactions() {
+    var key = $("#skKey").value.trim(), prog = $("#txProgress");
+    if (!/^sk_(live|test)_/.test(key)) { toast("Paste your Paystack secret key (starts with sk_live_ or sk_test_).", true); return Promise.resolve([]); }
+    try { localStorage.setItem("tiwc-paystack-sk", key); } catch (e) {}
+    var q = "perPage=100", st = $("#txStatus").value, from = $("#txFrom").value, to = $("#txTo").value;
+    if (st) q += "&status=" + st; if (from) q += "&from=" + from + "T00:00:00Z"; if (to) q += "&to=" + to + "T23:59:59Z";
+    var all = [], page = 1;
+    prog.textContent = "Loading...";
+    function next() {
+      return fetch("https://api.paystack.co/transaction?" + q + "&page=" + page, { headers: { Authorization: "Bearer " + key } })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.status) throw new Error(j.message || ("Paystack error " + r.status)); return j; }); })
+        .then(function (j) {
+          (j.data || []).forEach(function (t) {
+            var m = t.metadata || {}; if (typeof m === "string") { try { m = JSON.parse(m); } catch (e) { m = {}; } }
+            var cf = {}; (m.custom_fields || []).forEach(function (f) { cf[f.variable_name] = f.value; });
+            all.push({ date: (t.paid_at || t.created_at || "").replace("T", " ").slice(0, 16), amount: (t.amount || 0) / 100, status: t.status, channel: t.channel || "",
+              givenTo: m.given_to || cf.given_to || "", branchId: m.branch_id || "", offering: m.offering || cf.offering || "", name: m.giver_name || cf.giver_name || "",
+              email: (t.customer || {}).email || "", phone: m.giver_phone || cf.giver_phone || "", reference: t.reference });
+          });
+          var meta = j.meta || {};
+          if (meta.pageCount && page < meta.pageCount && page < 20) { page++; prog.textContent = "Loading page " + page + "..."; return next(); }
+        });
+    }
+    return next().then(function () { prog.textContent = all.length + " transaction(s) loaded."; drawTransactions(all); return all; })
+      .catch(function (e) { prog.textContent = ""; toast("Could not load transactions: " + e.message + ". You can always view them on the Paystack dashboard.", true); return []; });
+  }
+  function drawTransactions(rows) {
+    var list = filterTx(rows), total = 0, by = {};
+    list.forEach(function (t) { if (t.status === "success") { total += t.amount; var k = t.givenTo || "Other"; by[k] = (by[k] || 0) + t.amount; } });
+    var fmt = function (v) { return "GHS " + v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); };
+    $("#txSummary").innerHTML = list.length ? '<div class="tx-cards"><div class="tx-card total"><small>Total received</small><b>' + fmt(total) + "</b></div>" +
+      Object.keys(by).sort(function (a, b) { return by[b] - by[a]; }).map(function (k) { return '<div class="tx-card"><small>' + esc(k) + "</small><b>" + fmt(by[k]) + "</b></div>"; }).join("") + "</div>" : "";
+    $("#txTable").innerHTML = list.length ? '<table class="tx-table"><thead><tr><th>Date</th><th>Amount</th><th>Given to</th><th>Offering</th><th>Name</th><th>Channel</th><th>Status</th><th>Reference</th></tr></thead><tbody>' +
+      list.map(function (t) { return "<tr><td>" + esc(t.date) + "</td><td><b>" + fmt(t.amount) + "</b></td><td>" + esc(t.givenTo) + "</td><td>" + esc(t.offering) + "</td><td>" + esc(t.name || t.email) + "</td><td>" + esc(t.channel) + '</td><td><span class="tx-st ' + esc(t.status) + '">' + esc(t.status) + "</span></td><td>" + esc(t.reference) + "</td></tr>"; }).join("") +
+      "</tbody></table>" : '<p class="help">No transactions found.</p>';
   }
 
   /* ---------- tabs ---------- */
+  var BANK_CHOICES = ["", "GCB Bank (Ghana Commercial Bank)", "Consolidated Bank Ghana (CBG)", "Ecobank Ghana", "Fidelity Bank Ghana", "Stanbic Bank Ghana", "OmniBSIC Bank",
+    "Absa Bank Ghana", "Access Bank Ghana", "Agricultural Development Bank (ADB)", "CalBank", "First Atlantic Bank", "First National Bank Ghana", "GTBank Ghana",
+    "National Investment Bank (NIB)", "Prudential Bank", "Republic Bank Ghana", "Societe Generale Ghana", "Standard Chartered Ghana", "United Bank for Africa (UBA)",
+    "Universal Merchant Bank (UMB)", "Zenith Bank Ghana", "Rural / community bank", "Savings & loans / other"];
   var TABS = [
     ["today", "Live & Notice"], ["events", "Events"], ["words", "Pastor's Words"], ["photos", "Pictures"], ["videos", "Videos"],
     ["home", "Home & About"], ["times", "Service Times"], ["branches", "Branches"], ["trustees", "Board of Trustees"], ["bible", "Bible School"],
-    ["giving", "Giving"], ["contact", "Contact"], ["connect", "Settings"]
+    ["giving", "Giving"], ["transactions", "Transactions"], ["contact", "Contact"], ["connect", "Settings"]
   ];
   var current = "today";
   function showTab(t) { current = t; render(); window.scrollTo(0, 0); }
@@ -1220,7 +1321,8 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
         ["programs", "Upcoming programmes", "sublist", { noun: "programme", help: "Past programmes hide automatically.", fields: [["title", "Programme"], ["date", "Date", "date"], ["time", "Time"], ["details", "Details (optional)"]] }],
         ["h4", "Giving to this branch", "heading", { help: "(optional, leave empty to use the Headquarters accounts)" }],
         ["momoNumber", "MTN MoMo number"], ["momoName", "MoMo account name"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
-        ["bankName", "Bank name"], ["bankAccountName", "Bank account name"], ["bankAccountNumber", "Bank account number"]
+        ["bankName", "Bank", "select", { choices: BANK_CHOICES }], ["bankAccountName", "Bank account name"], ["bankAccountNumber", "Bank account number", "text", { full: true }],
+        ["paystackSubaccount", "Paystack subaccount code (optional)", "text", { full: true, help: "e.g. ACCT_xxxxxxxx. Online gifts to this branch are then paid straight into the branch's own account. Create it in Paystack: Settings > Subaccounts." }]
       ], { noun: "branch", blank: function () { return { pastorTitle: "Branch Pastor", serviceTimes: [], activities: [], programs: [] }; } }));
     }
     if (current === "trustees") {
@@ -1255,23 +1357,58 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
         next();
       };
     }
+    if (current === "transactions") {
+      var tx = document.createElement("div"); tx.className = "panel";
+      var sk = ""; try { sk = localStorage.getItem("tiwc-paystack-sk") || ""; } catch (e) {}
+      tx.innerHTML = "<h2>Transactions</h2>" +
+        '<p class="help">See every <b>online</b> gift made through the website (Paystack), for all branches. Your Paystack <b>secret key</b> is kept only on this device and is never published to the website. MoMo and bank transfers made directly to the church numbers appear on your MoMo / bank statements, and members can confirm them to you by WhatsApp or email from the Give page.</p>' +
+        '<div class="fields"><div class="full"><label for="skKey">Paystack SECRET key (stays on this device)</label><input id="skKey" type="password" value="' + esc(sk) + '" placeholder="sk_live_..." autocomplete="off"></div>' +
+        '<div><label for="txBranch">Branch</label><select id="txBranch"><option value="">All branches</option>' + branchesForFilter() + "</select></div>" +
+        '<div><label for="txStatus">Status</label><select id="txStatus"><option value="success">Successful</option><option value="">All</option><option value="failed">Failed</option><option value="abandoned">Abandoned</option></select></div>' +
+        '<div><label for="txFrom">From</label><input id="txFrom" type="date"></div><div><label for="txTo">To</label><input id="txTo" type="date"></div></div>' +
+        '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem"><button class="btn btn-green btn-sm" id="txLoad" type="button">Load transactions</button><button class="btn btn-outline-dark btn-sm" id="txCsv" type="button">Download (CSV)</button>' +
+        '<a class="btn btn-outline-dark btn-sm" href="https://dashboard.paystack.com/#/transactions" target="_blank" rel="noopener">Open Paystack dashboard</a><button class="btn btn-outline-dark btn-sm" id="txForget" type="button">Remove key from this device</button></div>' +
+        '<div class="progress" id="txProgress"></div><div id="txSummary"></div><div id="txTable" class="tx-wrap"></div>';
+      P.appendChild(tx);
+      var rows = [];
+      $("#txLoad").onclick = function () { loadTransactions().then(function (r) { rows = r; }); };
+      $("#txForget").onclick = function () { try { localStorage.removeItem("tiwc-paystack-sk"); } catch (e) {} $("#skKey").value = ""; toast("Secret key removed from this device."); };
+      $("#txBranch").onchange = function () { drawTransactions(rows); };
+      $("#txCsv").onclick = function () {
+        var list = filterTx(rows); if (!list.length) { toast("Load transactions first.", true); return; }
+        var csv = [["Date", "Amount (GHS)", "Status", "Channel", "Given to", "Offering", "Name", "Email", "Phone", "Reference"]].concat(list.map(function (t) {
+          return [t.date, t.amount.toFixed(2), t.status, t.channel, t.givenTo, t.offering, t.name, t.email, t.phone, t.reference];
+        })).map(function (r) { return r.map(function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+        var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "tiwc-transactions.csv"; a.click();
+      };
+    }
     if (current === "giving") {
       var G = data.giving;
       P.appendChild(objectPanel("Giving: Headquarters accounts", "Shown on the <b>Give</b> page. Branches without their own accounts (set in the Branches tab) use these.", G, [
         ["intro", "Introduction", "textarea", { rows: 2 }], ["verse", "Bible verse", "textarea", { rows: 2 }], ["verseRef", "Verse reference"],
         ["h1", "MTN Mobile Money", "heading"], ["momoNumber", "MoMo number"], ["momoName", "MoMo account name"],
         ["h2", "Telecel Cash", "heading"], ["telecelNumber", "Telecel Cash number"], ["telecelName", "Telecel Cash account name"],
-        ["h3", "Bank transfer", "heading"], ["bankName", "Bank name"], ["bankAccountName", "Account name"], ["bankAccountNumber", "Account number"], ["bankBranch", "Bank branch"],
+        ["h3", "Secure online payments (Paystack)", "heading"],
+        ["paystackPublicKey", "Paystack PUBLIC key", "text", { full: true, help: "Starts with <b>pk_live_</b> (or pk_test_ for testing). Adds a 'Pay Online' option on the Give page for MTN MoMo, Telecel Cash, AirtelTigo Money and cards. Find it in Paystack: Settings > API Keys. <b>Never put the SECRET key (sk_) here</b>: this page is public." }],
         ["h4", "Other", "heading"],
         ["branchOfferings", "Giving types for branches (one per line)", "lines", { help: "e.g. Offering / Tithe / Donation" }],
         ["confirmWhatsapp", "WhatsApp number for giving confirmations (optional)", "text", { help: "Leave empty to use the main church WhatsApp." }],
-        ["onlineLink", "Online payment link (optional)", "text", { full: true, help: "If you set up Paystack, Hubtel or similar, paste the payment page link to show a 'Pay Online' button." }]
+        ["onlineLink", "Other online payment link (optional)", "text", { full: true, help: "Only if you use another provider's payment page (e.g. Hubtel). Not needed with the Paystack key above." }]
       ]));
+      G.bankAccounts = G.bankAccounts || [];
+      P.appendChild(listPanel("Headquarters bank accounts", "Members choose their bank on the Give page. If the church has an account at the same bank, that one is shown; otherwise they see the first account here with interbank transfer steps.", G.bankAccounts, [
+        ["bank", "Bank", "select", { choices: BANK_CHOICES }], ["accountName", "Account name"], ["accountNumber", "Account number"], ["branch", "Bank branch (optional)"]
+      ], { noun: "bank account", titleKey: "bank" }));
       P.appendChild(listPanel("Headquarters offerings", "The offering types people can choose when giving to the Headquarters.", G.offerings, [
         ["name", "Offering name"], ["description", "Short description (optional)"]
       ], { noun: "offering" }));
     }
     if (current === "connect") {
+      var vp = document.createElement("div"); vp.className = "panel";
+      vp.innerHTML = "<h2>Admin version</h2><p class=\"help\">You are using version <b>" + esc(window.ADMIN_VERSION || "?") + "</b>. If something new is missing (a tab or a field), check for updates.</p>" +
+        '<button class="btn btn-green btn-sm" type="button" id="updCheck">Check for updates</button>';
+      P.appendChild(vp);
+      $("#updCheck").onclick = function () { checkAdminUpdate(true); };
       var c = document.createElement("div"); c.className = "panel";
       c.innerHTML = "<h2>Connect to GitHub</h2><p class=\"help\">The website lives in a GitHub repository. Connecting lets this page publish your changes and upload pictures and videos. Your token is saved only in this browser. Never share it.</p>" +
         '<ol class="steps"><li>Sign in to GitHub and open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained token</a>.</li><li>Give it a name (e.g. "Church website"), choose an expiry, and under <b>Repository access</b> select only the website repository.</li><li>Under <b>Permissions → Repository permissions</b>, set <b>Contents</b> to <b>Read and write</b>.</li><li>Click <b>Generate token</b>, copy it, and paste it below.</li></ol>' +
@@ -1363,10 +1500,44 @@ a.branch-card:hover { border-color: var(--green-600); transform: translateY(-2px
     var h = expectedHash();
     try { return sessionStorage.getItem("tiwc-admin-ok") === h || localStorage.getItem("tiwc-admin-remember") === h; } catch (e) { return false; }
   }
+  function adminVersionUrl() {
+    var inApp = /^https?:/.test(location.protocol) && /tiwc-admin/.test(location.pathname);
+    return (inApp ? "version.json" : (window.ADMIN_APP_URL || "") + "version.json") + "?t=" + Date.now();
+  }
+  function checkAdminUpdate(manual) {
+    fetch(adminVersionUrl(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.version && j.version !== window.ADMIN_VERSION) showUpdateBanner(j.version);
+      else if (manual) toast("You have the latest version (" + window.ADMIN_VERSION + ").");
+    }).catch(function () { if (manual) toast("Could not check for updates. Check your internet connection.", true); });
+  }
+  function updateNow() {
+    if (dirty && !confirm("You have unsaved changes. Update anyway? (Save & Publish first to keep them.)")) return;
+    dirty = false;
+    var inApp = /tiwc-admin/.test(location.pathname) && /^https?:/.test(location.protocol);
+    if (!inApp) { window.open((window.ADMIN_APP_URL || ""), "_blank"); return; }
+    var jobs = [];
+    if (window.caches) jobs.push(caches.keys().then(function (k) { return Promise.all(k.map(function (n) { return caches.delete(n); })); }));
+    if (navigator.serviceWorker) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.map(function (r) { return r.update().catch(function () {}); })); }));
+    Promise.all(jobs).then(function () { location.replace(location.pathname + "?v=" + Date.now()); }, function () { location.reload(); });
+  }
+  function showUpdateBanner(v) {
+    if ($("#updBanner")) return;
+    var inApp = /tiwc-admin/.test(location.pathname) && /^https?:/.test(location.protocol);
+    var d = document.createElement("div"); d.id = "updBanner"; d.className = "upd-banner";
+    d.innerHTML = "<span><b>A new version of the admin is available</b> (" + esc(v) + "). " + (inApp ? "Tap Update to get the latest features." : "Open the admin app to get the latest features, or download the new admin file.") + "</span>" +
+      '<button class="btn btn-gold btn-sm" type="button">' + (inApp ? "Update now" : "Open admin app") + "</button>";
+    document.body.appendChild(d);
+    $("button", d).onclick = updateNow;
+  }
+  window.__checkAdminUpdate = checkAdminUpdate;
+  // On phones, switching back to the app often resumes the old screen without reloading,
+  // so check again whenever the admin comes back into view
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible" && !$("#gate")) checkAdminUpdate(false); });
   function start() {
     $("#gate").remove();
     if (!connected()) current = "connect";
     render();
+    checkAdminUpdate(false);
     if (connected()) loadFromGitHub().catch(function (e) { toast("Could not load from GitHub: " + e.message, true); });
   }
   $("#logoutBtn").onclick = function () {

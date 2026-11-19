@@ -71,6 +71,20 @@
   .sub-item { position: relative; border: 1px dashed var(--line); border-radius: 10px; padding: .8rem 3rem .8rem .8rem; background: #fff; }
   .sub-del { position: absolute; top: .6rem; right: .6rem; }
   .sub-list > .btn { align-self: flex-start; }
+  .upd-banner { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 250; width: min(620px, calc(100% - 24px)); background: var(--green-900); color: #fff; border-radius: 14px; padding: .9rem 1rem; display: flex; gap: .8rem; align-items: center; justify-content: space-between; box-shadow: var(--shadow); font-size: .9rem; }
+  .upd-banner .btn { flex: 0 0 auto; }
+  .tx-wrap { overflow-x: auto; margin-top: 1rem; }
+  .tx-table { width: 100%; border-collapse: collapse; font-size: .85rem; min-width: 760px; }
+  .tx-table th { text-align: left; background: var(--bg-soft); padding: .55rem; color: var(--green-800); font-family: var(--font-head); font-size: .78rem; }
+  .tx-table td { padding: .55rem; border-bottom: 1px solid var(--line); }
+  .tx-st { padding: .1rem .5rem; border-radius: 99px; font-size: .74rem; font-weight: 700; background: var(--bg-soft); }
+  .tx-st.success { background: var(--mint-100); color: var(--green-700); }
+  .tx-st.failed, .tx-st.abandoned { background: #fff1f1; color: var(--red-600); }
+  .tx-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .6rem; margin-top: 1rem; }
+  .tx-card { background: var(--bg-soft); border-radius: 12px; padding: .8rem 1rem; }
+  .tx-card small { display: block; color: var(--muted); font-size: .78rem; }
+  .tx-card b { font-size: 1.1rem; color: var(--green-900); }
+  .tx-card.total { background: var(--green-700); } .tx-card.total small, .tx-card.total b { color: #fff; }
   code { background: var(--bg-soft); padding: .1rem .35rem; border-radius: 5px; font-size: .85em; }
 </style>
 </head>
@@ -106,6 +120,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<script>window.ADMIN_VERSION = "{{VERSION}}"; window.ADMIN_APP_URL = "https://christosdaniel.github.io/Thyword-Church/tiwc-admin-9k2x/";</script>
 <script>
 {{ADMIN_JS}}
 </script>

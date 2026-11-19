@@ -317,7 +317,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Kasoa Branch",
@@ -342,7 +343,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Djamah Branch",
@@ -367,7 +369,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Dome Pillar 2 Branch",
@@ -392,7 +395,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Cape Coast Branch",
@@ -417,7 +421,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Kejebi Branch",
@@ -442,7 +447,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Potsin Branch",
@@ -467,7 +473,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     },
     {
       "name": "Domenase Branch",
@@ -492,7 +499,8 @@ window.SITE_CONTENT = {
       "telecelName": "",
       "bankName": "",
       "bankAccountName": "",
-      "bankAccountNumber": ""
+      "bankAccountNumber": "",
+      "paystackSubaccount": ""
     }
   ],
   "trustees": [],
@@ -540,15 +548,20 @@ window.SITE_CONTENT = {
       "Tithe",
       "Donation"
     ],
-    "momoNumber": "",
-    "momoName": "",
+    "momoNumber": "0598997207",
+    "momoName": "Thyword International Worship",
     "telecelNumber": "",
     "telecelName": "",
-    "bankName": "",
-    "bankAccountName": "",
-    "bankAccountNumber": "",
-    "bankBranch": "",
     "onlineLink": "",
-    "confirmWhatsapp": ""
+    "confirmWhatsapp": "",
+    "bankAccounts": [
+      {
+        "bank": "OmniBSIC Bank",
+        "accountName": "",
+        "accountNumber": "00101195661027",
+        "branch": ""
+      }
+    ],
+    "paystackPublicKey": ""
   }
 };

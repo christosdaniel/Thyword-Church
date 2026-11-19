@@ -51,7 +51,8 @@ Keep the file on the administrator's computer or phone and open it in a web brow
 - **Branches**: each branch's pastor (name, photo, bio), about, contacts, service times, activities, upcoming programmes and its own MoMo/Telecel/bank details. Tick *This is the Headquarters* for the HQ.
 - **Board of Trustees**: name, position and photo.
 - **Bible School**: details, how to enroll, enrollment forms (upload PDF/Word) and pictures.
-- **Giving**: Headquarters MoMo, Telecel Cash and bank details, offering types, and an optional online-payment link.
+- **Giving**: Headquarters MoMo, Telecel Cash, bank accounts (bank picked from a list), offering types and the Paystack public key.
+- **Transactions**: online gifts for every branch (needs your Paystack secret key on that device).
 - **Home & About**, **Service Times**, **Contact**: change any text, photo or phone number.
 
 Then click **Save & Publish**. Changes appear on the website within 1–2 minutes.
@@ -108,6 +109,24 @@ The **Watch Sermons** page, the gold **Watch Sermons** button at the top right o
 - Each sermon plays on the website and has a **Watch on YouTube** link.
 - YouTube links you add in **Admin → Videos** also appear in the sermon list.
 - If the action can't find the channel, add the **YouTube channel ID** (starts with `UC`) in **Admin → Settings**.
+
+## 3c. Giving and secure online payments
+
+**Direct transfers (work now):** the Give page shows the Headquarters **MTN MoMo** number (0598997207, Thyword International Worship) and the **OmniBSIC Bank** account (00101195661027). Members enter the amount, choose their own bank from the list (GCB, CBG, Ecobank, Fidelity, Stanbic and OmniBSIC first, then other banks), and get same-bank or interbank steps. Edit everything in **Admin → Giving** (Headquarters) and **Admin → Branches** (a branch's own accounts).
+
+**Secure online payments (Paystack):** members pay with MTN MoMo, Telecel Cash, AirtelTigo Money or a bank card in Paystack's secure payment window, and get a receipt. To switch it on:
+1. Open a business account at <https://paystack.com> (Ghana). It needs the church's registration documents and a settlement bank account (e.g. the OmniBSIC account).
+2. In Paystack go to **Settings → API Keys** and copy the **Public key** (`pk_live_...`).
+3. Paste it in **Admin → Giving → Paystack PUBLIC key**, then Save & Publish. A **Pay Online** option appears on the Give page.
+4. Optional, per branch: in Paystack create a **Subaccount** for the branch's own bank account, then paste its code (`ACCT_...`) in **Admin → Branches**. Online gifts to that branch then settle straight into its account.
+
+**Never put the SECRET key (`sk_...`) in Settings or Giving.** Those fields are published on the website.
+
+**Monitoring:** **Admin → Transactions** lists every online gift for all branches, with totals per branch, filters and a CSV download. It uses your Paystack **secret key**, which stays only on that device. The Paystack dashboard and app show the same transactions. Direct MoMo and bank transfers appear on the church's MoMo and bank statements; members can also confirm their gift by WhatsApp or email from the Give page.
+
+## Admin updates
+
+The admin checks for a newer version when it opens and whenever you switch back to it. If one is available, tap **Update now**. You can also use **Settings → Check for updates**. If the phone app still looks old, swipe it closed and reopen it. As a last resort, delete it from the Home Screen and add it again from Safari.
 
 ## 4. Live stream detection
 

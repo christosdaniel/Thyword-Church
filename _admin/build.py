@@ -14,7 +14,7 @@ import base64, io, json, os
 from PIL import Image
 
 APP_DIR = "tiwc-admin-9k2x"
-VERSION = "2026-11-19.3"   # bump to make installed apps fetch the new version
+VERSION = "2026-11-20.1"   # bump to make installed apps fetch the new version
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 here = os.path.join(root, "_admin")
@@ -42,7 +42,7 @@ js = open(os.path.join(here, "admin.js"), encoding="utf-8").read()
 def build(app_head, app_script, logo_src):
     return (template.replace("{{SITE_CSS}}", css).replace("{{ADMIN_JS}}", js)
             .replace("{{APP_HEAD}}", app_head).replace("{{APP_SCRIPT}}", app_script)
-            .replace("{{LOGO}}", logo_src))
+            .replace("{{LOGO}}", logo_src).replace("{{VERSION}}", VERSION))
 
 # 1. Single-file version
 out = os.path.join(here, "Thyword-Admin.html")
@@ -98,11 +98,13 @@ self.addEventListener("activate", function (e) {
 self.addEventListener("fetch", function (e) {
   var url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return; // GitHub API etc. go straight to the network
-  e.respondWith(fetch(e.request).then(function (res) {
+  // cache: "no-store" skips the browser cache so a new version is picked up straight away
+  e.respondWith(fetch(e.request, { cache: "no-store" }).then(function (res) {
     var copy = res.clone(); caches.open(CACHE).then(function (c) { c.put(e.request, copy); });
     return res;
   }).catch(function () { return caches.match(e.request).then(function (r) { return r || caches.match("index.html"); }); }));
 });
 """ % VERSION
 open(os.path.join(app, "sw.js"), "w", encoding="utf-8").write(sw)
+json.dump({"version": VERSION}, open(os.path.join(app, "version.json"), "w"))
 print("Wrote", app)
