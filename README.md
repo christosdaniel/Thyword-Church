@@ -50,7 +50,27 @@ Then click **Save & Publish**. Changes appear on the website within 1–2 minute
 
 All content lives in **`data/content.js`**, so you can also edit that file by hand on GitHub.
 
-*For developers:* the admin tool is built from `_admin/admin.template.html`, `_admin/admin.js` and `assets/css/style.css`. After changing them, run `python3 _admin/build.py`.
+*For developers:* the admin tool is built from `_admin/admin.template.html`, `_admin/admin.js` and `assets/css/style.css`. After changing them, run `python3 _admin/build.py`. It rebuilds both the single file and the phone app (bump `VERSION` in `build.py` so installed apps update).
+
+### Admin app for iPhone (and Android)
+
+The admin is also available as an app you add to your phone's Home Screen. It opens full-screen with the church logo as its icon, stays logged in, and stays connected to GitHub after you add the token once.
+
+App address (unlisted; nothing on the website links to it):
+**https://christosdaniel.github.io/Thyword-Church/tiwc-admin-9k2x/**
+
+**Install on iPhone (one time):**
+1. Open the address above in **Safari** (it must be Safari).
+2. Tap the **Share** button (the square with an arrow pointing up).
+3. Scroll down and tap **Add to Home Screen**, then **Add**.
+4. Open **TIWC Admin** from your Home Screen. Log in with the admin password, keeping **Keep me logged in on this device** ticked.
+5. The **Settings** tab opens. Paste your GitHub token and tap **Connect & load content**.
+
+From then on, tap the icon and you go straight in, already connected. Use **Log out** if you ever hand the phone to someone else.
+
+*Note:* the Home Screen app keeps its own storage, separate from Safari. Enter the token **inside the app** (step 5), not in Safari.
+
+*Android:* open the address in Chrome, tap the **⋮** menu, then **Add to Home screen** / **Install app**.
 
 ## 3. Contact form and email sign-ups
 
@@ -73,7 +93,8 @@ If the form service can't be reached, or the form is not activated yet, the webs
 
 ```
 index.html, pictures.html, videos.html, live.html, contact.html
-_admin/Thyword-Admin.html  ← the private admin tool (not published)
+_admin/Thyword-Admin.html  ← the private admin tool, single file (not published)
+tiwc-admin-9k2x/           ← the admin as a phone app (unlisted address)
 data/content.js          ← all website text, events, photos, videos, branches
 assets/css/style.css     ← design (colours taken from the church logo)
 assets/js/main.js        ← builds the pages from content.js

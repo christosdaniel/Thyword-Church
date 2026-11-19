@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{{APP_HEAD}}
 <meta name="robots" content="noindex, nofollow">
 <title>Website Admin | Thyword International Worship Centre</title>
 <link rel="icon" type="image/png" href="{{LOGO}}">
@@ -54,6 +55,17 @@
   .dropzone { border: 2px dashed var(--mint); background: var(--mint-100); border-radius: 12px; padding: 1.4rem; text-align: center; margin-bottom: 1rem; }
   .progress { font-size: .85rem; color: var(--green-700); font-weight: 600; margin-top: .5rem; min-height: 1.2em; }
   .unsaved { background: var(--gold); color: var(--green-900); font-weight: 800; font-size: .75rem; padding: .25rem .6rem; border-radius: 999px; }
+  /* iPhone app: room for the notch / status bar, compact top bar */
+  .adm-top { padding-top: env(safe-area-inset-top); }
+  #gate { padding-top: calc(16px + env(safe-area-inset-top)) !important; }
+  .adm-wrap { padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+  @media (max-width: 640px) {
+    #downloadBtn, .adm-top .brand-tag { display: none; }
+    .adm-top .brand-name { font-size: .85rem; }
+    .adm-top .container { gap: .5rem; }
+    .adm-actions { width: 100%; justify-content: space-between; }
+    .conn { font-size: .72rem; }
+  }
   code { background: var(--bg-soft); padding: .1rem .35rem; border-radius: 5px; font-size: .85em; }
 </style>
 </head>
@@ -64,6 +76,7 @@
     <h2 style="font-size:1.3rem">Admin Login</h2>
     <p class="help" style="color:var(--muted);font-size:.9rem">This area is for church administrators only.</p>
     <div style="display:flex;gap:.4rem;margin-bottom:.8rem"><input type="password" id="gatePass" placeholder="Admin password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus><button type="button" id="gateShow" class="btn btn-outline-dark btn-sm" style="flex:0 0 auto">Show</button></div>
+    <label style="display:flex;align-items:center;gap:.5rem;justify-content:center;font-weight:600;font-size:.88rem;margin:0 0 .8rem;color:var(--green-800)"><input type="checkbox" id="gateRemember" checked style="width:18px;height:18px;accent-color:var(--green-700)"> Keep me logged in on this device</label>
     <button class="btn btn-red" type="submit" style="width:100%">Log in</button>
     <p id="gateMsg" style="color:var(--red-600);font-weight:600;min-height:1.4em;margin:.8rem 0 0;font-size:.9rem"></p>
     
@@ -91,5 +104,6 @@
 <script>
 {{ADMIN_JS}}
 </script>
+{{APP_SCRIPT}}
 </body>
 </html>

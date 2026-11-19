@@ -413,7 +413,10 @@
         if (a.length < 8) { toast("Use at least 8 characters.", true); return; }
         if (a !== b) { toast("The two passwords do not match.", true); return; }
         window.__setAdminPassword(a).then(function () {
-          try { sessionStorage.setItem("tiwc-admin-ok", data.settings.adminPasswordHash); } catch (e) {}
+          try {
+            sessionStorage.setItem("tiwc-admin-ok", data.settings.adminPasswordHash);
+            if (localStorage.getItem("tiwc-admin-remember")) localStorage.setItem("tiwc-admin-remember", data.settings.adminPasswordHash);
+          } catch (e) {}
           $("#pw1").value = $("#pw2").value = ""; toast("Password changed. Now click Save & Publish.");
         });
       };
@@ -461,21 +464,28 @@
   // Starting password: Thyword@2026 (change it in Settings > Admin Password).
   var DEFAULT_HASH = "0ee99b61774bb1a7df638ca707ce5ac95518978bd7fcadc903b8baba90cab0ed";
   function rememberHash() { var h = (data.settings || {}).adminPasswordHash; if (h) try { localStorage.setItem("tiwc-admin-hash", h); } catch (e) {} }
+
   function expectedHash() {
     var h = (data.settings || {}).adminPasswordHash;
     if (!h) try { h = localStorage.getItem("tiwc-admin-hash"); } catch (e) {}
     return h || DEFAULT_HASH;
   }
-  function unlocked() { try { return sessionStorage.getItem("tiwc-admin-ok") === expectedHash(); } catch (e) { return false; } }
+  // "Keep me logged in" stores the login on this device (used by the iPhone app)
+  function unlocked() {
+    var h = expectedHash();
+    try { return sessionStorage.getItem("tiwc-admin-ok") === h || localStorage.getItem("tiwc-admin-remember") === h; } catch (e) { return false; }
+  }
   function start() {
     $("#gate").remove();
+    if (!connected()) current = "connect";
     render();
     if (connected()) loadFromGitHub().catch(function (e) { toast("Could not load from GitHub: " + e.message, true); });
   }
   $("#logoutBtn").onclick = function () {
     if (dirty && !confirm("You have unsaved changes. Log out anyway?")) return;
-    dirty = false; try { sessionStorage.removeItem("tiwc-admin-ok"); } catch (e) {}
-    location.href = "index.html";
+    dirty = false;
+    try { sessionStorage.removeItem("tiwc-admin-ok"); localStorage.removeItem("tiwc-admin-remember"); } catch (e) {}
+    location.reload();
   };
   window.__setAdminPassword = function (pw) { return sha256(pw).then(function (h) { data.settings.adminPasswordHash = h; rememberHash(); markDirty(); }); };
   if (unlocked()) start();
@@ -484,7 +494,13 @@
       e.preventDefault();
       var pw = $("#gatePass").value.trim();
       sha256(pw).then(function (h) {
-        if (h === expectedHash() || (!loaded && h === DEFAULT_HASH)) { try { sessionStorage.setItem("tiwc-admin-ok", expectedHash()); } catch (er) {} start(); }
+        if (h === expectedHash() || (!loaded && h === DEFAULT_HASH)) {
+          try {
+            sessionStorage.setItem("tiwc-admin-ok", expectedHash());
+            if ($("#gateRemember").checked) localStorage.setItem("tiwc-admin-remember", expectedHash());
+          } catch (er) {}
+          start();
+        }
         else { $("#gateMsg").textContent = "Incorrect password. Check capital letters (the first letter T is a capital)."; $("#gatePass").select(); }
       });
     });
