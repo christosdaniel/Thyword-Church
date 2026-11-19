@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Thu Nov 19 2026 00:38:17 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Thu Nov 19 2026 00:40:05 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -98,6 +98,12 @@ window.SITE_CONTENT = {
     }
   ],
   "words": [
+    {
+      "author": "Bishop Dr. Fiifi Mensah Greatman",
+      "date": "2026-11-19",
+      "text": "Beloved, If There Is Anyone Or Evil Spirit That  Intends To Harm Or Destroy You , Your Business And Your Family.\nBY THE POWER OF THE HOLY GHOST I OVERRULE THOSE INTENTIONS IN JESUS MIGHTY NAME AMEN 🙏",
+      "image": "assets/uploads/images/2026-11-19-whatsapp-image-2026-10-29-at-6-12-55-am-3x6i.jpg"
+    },
     {
       "text": "You can have endless money but you can't have endless life, so think about wealth and life and choose one. Jesus Christ is all.",
       "author": "Bishop Dr. Fiifi Mensah Greatman",
