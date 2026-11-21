@@ -3,8 +3,14 @@
 window.YOUTUBE_FEED = {
   "channelId": "UCCjGvl3iQ7dkGhlBV8cvYnQ",
   "channelUrl": "https://www.youtube.com/@TIWC__THOP",
-  "updated": "2026-11-19T00:40Z",
+  "updated": "2026-11-21T01:36Z",
   "videos": [
+    {
+      "id": "WqvsWpBYclU",
+      "title": "FRESH GLORY SUNDAY SERVICE -- WITH BISHHOP FIIFI MENSAH GREATMAN",
+      "date": "2026-11-21",
+      "description": "FRESH GLORY SUNDAY SERVICE -- WITH BISHHOP FIIFI MENSAH GREATMAN @THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (15/11/26)"
+    },
     {
       "id": "qByxQn_idTw",
       "title": "FRESH GLORY SUNDAY SERVICE -- WITH BISHHOP FIIFI MENSAH GREATMAN",
