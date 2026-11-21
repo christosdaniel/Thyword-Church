@@ -1,6 +1,6 @@
 // TIWC admin app: lets the app open quickly and offline. Always tries the
 // network first so the newest version is used whenever there is a connection.
-var CACHE = "tiwc-admin-2026-11-20.2";
+var CACHE = "tiwc-admin-2026-11-21.1";
 var FILES = ["./", "index.html", "manifest.webmanifest", "logo.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));

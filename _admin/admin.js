@@ -405,7 +405,7 @@
         ["youtube", "We are LIVE on YouTube now", "bool"], ["facebook", "We are LIVE on Facebook now", "bool"],
         ["title", "Name of the live service", "text", { full: true }],
         ["youtubeLiveUrl", "YouTube live video link (optional)", "text", { full: true, help: "Paste the link of today's YouTube live video so it plays on the website." }],
-        ["facebookLiveUrl", "Facebook live video link (optional)", "text", { full: true, help: "Paste the link of the Facebook live video so it plays on the website." }]
+        ["facebookLiveUrl", "Facebook live video link (optional)", "text", { full: true, help: "To make it PLAY on the website: on a computer, open the live video on Facebook, click the time under the page name (or ••• → Copy link) and paste a link like facebook.com/…/videos/123456. A phone share link (facebook.com/share/…) still works, but members will get a Watch on Facebook button instead of the player." }]
       ]));
       P.appendChild(objectPanel("Announcement Bar", "A gold strip at the top of every page for short notices.", data.announcement, [
         ["show", "Show the announcement", "bool", { full: true }], ["text", "Announcement text", "textarea", { rows: 2 }], ["link", "Link (optional)", "text", { full: true, help: "e.g. index.html#events or contact.html" }]

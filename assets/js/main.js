@@ -368,10 +368,25 @@
       (thumb ? '<img src="' + esc(thumb) + '" alt="">' : '<span class="noposter"><img src="' + esc(S.logo) + '" alt=""></span>') +
       '<span class="play">' + ICON.play + "</span></button>";
   }
+  // Facebook only plays full video links (facebook.com/.../videos/123, /watch/?v=123, /reel/123)
+  // inside other websites. Share links (facebook.com/share/v/..., fb.watch/...) cannot be embedded.
+  function fbClean(u) {
+    u = String(u || "").trim();
+    try { var x = new URL(u); ["mibextid", "rdid", "share_url", "si"].forEach(function (k) { x.searchParams.delete(k); }); u = x.toString(); } catch (e) {}
+    return u;
+  }
+  function fbEmbeddable(u) {
+    return /facebook\.com\/(?!share\/)(.+\/videos\/(.+\/)?\d+|watch\/?(live\/?)?\?v=\d+|reel\/\d+|video\.php\?v=\d+)/i.test(u);
+  }
+  function fbPlayer(u, title, live) {
+    u = fbClean(u);
+    if (fbEmbeddable(u)) return '<iframe src="https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(u) + '&show_text=false&autoplay=true" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="' + esc(title || "Facebook video") + '"></iframe>';
+    return '<div class="player-empty"><img src="' + esc(S.logo) + '" alt=""><h3>' + (live ? "We are LIVE on Facebook" : esc(title || "Facebook video")) + '</h3><p>' + (live ? "Tap below to join the live service on Facebook." : "Tap below to watch this video on Facebook.") + '</p><a class="btn btn-gold btn-sm" href="' + esc(u) + '" target="_blank" rel="noopener">' + ICON.fb + (live ? " Watch live on Facebook" : " Watch on Facebook") + "</a></div>";
+  }
   function featuredEmbed(v) {
     var id = v.type === "youtube" ? youtubeId(v.src) : "";
     if (id) return '<iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="' + esc(v.title) + '"></iframe>';
-    if (v.type === "facebook") return '<iframe src="https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(v.src) + '&show_text=false&autoplay=true" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    if (v.type === "facebook") return fbPlayer(v.src, v.title);
     return '<video src="' + esc(v.src) + '" controls autoplay playsinline' + (v.poster ? ' poster="' + esc(v.poster) + '"' : "") + "></video>";
   }
   function bindFeatured(root, v) {
@@ -447,7 +462,7 @@
     } else {
       var vid = youtubeId(item.src), portrait = item.type === "file" && /short|clip/i.test(item.category || "");
       if (item.type === "youtube" && vid) html = '<div class="vframe"><iframe src="https://www.youtube.com/embed/' + vid + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
-      else if (item.type === "facebook") html = '<div class="vframe"><iframe src="https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(item.src) + '&show_text=false&autoplay=true" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
+      else if (item.type === "facebook") html = '<div class="vframe">' + fbPlayer(item.src, item.title) + "</div>";
       else html = '<div class="vframe' + (portrait ? " portrait" : "") + '"><video src="' + esc(item.src) + '" controls autoplay playsinline' + (item.poster ? ' poster="' + esc(item.poster) + '"' : "") + "></video></div>";
     }
     inner.innerHTML = html + (item.caption || item.title ? '<div class="modal-caption">' + esc(item.caption || item.title) + "</div>" : "");
@@ -1148,10 +1163,16 @@
         else if (liveState.youtube && S.youtubeChannelId) player.innerHTML = '<iframe src="https://www.youtube.com/embed/live_stream?channel=' + esc(S.youtubeChannelId) + '&autoplay=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="YouTube live"></iframe>';
         else player.innerHTML = emptyState("youtube");
       } else {
-        if (liveState.facebook && L.facebookLiveUrl) player.innerHTML = '<iframe src="https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(L.facebookLiveUrl) + '&show_text=false&autoplay=true" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Facebook live"></iframe>';
+        if (liveState.facebook && L.facebookLiveUrl) player.innerHTML = fbPlayer(L.facebookLiveUrl, "Facebook live", true);
         else if (liveState.facebook) player.innerHTML = '<div class="player-empty"><img src="' + esc(S.logo) + '" alt=""><h3>We are LIVE on Facebook</h3><p>Tap below to join the live service on our Facebook page.</p><a class="btn btn-gold btn-sm" href="' + esc(S.facebookPageUrl) + '" target="_blank" rel="noopener">Watch on Facebook</a></div>';
         else player.innerHTML = emptyState("facebook");
       }
+      var help = $("#playerHelp");
+      if (!help) { help = document.createElement("p"); help.id = "playerHelp"; help.className = "player-help"; player.parentNode.insertBefore(help, player.nextSibling); }
+      var fbUrl = L.facebookLiveUrl ? fbClean(L.facebookLiveUrl) : S.facebookPageUrl;
+      help.innerHTML = tab === "facebook" && liveState.facebook && L.facebookLiveUrl && fbEmbeddable(fbClean(L.facebookLiveUrl))
+        ? 'Video not playing? <a href="' + esc(fbUrl) + '" target="_blank" rel="noopener">Open it on Facebook</a>'
+        : (tab === "youtube" && liveState.youtube ? 'Video not playing? <a href="' + esc(L.youtubeLiveUrl || S.youtubeUrl) + '" target="_blank" rel="noopener">Open it on YouTube</a>' : "");
     }
     function drawStatus() {
       var row = function (name, icon, on, url) {
