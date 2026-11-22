@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Sat Nov 21 2026 06:33:12 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Sun Nov 22 2026 09:56:29 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -22,15 +22,15 @@ window.SITE_CONTENT = {
     "youtubeUrl": "https://www.youtube.com/@TIWC__THOP"
   },
   "live": {
-    "youtube": false,
-    "facebook": false,
-    "title": "FRIDAY ALLNIGHT SERVICE ",
-    "youtubeLiveUrl": "",
-    "facebookLiveUrl": ""
+    "youtube": true,
+    "facebook": true,
+    "title": "SUNDAY FRESH GLORY SERVICE",
+    "youtubeLiveUrl": "https://www.youtube.com/live/6ubxo7JiEY0?si=7QDWLo_s_klWfoLb",
+    "facebookLiveUrl": "https://www.facebook.com/share/v/1BpQecXKnK/?mibextid=wwXIfr"
   },
   "announcement": {
     "show": true,
-    "text": "Friday All-Night Service: A Night of Breaking the Curses, 20th November 2026, 9:00 PM at the church premises, Kasoa Old Barrier.",
+    "text": "",
     "link": "index.html#events"
   },
   "hero": {
