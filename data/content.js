@@ -5,7 +5,7 @@
  * The easiest way to update it is the admin tool (_admin/Thyword-Admin.html), which edits
  * and saves this file for you. You can also edit it by hand. Keep the
  * structure, and put text inside "quotes" followed by a comma.
- * Last updated: Sun Nov 22 2026 09:56:29 GMT+0000 (Greenwich Mean Time)
+ * Last updated: Sun Nov 22 2026 11:19:15 GMT+0000 (Greenwich Mean Time)
  */
 window.SITE_CONTENT = {
   "settings": {
@@ -22,8 +22,8 @@ window.SITE_CONTENT = {
     "youtubeUrl": "https://www.youtube.com/@TIWC__THOP"
   },
   "live": {
-    "youtube": true,
-    "facebook": true,
+    "youtube": false,
+    "facebook": false,
     "title": "SUNDAY FRESH GLORY SERVICE",
     "youtubeLiveUrl": "https://www.youtube.com/live/6ubxo7JiEY0?si=7QDWLo_s_klWfoLb",
     "facebookLiveUrl": "https://www.facebook.com/share/v/1BpQecXKnK/?mibextid=wwXIfr"
