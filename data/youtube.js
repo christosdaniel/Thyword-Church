@@ -3,8 +3,14 @@
 window.YOUTUBE_FEED = {
   "channelId": "UCCjGvl3iQ7dkGhlBV8cvYnQ",
   "channelUrl": "https://www.youtube.com/@TIWC__THOP",
-  "updated": "2026-11-23T00:57Z",
+  "updated": "2026-11-26T00:30Z",
   "videos": [
+    {
+      "id": "R3GW7YPWleo",
+      "title": "THREE DAYS PACKED REVIVAL  - (DAY ONE) WITH REV DR BETH LAM PTEY",
+      "date": "2026-11-25",
+      "description": "THREE DAYS PACKED REVIVAL - (DAY ONE) WITH REV DR BETH LAMPTEY @THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (25/11/26)"
+    },
     {
       "id": "pAoWwJWbXYw",
       "title": "FRESH GLORY SUNDAY SERVICE  - WITH BISHOP FIIFI MENSAH GREATMAN",
