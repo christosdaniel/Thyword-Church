@@ -3,12 +3,30 @@
 window.YOUTUBE_FEED = {
   "channelId": "UCCjGvl3iQ7dkGhlBV8cvYnQ",
   "channelUrl": "https://www.youtube.com/@TIWC__THOP",
-  "updated": "2026-11-26T00:30Z",
+  "updated": "2026-11-27T00:39Z",
   "videos": [
+    {
+      "id": "j9kFaziQx2A",
+      "title": "THREE DAYS PACKED REVIVAL  - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB",
+      "date": "2026-11-26",
+      "description": "THREE DAYS PACKED REVIVAL - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB@THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (26/11/26)"
+    },
+    {
+      "id": "I1RkGoRrG0w",
+      "title": "THREE DAYS PACKED REVIVAL  - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB",
+      "date": "2026-11-26",
+      "description": "THREE DAYS PACKED REVIVAL - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB@THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (26/11/26)"
+    },
+    {
+      "id": "EnO5eQb0HOc",
+      "title": "THREE DAYS PACKED REVIVAL  - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB",
+      "date": "2026-11-26",
+      "description": "THREE DAYS PACKED REVIVAL - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB@THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (26/11/26)"
+    },
     {
       "id": "R3GW7YPWleo",
       "title": "THREE DAYS PACKED REVIVAL  - (DAY ONE) WITH REV DR BETH LAM PTEY",
-      "date": "2026-11-25",
+      "date": "2026-11-26",
       "description": "THREE DAYS PACKED REVIVAL - (DAY ONE) WITH REV DR BETH LAMPTEY @THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (25/11/26)"
     },
     {
