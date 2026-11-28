@@ -3,8 +3,14 @@
 window.YOUTUBE_FEED = {
   "channelId": "UCCjGvl3iQ7dkGhlBV8cvYnQ",
   "channelUrl": "https://www.youtube.com/@TIWC__THOP",
-  "updated": "2026-11-27T13:58Z",
+  "updated": "2026-11-28T00:06Z",
   "videos": [
+    {
+      "id": "dsE17uI4tf4",
+      "title": "THREE DAYS PACKED REVIVAL  - (DAY THREE) WITH BISHOP EMMANUEL GAMAH",
+      "date": "2026-11-27",
+      "description": "THREE DAYS PACKED REVIVAL - (DAY THREE) WITH BISHOP EMMANUEL GAMAH@THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (27/11/26)"
+    },
     {
       "id": "I1RkGoRrG0w",
       "title": "THREE DAYS PACKED REVIVAL  - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB",
@@ -19,9 +25,9 @@ window.YOUTUBE_FEED = {
     },
     {
       "id": "j9kFaziQx2A",
-      "title": "THREE DAYS PACKED REVIVAL  - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB",
+      "title": "THREE DAYS PACKED REVIVAL  - (DAY THREE) WITH BISHOP EMMANUEL GAMAH",
       "date": "2026-11-26",
-      "description": "THREE DAYS PACKED REVIVAL - (DAY TWO) WITH PROPHET MAJOR ISRAEL AB@THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (26/11/26)"
+      "description": "THREE DAYS PACKED REVIVAL - (DAY THREE) WITH BISHOP EMMANUEL GAMAH@THYWORD INTERNATIONAL WORSHIP CENTRE - ASHBREAD - OLD BARRIER (27/11/26)"
     },
     {
       "id": "R3GW7YPWleo",
